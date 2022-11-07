@@ -11,7 +11,10 @@
     "require": {
         "php": "^8.0",
 
-        "decodelabs/exceptional": "^0.4"
+        "decodelabs/atlas": "^0.10.5",
+        "decodelabs/exceptional": "^0.4",
+        "decodelabs/systemic": "^0.9.6",
+        "decodelabs/terminus": "^0.9.1"
     },
     "require-dev": {
         "phpunit/phpunit": "^9",
