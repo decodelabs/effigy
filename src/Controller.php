@@ -9,10 +9,13 @@ declare(strict_types=1);
 
 namespace DecodeLabs\Effigy;
 
+use DecodeLabs\Archetype;
+use DecodeLabs\Archetype\Exception as ArchetypeException;
 use DecodeLabs\Atlas;
 use DecodeLabs\Atlas\Dir;
 use DecodeLabs\Atlas\File;
 use DecodeLabs\Coercion;
+use DecodeLabs\Dictum;
 use DecodeLabs\Exceptional;
 use DecodeLabs\Systemic;
 use DecodeLabs\Terminus as Cli;
@@ -29,10 +32,11 @@ class Controller
 {
     public const USER_FILENAME = 'effigy.json';
 
-    protected Dir $runDir;
-    protected Dir $rootDir;
-    protected File $composerFile;
-    protected File $userFile;
+    public Dir $runDir;
+    public Dir $rootDir;
+    public File $composerFile;
+    public File $userFile;
+
     protected ?File $entryFile = null;
 
     /**
@@ -189,15 +193,24 @@ class Controller
 
         $first = $args[0] ?? null;
 
-        if (in_array($first, $this->scripts)) {
+        if ($first !== null) {
             // Composer script
-            Systemic::$process->newLauncher('composer', $args, null, null, $user)
-                ->setSession(Cli::getSession())
-                ->launch();
+            if (in_array($first, $this->scripts)) {
+                Systemic::$process->newLauncher('composer', $args, null, null, $user)
+                    ->setSession(Cli::getSession())
+                    ->launch();
 
-            return;
+                return;
+            }
+
+
+            // Commands
+            if ($this->runCommand($first)) {
+                return;
+            }
         }
 
+        // Entry file
         try {
             $entry = $this->getEntryFile();
             $this->saveConfig();
@@ -211,6 +224,27 @@ class Controller
             ->setSession(Cli::getSession())
             ->launch();
     }
+
+
+    /**
+     * Run command
+     */
+    public function runCommand(string $command): bool
+    {
+        $command = (string)Dictum::id($command);
+
+        try {
+            $class = Archetype::resolve(Command::class, $command);
+        } catch (ArchetypeException $e) {
+            return false;
+        }
+
+        $command = new $class($this);
+        $command->execute();
+        return true;
+    }
+
+
 
     /**
      * Get entry file

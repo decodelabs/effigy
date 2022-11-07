@@ -11,11 +11,9 @@ namespace DecodeLabs\Effigy;
 
 use DecodeLabs\Effigy\Controller;
 
-$basePath = getcwd();
-
 foreach ([
-    $basePath . '/vendor/autoload.php',
     __DIR__ . '/../../../autoload.php',
+    __DIR__ . '/vendor/autoload.php',
     __DIR__ . '/../vendor/autoload.php'
 ] as $file) {
     if (file_exists($file)) {
