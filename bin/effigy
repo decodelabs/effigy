@@ -1,0 +1,27 @@
+#!/usr/bin/env php
+<?php
+/**
+ * @package Effigy
+ * @license http://opensource.org/licenses/MIT
+ */
+
+declare(strict_types=1);
+
+namespace DecodeLabs\Effigy;
+
+use DecodeLabs\Effigy\Controller;
+
+$basePath = getcwd();
+
+foreach ([
+    $basePath . '/vendor/autoload.php',
+    __DIR__ . '/../../../autoload.php',
+    __DIR__ . '/../vendor/autoload.php'
+] as $file) {
+    if (file_exists($file)) {
+        require $file;
+        break;
+    }
+}
+
+(new Controller())->run();
