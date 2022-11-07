@@ -1,3 +1,6 @@
+## v0.1.3 (2022-11-07)
+* Improved exception handling
+
 ## v0.1.2 (2022-11-07)
 * Added Command structure
 
