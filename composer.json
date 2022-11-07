@@ -30,6 +30,9 @@
             "DecodeLabs\\Effigy\\": "src/"
         }
     },
+    "bin": [
+        "bin/effigy"
+    ],
     "extra": {
         "branch-alias": {
             "dev-develop": "0.1.x-dev"
