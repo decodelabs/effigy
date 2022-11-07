@@ -59,6 +59,13 @@ class Controller
      */
     public function __construct()
     {
+        set_exception_handler(function (Throwable $e) {
+            Cli::newLine();
+            Cli::error($e->getMessage());
+            Cli::newLine();
+            exit;
+        });
+
         if (false === ($dir = getcwd())) {
             throw Exceptional::Runtime('Unable to get current working directory');
         }
@@ -211,14 +218,8 @@ class Controller
         }
 
         // Entry file
-        try {
-            $entry = $this->getEntryFile();
-            $this->saveConfig();
-        } catch (Throwable $e) {
-            Cli::newLine();
-            Cli::error($e->getMessage());
-            return;
-        }
+        $entry = $this->getEntryFile();
+        $this->saveConfig();
 
         Systemic::$process->newScriptLauncher($entry->getPath(), $args, null, $user)
             ->setSession(Cli::getSession())
