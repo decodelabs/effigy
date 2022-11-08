@@ -9,7 +9,6 @@ declare(strict_types=1);
 
 namespace DecodeLabs\Effigy\Command;
 
-use DecodeLabs\Atlas;
 use DecodeLabs\Effigy\Command;
 use DecodeLabs\Effigy\Controller;
 use DecodeLabs\Terminus as Cli;
@@ -25,7 +24,8 @@ class Composer implements Command
 
     public function execute(): void
     {
-        $args = Cli::prepareArguments();
+        /** @var array<string> */
+        $args = array_values(Cli::prepareArguments());
         array_shift($args);
 
         $this->controller->newComposerLauncher($args)
