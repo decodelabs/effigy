@@ -11,9 +11,10 @@ namespace DecodeLabs\Effigy\Command;
 
 use DecodeLabs\Effigy\Command;
 use DecodeLabs\Effigy\Controller;
+use DecodeLabs\Systemic;
 use DecodeLabs\Terminus as Cli;
 
-class RemoveLocal implements Command
+class SetPhp implements Command
 {
     protected Controller $controller;
 
@@ -24,16 +25,16 @@ class RemoveLocal implements Command
 
     public function execute(): void
     {
-        $binFile = $this->controller->rootDir->getFile('effigy');
+        $binName = (string)Cli::ask('Which PHP binary should this project use?', 'php');
 
-        Cli::{'brightMagenta'}('Deleting effigy executable... ');
-        $binFile->delete();
-        Cli::{'success'}('done');
+        if (false === strpos($binName, '/')) {
+            $binName = Systemic::$os->which($binName);
+        }
 
-        Cli::newLine();
-        $args = ['remove', 'decodelabs/effigy'];
+        Cli::{'.brightYellow'}($binName);
 
-        $this->controller->newComposerLauncher($args)
-            ->launch();
+        // TODO: validate binary
+
+        $this->controller->setConfig('php', $binName);
     }
 }
