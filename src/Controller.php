@@ -18,12 +18,14 @@ use DecodeLabs\Coercion;
 use DecodeLabs\Dictum;
 use DecodeLabs\Exceptional;
 use DecodeLabs\Systemic;
+use DecodeLabs\Systemic\Process\Launcher;
 use DecodeLabs\Terminus as Cli;
 
 use Throwable;
 
 /**
  * @phpstan-type TConfig array{
+ *     'php'?: string,
  *     'entry'?: string,
  *     'params'?: array<string, string>
  * }
@@ -112,64 +114,6 @@ class Controller
     }
 
 
-    /**
-     * Load composer config
-     *
-     * @phpstan-return TConfig
-     */
-    protected function loadConfig(): array
-    {
-        /** @var array<string, mixed> */
-        $json = json_decode($this->composerFile->getContents(), true);
-        /** @phpstan-ignore-next-line */
-        $output = $this->parseConfig(Coercion::toArray($json['extra']['effigy'] ?? []));
-
-        /** @phpstan-ignore-next-line */
-        $this->scripts = $this->parseComposerScripts($json['scripts'] ?? []);
-
-        if ($this->userFile->exists()) {
-            $json = json_decode($this->userFile->getContents(), true);
-            $output = array_merge($this->parseConfig(Coercion::toArray($json)));
-        }
-
-        return $output;
-    }
-
-    /**
-     * Parse config
-     *
-     * @param array<string, mixed> $config
-     * @phpstan-return TConfig
-     */
-    protected function parseConfig(array $config): array
-    {
-        $output = [];
-
-        foreach ($config as $key => $value) {
-            switch ($key) {
-                // string
-                case 'entry':
-                    if (null !== ($value = Coercion::toStringOrNull($value))) {
-                        $output[$key] = $value;
-                    }
-                    break;
-
-                    // array<string, string
-                case 'params':
-                    if (null !== ($value = Coercion::toArrayOrNull($value))) {
-                        $output[$key] = [];
-
-                        foreach ($value as $slug => $param) {
-                            $output[$key][Coercion::forceString($slug)] = Coercion::forceString($param);
-                        }
-                    }
-                    break;
-            }
-        }
-
-        return $output;
-    }
-
 
     /**
      * Parse composer scripts
@@ -196,15 +140,12 @@ class Controller
     {
         /** @var array<string> */
         $args = array_values(Cli::prepareArguments());
-        $user = Systemic::$process->getCurrent()->getOwnerName();
-
         $first = $args[0] ?? null;
 
         if ($first !== null) {
             // Composer script
             if (in_array($first, $this->scripts)) {
-                Systemic::$process->newLauncher('composer', $args, null, null, $user)
-                    ->setSession(Cli::getSession())
+                $this->newComposerLauncher($args)
                     ->launch();
 
                 return;
@@ -213,6 +154,7 @@ class Controller
 
             // Commands
             if ($this->runCommand($first)) {
+                $this->saveConfig();
                 return;
             }
         }
@@ -221,9 +163,56 @@ class Controller
         $entry = $this->getEntryFile();
         $this->saveConfig();
 
-        Systemic::$process->newScriptLauncher($entry->getPath(), $args, null, $user)
-            ->setSession(Cli::getSession())
+        // Launch script
+        $this->newScriptLauncher($entry->getPath(), $args)
             ->launch();
+    }
+
+    /**
+     * New script launcher
+     *
+     * @param string|array<string>|null $args
+     */
+    public function newScriptLauncher(
+        string $path,
+        string|array|null $args = null
+    ): Launcher {
+        if ($args === null) {
+            $args = [];
+        } elseif (!is_array($args)) {
+            $args = (array)$args;
+        }
+
+        array_unshift($args, $path);
+        $user = Systemic::$process->getCurrent()->getOwnerName();
+
+        return Systemic::$process->newLauncher($this->getPhpBinary(), $args, null, null, $user)
+            ->setSession(Cli::getSession());
+    }
+
+    /**
+     * New composer launcher
+     *
+     * @param string|array<string>|null $args
+     */
+    public function newComposerLauncher(
+        string|array|null $args = null
+    ): Launcher {
+        if ($args === null) {
+            $args = [];
+        } elseif (!is_array($args)) {
+            $args = (array)$args;
+        }
+
+        if (null === ($composer = Systemic::$os->which('composer'))) {
+            throw Exceptional::NotFound('Unable to locate global composer executable');
+        }
+
+        array_unshift($args, $composer);
+        $user = Systemic::$process->getCurrent()->getOwnerName();
+
+        return Systemic::$process->newLauncher($this->getPhpBinary(), $args, null, null, $user)
+            ->setSession(Cli::getSession());
     }
 
 
@@ -245,6 +234,14 @@ class Controller
         return true;
     }
 
+
+    /**
+     * Get PHP binary
+     */
+    public function getPhpBinary(): string
+    {
+        return $this->config['php'] ?? Systemic::$os->which('php') ?? 'php';
+    }
 
 
     /**
@@ -318,6 +315,22 @@ class Controller
     }
 
     /**
+     * Set config to save
+     */
+    public function setConfig(
+        string $key,
+        mixed $value
+    ): void {
+        /** @phpstan-var TConfig $config */
+        $config = $this->mergeConfig(
+            $this->newConfig,
+            $this->parseConfig([$key => $value])
+        );
+
+        $this->newConfig = $config;
+    }
+
+    /**
      * Save user config
      */
     protected function saveConfig(): void
@@ -356,6 +369,68 @@ class Controller
 
         $gitIgnore .= "\n" . 'effigy.json' . "\n";
         $gitFile->putContents($gitIgnore);
+    }
+
+
+    /**
+     * Load composer config
+     *
+     * @phpstan-return TConfig
+     */
+    protected function loadConfig(): array
+    {
+        /** @var array<string, mixed> */
+        $json = json_decode($this->composerFile->getContents(), true);
+        /** @phpstan-ignore-next-line */
+        $output = $this->parseConfig(Coercion::toArray($json['extra']['effigy'] ?? []));
+
+        /** @phpstan-ignore-next-line */
+        $this->scripts = $this->parseComposerScripts($json['scripts'] ?? []);
+
+        if ($this->userFile->exists()) {
+            $json = json_decode($this->userFile->getContents(), true);
+            $output = array_merge($this->parseConfig(Coercion::toArray($json)));
+        }
+
+        return $output;
+    }
+
+
+    /**
+     * Parse config
+     *
+     * @param array<string, mixed> $config
+     * @phpstan-return TConfig
+     */
+    protected function parseConfig(array $config): array
+    {
+        $output = [];
+
+        foreach ($config as $key => $value) {
+            switch ($key) {
+                // string
+                case 'entry':
+                case 'php':
+                    if (null !== ($value = Coercion::toStringOrNull($value))) {
+                        $output[$key] = $value;
+                    }
+                    break;
+
+                    // array<string, string
+                case 'params':
+                    if (null !== ($value = Coercion::toArrayOrNull($value))) {
+                        $output[$key] = [];
+
+                        foreach ($value as $slug => $param) {
+                            $output[$key][Coercion::forceString($slug)] = Coercion::forceString($param);
+                        }
+                    }
+                    break;
+            }
+        }
+
+        /** @phpstan-var TConfig */
+        return $output;
     }
 
 

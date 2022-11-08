@@ -12,7 +12,6 @@ namespace DecodeLabs\Effigy\Command;
 use DecodeLabs\Atlas;
 use DecodeLabs\Effigy\Command;
 use DecodeLabs\Effigy\Controller;
-use DecodeLabs\Systemic;
 use DecodeLabs\Terminus as Cli;
 
 class InstallLocal implements Command
@@ -37,11 +36,9 @@ class InstallLocal implements Command
         umask($umask);
 
         Cli::newLine();
-        $user = Systemic::$process->getCurrent()->getOwnerName();
         $args = ['require', 'decodelabs/effigy'];
 
-        Systemic::$process->newLauncher('composer', $args, null, null, $user)
-            ->setSession(Cli::getSession())
+        $this->controller->newComposerLauncher($args)
             ->launch();
     }
 }

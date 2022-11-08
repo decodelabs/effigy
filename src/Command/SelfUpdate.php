@@ -11,9 +11,8 @@ namespace DecodeLabs\Effigy\Command;
 
 use DecodeLabs\Effigy\Command;
 use DecodeLabs\Effigy\Controller;
-use DecodeLabs\Terminus as Cli;
 
-class RemoveLocal implements Command
+class SelfUpdate implements Command
 {
     protected Controller $controller;
 
@@ -24,16 +23,7 @@ class RemoveLocal implements Command
 
     public function execute(): void
     {
-        $binFile = $this->controller->rootDir->getFile('effigy');
-
-        Cli::{'brightMagenta'}('Deleting effigy executable... ');
-        $binFile->delete();
-        Cli::{'success'}('done');
-
-        Cli::newLine();
-        $args = ['remove', 'decodelabs/effigy'];
-
-        $this->controller->newComposerLauncher($args)
+        $this->controller->newComposerLauncher(['global', 'update', 'decodelabs/effigy'])
             ->launch();
     }
 }
