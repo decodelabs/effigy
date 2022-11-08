@@ -1,3 +1,6 @@
+## v0.1.5 (2022-11-08)
+* Added composer passthrough command
+
 ## v0.1.4 (2022-11-08)
 * Added custom PHP bin config
 * Added self-update command
