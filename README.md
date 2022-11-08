@@ -22,6 +22,14 @@ _Get news and updates on the [DecodeLabs blog](https://blog.decodelabs.com)._
 composer global require decodelabs/effigy
 ```
 
+You will also need to have added your global composer installation bin directory to your $PATH in your ~/.bash_profile or ~/.bashrc file:
+
+```bash
+export PATH=~/.config/composer/vendor/bin:$PATH
+```
+
+_Note, earlier versions of composer may store global config in `~/.composer/vendor/bin` - adapt your $PATH as necessary. You can find composer's home path with `composer global config home`_
+
 ## Usage
 
 Effigy can be used to simplify running tasks in your project from the command line. Its primary job is to locate and load the main entry point to your project via a globally installed executable.
