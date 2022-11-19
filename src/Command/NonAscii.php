@@ -35,9 +35,11 @@ class NonAscii implements Command
         $output = exec($command);
 
         if ($output !== '') {
-            Cli::newLine();
             Cli::error('Non ascii:');
             Cli::write((string)$output);
+            Cli::newLine();
+        } else {
+            Cli::success('No non-ascii characters causing issues');
             Cli::newLine();
         }
 

@@ -11,6 +11,7 @@ namespace DecodeLabs\Effigy\Command;
 
 use DecodeLabs\Effigy\Command;
 use DecodeLabs\Effigy\Controller;
+use DecodeLabs\Terminus as Cli;
 
 class Update implements Command
 {
@@ -23,42 +24,23 @@ class Update implements Command
 
     public function execute(): bool
     {
+        Cli::newLine();
+
         // Update
+        Cli::info('Update composer');
+
         if (!$this->controller->run('composer', 'update')) {
             return false;
         }
 
-
-        // Analysis
-        if (!$this->controller->run('analyze', '--clear')) {
-            return false;
-        }
-
-        if (!$this->controller->run('analyze')) {
-            return false;
-        }
+        Cli::newLine();
+        Cli::newLine();
 
 
-        // Standards
-        if (!$this->controller->run('format')) {
-            return false;
-        }
+        // Veneer
+        Cli::info('Create veneer stubs');
 
-
-        // Lint
-        if (!$this->controller->run('lint')) {
-            return false;
-        }
-
-
-        // EC Lint
-        if (!$this->controller->run('eclint')) {
-            return false;
-        }
-
-
-        // Non ascii
-        if (!$this->controller->run('non-ascii')) {
+        if (!$this->controller->run('veneer-stub')) {
             return false;
         }
 
