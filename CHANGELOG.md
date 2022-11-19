@@ -1,3 +1,5 @@
+* Fixed headless options in analyze and format commands
+
 ## v0.1.7 (2022-11-19)
 * Added veneer-stub command
 

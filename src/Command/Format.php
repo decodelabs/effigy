@@ -37,16 +37,21 @@ class Format implements Command
 
 
         $args = ['composer', 'exec', 'ecs'];
+        $composerArgs = ['--'];
 
         if (Cli::getArgument('headless')) {
             $args[] = '--no-interaction';
         }
 
         if (!Cli::getArgument('check')) {
-            $args[] = '-- --fix';
+            $composerArgs[] = '--fix';
         }
 
-        return $this->controller->run(...$args);
+        if (Cli::getArgument('headless')) {
+            $composerArgs[] = '--no-progress-bar';
+        }
+
+        return $this->controller->run(...$args, ...$composerArgs);
     }
 
     protected function ensureInstalled(): bool
