@@ -44,16 +44,22 @@ class Analyze implements Command
 
         // Main analyze
         $args = ['composer', 'exec', 'phpstan'];
+        $composerArgs = ['--'];
 
         if (Cli::getArgument('headless')) {
             $args[] = '--no-interaction';
         }
 
+
         if (Cli::getArgument('debug')) {
-            $args[] = '-- --debug';
+            $composerArgs[] = '--debug';
         }
 
-        if (!$this->controller->run(...$args)) {
+        if (Cli::getArgument('headless')) {
+            $composerArgs[] = '--no-progress';
+        }
+
+        if (!$this->controller->run(...$args, ...$composerArgs)) {
             return false;
         }
 
