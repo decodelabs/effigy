@@ -136,10 +136,14 @@ class Controller
     /**
      * Run controller
      */
-    public function run(): void
-    {
-        /** @var array<string> */
-        $args = array_values(Cli::prepareArguments());
+    public function run(
+        string ...$args
+    ): void {
+        if (empty($args)) {
+            /** @var array<string> */
+            $args = array_values(Cli::getRequest()->getArguments());
+        }
+
         $first = $args[0] ?? null;
 
         if ($first !== null) {
@@ -153,7 +157,7 @@ class Controller
 
 
             // Commands
-            if ($this->runCommand($first)) {
+            if ($this->runCommand($first, array_slice($args, 1))) {
                 $this->saveConfig();
                 return;
             }
@@ -216,22 +220,78 @@ class Controller
     }
 
 
+
+    /**
+     * Can run script or command
+     */
+    public function canRun(string $name): bool
+    {
+        return
+            $this->hasComposerScript($name) ||
+            $this->hasCommand($name);
+    }
+
+
+    /**
+     * Get list of composer scripts
+     *
+     * @return array<string>
+     */
+    public function getComposerScripts(): array
+    {
+        return $this->scripts;
+    }
+
+    /**
+     * Composer script exists
+     */
+    public function hasComposerScript(string $name): bool
+    {
+        return in_array($name, $this->scripts);
+    }
+
+
+    /**
+     * Has command
+     */
+    public function hasCommand(string $name): bool
+    {
+        return (bool)$this->getCommandClass($name);
+    }
+
+
     /**
      * Run command
+     * @param array<string> $args
      */
-    public function runCommand(string $command): bool
-    {
-        $command = (string)Dictum::id($command);
-
-        try {
-            $class = Archetype::resolve(Command::class, $command);
-        } catch (ArchetypeException $e) {
+    public function runCommand(
+        string $command,
+        array $args = []
+    ): bool {
+        if (!$class = $this->getCommandClass($command)) {
             return false;
         }
+
+        /** @phpstan-ignore-next-line */
+        Cli::setRequest(Cli::newRequest([$command, ...$args]));
 
         $command = new $class($this);
         $command->execute();
         return true;
+    }
+
+    /**
+     * Get command class
+     *
+     * @phpstan-return class-string<Command>|null
+     */
+    protected function getCommandClass(string $command): ?string
+    {
+        try {
+            return Archetype::resolve(Command::class, Dictum::id($command));
+        } catch (ArchetypeException $e) {
+            return null;
+        }
     }
 
 

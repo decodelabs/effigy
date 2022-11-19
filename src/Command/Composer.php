@@ -25,8 +25,7 @@ class Composer implements Command
     public function execute(): void
     {
         /** @var array<string> */
-        $args = array_values(Cli::prepareArguments());
-        array_shift($args);
+        $args = array_values(Cli::getRequest()->getArguments());
 
         $this->controller->newComposerLauncher($args)
             ->launch();
