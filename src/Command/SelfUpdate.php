@@ -23,8 +23,8 @@ class SelfUpdate implements Command
 
     public function execute(): bool
     {
-        return $this->controller->newComposerLauncher(['global', 'require', 'decodelabs/effigy'])
-            ->launch()
-            ->wasSuccessful();
+        // TODO: Check if running local copy
+
+        return $this->controller->run('composer', 'global', 'update');
     }
 }
