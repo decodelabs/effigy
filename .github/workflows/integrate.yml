@@ -123,7 +123,7 @@ jobs:
           dependency-versions: "highest"
 
       - name: "Execute static analysis"
-        run: "composer run-script --no-interaction analyze"
+        run: "composer exec phpstan analyze --no-interaction -- --no-progress"
         # @TODO Magic Number Detector, Copy-Paste Detector
 
   coding_standards:
@@ -155,7 +155,7 @@ jobs:
           dependency-versions: "highest"
 
       - name: "Check coding style"
-        run: "composer run-script --no-interaction ecs"
+        run: "composer exec ecs check --no-interaction -- --no-progress-bar"
 
   exported_files:
     name: "5️⃣ Exported files"

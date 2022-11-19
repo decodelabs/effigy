@@ -11,6 +11,7 @@ namespace DecodeLabs\Effigy\Command;
 
 use DecodeLabs\Effigy\Command;
 use DecodeLabs\Effigy\Controller;
+use DecodeLabs\Exceptional;
 use DecodeLabs\Terminus as Cli;
 
 class Analyze implements Command
@@ -22,31 +23,39 @@ class Analyze implements Command
         $this->controller = $controller;
     }
 
-    public function execute(): void
+    public function execute(): bool
     {
-        $this->ensureInstalled();
+        if (!$this->ensureInstalled()) {
+            throw Exceptional::Runtime('Unable to find or create a PHPStan neon config');
+        }
 
         Cli::getCommandDefinition()
             ->addArgument('-clear|c', 'Clear cache')
-            ->addArgument('-debug|d', 'Debug mode');
+            ->addArgument('-debug|d', 'Debug mode')
+            ->addArgument('-headless|h', 'No interaction mode');
 
         Cli::prepareArguments();
 
         // Clear
         if (Cli::getArgument('clear')) {
-            $this->controller->run('composer', 'exec', 'phpstan', 'clear-result-cache');
-            return;
+            return $this->controller->run('composer', 'exec', 'phpstan', 'clear-result-cache');
         }
 
 
         // Main analyze
         $args = ['composer', 'exec', 'phpstan'];
 
+        if (Cli::getArgument('headless')) {
+            $args[] = '--no-interaction';
+        }
+
         if (Cli::getArgument('debug')) {
             $args[] = '-- --debug';
         }
 
-        $this->controller->run(...$args);
+        if (!$this->controller->run(...$args)) {
+            return false;
+        }
 
 
 
@@ -58,11 +67,15 @@ class Analyze implements Command
                 continue;
             }
 
-            $this->controller->run('composer', 'run-script', $script);
+            if (!$this->controller->run('composer', 'run-script', $script)) {
+                return false;
+            }
         }
+
+        return true;
     }
 
-    protected function ensureInstalled(): void
+    protected function ensureInstalled(): bool
     {
         // Dependencies
         $execFile = $this->controller->rootDir->getFile('vendor/bin/phpstan');
@@ -77,7 +90,30 @@ class Analyze implements Command
         $neonFile = $this->controller->rootDir->getFile('phpstan.neon');
 
         if (!$neonFile->exists()) {
-            // TODO: create config
+            $dirs = $this->controller->getCodeDirs();
+
+            if (empty($dirs)) {
+                return false;
+            }
+
+            $paths = [];
+
+            foreach ($dirs as $name => $dir) {
+                $paths[] = '- ' . $name;
+            }
+
+            $pathString = implode("\n        ", $paths);
+
+            $content = <<<NEON
+parameters:
+    paths:
+        $pathString
+    level: max
+NEON;
+
+            $neonFile->putContents($content);
         }
+
+        return true;
     }
 }

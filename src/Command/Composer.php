@@ -22,12 +22,13 @@ class Composer implements Command
         $this->controller = $controller;
     }
 
-    public function execute(): void
+    public function execute(): bool
     {
         /** @var array<string> */
         $args = array_values(Cli::getRequest()->getArguments());
 
-        $this->controller->newComposerLauncher($args)
-            ->launch();
+        return $this->controller->newComposerLauncher($args)
+            ->launch()
+            ->wasSuccessful();
     }
 }

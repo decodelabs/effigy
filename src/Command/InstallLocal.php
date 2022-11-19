@@ -23,7 +23,7 @@ class InstallLocal implements Command
         $this->controller = $controller;
     }
 
-    public function execute(): void
+    public function execute(): bool
     {
         $binFile = Atlas::file(dirname(dirname(__DIR__)) . '/bin/effigy');
         $umask = umask(0);
@@ -38,7 +38,8 @@ class InstallLocal implements Command
         Cli::newLine();
         $args = ['require', 'decodelabs/effigy'];
 
-        $this->controller->newComposerLauncher($args)
-            ->launch();
+        return $this->controller->newComposerLauncher($args)
+            ->launch()
+            ->wasSuccessful();
     }
 }

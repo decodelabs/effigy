@@ -21,29 +21,47 @@ class Update implements Command
         $this->controller = $controller;
     }
 
-    public function execute(): void
+    public function execute(): bool
     {
-        $this->controller->run('composer', 'update');
-
-        if ($this->controller->canRun('analyze')) {
-            $this->controller->run('analyze', '--clear');
-            $this->controller->run('analyze');
+        // Update
+        if (!$this->controller->run('composer', 'update')) {
+            return false;
         }
 
-        if ($this->controller->canRun('ecs-fix')) {
-            $this->controller->run('ecs-fix');
+
+        // Analysis
+        if (!$this->controller->run('analyze', '--clear')) {
+            return false;
         }
 
-        if ($this->controller->canRun('lint')) {
-            $this->controller->run('lint');
+        if (!$this->controller->run('analyze')) {
+            return false;
         }
 
-        if ($this->controller->canRun('eclint-fix')) {
-            $this->controller->run('eclint-fix');
+
+        // Standards
+        if (!$this->controller->run('format')) {
+            return false;
         }
 
-        if ($this->controller->canRun('non-ascii')) {
-            $this->controller->run('non-ascii');
+
+        // Lint
+        if (!$this->controller->run('lint')) {
+            return false;
         }
+
+
+        // EC Lint
+        if (!$this->controller->run('eclint')) {
+            return false;
+        }
+
+
+        // Non ascii
+        if (!$this->controller->run('non-ascii')) {
+            return false;
+        }
+
+        return true;
     }
 }

@@ -22,7 +22,7 @@ class RemoveLocal implements Command
         $this->controller = $controller;
     }
 
-    public function execute(): void
+    public function execute(): bool
     {
         $binFile = $this->controller->rootDir->getFile('effigy');
 
@@ -33,7 +33,8 @@ class RemoveLocal implements Command
         Cli::newLine();
         $args = ['remove', 'decodelabs/effigy'];
 
-        $this->controller->newComposerLauncher($args)
-            ->launch();
+        return $this->controller->newComposerLauncher($args)
+            ->launch()
+            ->wasSuccessful();
     }
 }

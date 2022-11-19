@@ -21,9 +21,10 @@ class SelfUpdate implements Command
         $this->controller = $controller;
     }
 
-    public function execute(): void
+    public function execute(): bool
     {
-        $this->controller->newComposerLauncher(['global', 'update', 'decodelabs/effigy'])
-            ->launch();
+        return $this->controller->newComposerLauncher(['global', 'update', 'decodelabs/effigy'])
+            ->launch()
+            ->wasSuccessful();
     }
 }
