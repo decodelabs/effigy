@@ -1,4 +1,7 @@
-## v0.1.6 (2022-11-08)
+## v0.1.7 (2022-11-19)
+* Added veneer-stub command
+
+## v0.1.6 (2022-11-19)
 * Added full composer scripts replacement commands
 * Added codeDir config support
 * Added proper process termination handling
