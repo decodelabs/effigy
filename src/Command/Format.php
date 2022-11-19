@@ -95,6 +95,7 @@ return static function (ECSConfig \$ecsConfig): void {
     \$ecsConfig->paths($pathString);
     \$ecsConfig->sets([SetList::CLEAN_CODE, SetList::PSR_12]);
 };
+
 ECS;
 
             $ecsFile->putContents($content);
