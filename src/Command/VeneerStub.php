@@ -11,6 +11,7 @@ namespace DecodeLabs\Effigy\Command;
 
 use DecodeLabs\Effigy\Command;
 use DecodeLabs\Effigy\Controller;
+use DecodeLabs\Terminus as Cli;
 
 class VeneerStub implements Command
 {
@@ -26,6 +27,7 @@ class VeneerStub implements Command
         $execFile = $this->controller->rootDir->getFile('vendor/bin/veneer-stub');
 
         if (!$execFile->exists()) {
+            Cli::operative('This package does not use Veneer');
             return true;
         }
 
