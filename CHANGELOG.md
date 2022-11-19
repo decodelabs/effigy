@@ -1,3 +1,5 @@
+* Migrated to use effigy in CI workflow
+
 ## v0.1.8 (2022-11-19)
 * Fixed headless options in analyze and format commands
 * Updated self-update command
