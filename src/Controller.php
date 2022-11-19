@@ -27,7 +27,8 @@ use Throwable;
  * @phpstan-type TConfig array{
  *     'php'?: string,
  *     'entry'?: string,
- *     'params'?: array<string, string>
+ *     'params'?: array<string, string>,
+ *     'codeDirs'?: array<string>
  * }
  */
 class Controller
@@ -65,7 +66,7 @@ class Controller
             Cli::newLine();
             Cli::error($e->getMessage());
             Cli::newLine();
-            exit;
+            exit(1);
         });
 
         if (false === ($dir = getcwd())) {
@@ -136,26 +137,34 @@ class Controller
     /**
      * Run controller
      */
-    public function run(): void
-    {
-        /** @var array<string> */
-        $args = array_values(Cli::prepareArguments());
+    public function run(
+        string ...$args
+    ): bool {
+        if (empty($args)) {
+            /** @var array<string> */
+            $args = array_values(Cli::getRequest()->getArguments());
+        }
+
         $first = $args[0] ?? null;
 
         if ($first !== null) {
             // Composer script
             if (in_array($first, $this->scripts)) {
-                $this->newComposerLauncher($args)
+                $result = $this->newComposerLauncher($args)
                     ->launch();
 
-                return;
+                return $result->wasSuccessful();
             }
 
 
             // Commands
-            if ($this->runCommand($first)) {
+            $result = $this->runCommand($first, array_slice($args, 1));
+
+            if ($result === true) {
                 $this->saveConfig();
-                return;
+                return true;
+            } elseif ($result === false) {
+                return false;
             }
         }
 
@@ -164,8 +173,10 @@ class Controller
         $this->saveConfig();
 
         // Launch script
-        $this->newScriptLauncher($entry->getPath(), $args)
+        $result = $this->newScriptLauncher($entry->getPath(), $args)
             ->launch();
+
+        return $result->wasSuccessful();
     }
 
     /**
@@ -216,23 +227,87 @@ class Controller
     }
 
 
+
+    /**
+     * Can run script or command
+     */
+    public function canRun(string $name): bool
+    {
+        return
+            $this->hasComposerScript($name) ||
+            $this->hasCommand($name);
+    }
+
+
+    /**
+     * Get list of composer scripts
+     *
+     * @return array<string>
+     */
+    public function getComposerScripts(): array
+    {
+        return $this->scripts;
+    }
+
+    /**
+     * Composer script exists
+     */
+    public function hasComposerScript(string $name): bool
+    {
+        return in_array($name, $this->scripts);
+    }
+
+
+    /**
+     * Has command
+     */
+    public function hasCommand(string $name): bool
+    {
+        return (bool)$this->getCommandClass($name);
+    }
+
+
     /**
      * Run command
+     * @param array<string> $args
      */
-    public function runCommand(string $command): bool
-    {
-        $command = (string)Dictum::id($command);
+    public function runCommand(
+        string $name,
+        array $args = []
+    ): ?bool {
+        if (!$class = $this->getCommandClass($name)) {
+            return null;
+        }
 
-        try {
-            $class = Archetype::resolve(Command::class, $command);
-        } catch (ArchetypeException $e) {
+        $args = [$name, ...$args];
+
+        /** @phpstan-ignore-next-line */
+        Cli::setRequest(Cli::newRequest($args));
+
+        $command = new $class($this);
+
+        if (!$command->execute()) {
             return false;
         }
 
-        $command = new $class($this);
-        $command->execute();
         return true;
     }
+
+    /**
+     * Get command class
+     *
+     * @phpstan-return class-string<Command>|null
+     */
+    protected function getCommandClass(string $command): ?string
+    {
+        try {
+            return Archetype::resolve(Command::class, Dictum::id($command));
+        } catch (ArchetypeException $e) {
+            return null;
+        }
+    }
+
+
 
 
     /**
@@ -314,6 +389,35 @@ class Controller
         return $value;
     }
 
+
+    /**
+     * Get code paths
+     *
+     * @return array<string, Dir>
+     */
+    public function getCodeDirs(): array
+    {
+        if (isset($this->config['codeDirs'])) {
+            $dirs = $this->config['codeDirs'];
+        } else {
+            static $dirs = ['src', 'tests', 'stubs'];
+        }
+
+        $output = [];
+
+        foreach ($dirs as $name) {
+            $dir = $this->rootDir->getDir($name);
+
+            if ($dir->exists()) {
+                $output[(string)$name] = $dir;
+            }
+        }
+
+        return $output;
+    }
+
+
+
     /**
      * Set config to save
      */
@@ -389,7 +493,7 @@ class Controller
 
         if ($this->userFile->exists()) {
             $json = json_decode($this->userFile->getContents(), true);
-            $output = array_merge($this->parseConfig(Coercion::toArray($json)));
+            $output = array_merge($output, $this->parseConfig(Coercion::toArray($json)));
         }
 
         return $output;
@@ -416,13 +520,24 @@ class Controller
                     }
                     break;
 
-                    // array<string, string
+                    // array<string, string>
                 case 'params':
                     if (null !== ($value = Coercion::toArrayOrNull($value))) {
                         $output[$key] = [];
 
                         foreach ($value as $slug => $param) {
                             $output[$key][Coercion::forceString($slug)] = Coercion::forceString($param);
+                        }
+                    }
+                    break;
+
+                    // array<string>
+                case 'codeDirs':
+                    if (null !== ($value = Coercion::toArrayOrNull($value))) {
+                        $output[$key] = [];
+
+                        foreach ($value as $param) {
+                            $output[$key][] = Coercion::forceString($param);
                         }
                     }
                     break;

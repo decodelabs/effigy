@@ -23,7 +23,7 @@ class SetPhp implements Command
         $this->controller = $controller;
     }
 
-    public function execute(): void
+    public function execute(): bool
     {
         $binName = (string)Cli::ask('Which PHP binary should this project use?', 'php');
 
@@ -36,5 +36,6 @@ class SetPhp implements Command
         // TODO: validate binary
 
         $this->controller->setConfig('php', $binName);
+        return true;
     }
 }

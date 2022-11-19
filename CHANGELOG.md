@@ -1,3 +1,8 @@
+## v0.1.6 (2022-11-08)
+* Added full composer scripts replacement commands
+* Added codeDir config support
+* Added proper process termination handling
+
 ## v0.1.5 (2022-11-08)
 * Added composer passthrough command
 
