@@ -12,7 +12,7 @@ namespace DecodeLabs\Effigy\Command;
 use DecodeLabs\Effigy\Command;
 use DecodeLabs\Effigy\Controller;
 
-class SelfUpdate implements Command
+class VeneerStub implements Command
 {
     protected Controller $controller;
 
@@ -23,8 +23,12 @@ class SelfUpdate implements Command
 
     public function execute(): bool
     {
-        return $this->controller->newComposerLauncher(['global', 'require', 'decodelabs/effigy'])
-            ->launch()
-            ->wasSuccessful();
+        $execFile = $this->controller->rootDir->getFile('vendor/bin/veneer-stub');
+
+        if (!$execFile->exists()) {
+            return true;
+        }
+
+        return $this->controller->run('composer', 'exec', 'veneer-stub');
     }
 }

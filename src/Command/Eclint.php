@@ -53,7 +53,13 @@ class Eclint implements Command
             ->setSession(Cli::getSession())
             ->launch();
 
-        return $result->wasSuccessful();
+        $output = $result->wasSuccessful();
+
+        if ($output) {
+            Cli::success('No linting issues found');
+        }
+
+        return $output;
     }
 
     protected function ensureInstalled(): bool
