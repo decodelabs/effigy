@@ -16,7 +16,7 @@
         "decodelabs/dictum": "^0.4.3",
         "decodelabs/exceptional": "^0.4",
         "decodelabs/systemic": "^0.10.1",
-        "decodelabs/terminus": "^0.9.1"
+        "decodelabs/terminus": "^0.9.3"
     },
     "require-dev": {
         "phpunit/phpunit": "^9",

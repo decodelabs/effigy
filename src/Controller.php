@@ -17,6 +17,7 @@ use DecodeLabs\Atlas\File;
 use DecodeLabs\Coercion;
 use DecodeLabs\Dictum;
 use DecodeLabs\Exceptional;
+use DecodeLabs\Glitch\Dumpable;
 use DecodeLabs\Systemic;
 use DecodeLabs\Systemic\Process\Launcher;
 use DecodeLabs\Terminus as Cli;
@@ -28,10 +29,11 @@ use Throwable;
  *     'php'?: string,
  *     'entry'?: string,
  *     'params'?: array<string, string>,
- *     'codeDirs'?: array<string>
+ *     'codeDirs'?: array<string>,
+ *     'exports'?: array<string>
  * }
  */
-class Controller
+class Controller implements Dumpable
 {
     public const USER_FILENAME = 'effigy.json';
 
@@ -40,6 +42,7 @@ class Controller
     public File $composerFile;
     public File $userFile;
 
+    protected bool $local = false;
     protected ?File $entryFile = null;
 
     /**
@@ -56,6 +59,11 @@ class Controller
      * @var array<string>
      */
     protected array $scripts = [];
+
+    /**
+     * @var array<string, mixed>
+     */
+    protected array $composerConfig;
 
     /**
      * Initialize paths
@@ -83,6 +91,9 @@ class Controller
         $this->rootDir = $root;
         $this->userFile = $this->loadUserFile();
         $this->config = $this->loadConfig();
+
+        $entry = Atlas::file((string)realpath($_SERVER['PHP_SELF']));
+        $this->local = (string)$entry->getParent() === (string)$this->rootDir;
     }
 
 
@@ -103,7 +114,7 @@ class Controller
             $dir = $dir->getParent();
         } while ($dir !== null);
 
-        throw Exceptional::Runtime('Unable to find composer.json');
+        return $this->runDir->getFile('composer.json');
     }
 
     /**
@@ -131,6 +142,15 @@ class Controller
         }
 
         return $output;
+    }
+
+
+    /**
+     * Is local installation
+     */
+    public function isLocal(): bool
+    {
+        return $this->local;
     }
 
 
@@ -416,6 +436,16 @@ class Controller
         return $output;
     }
 
+    /**
+     * Get exports whitelist
+     *
+     * @return array<string>
+     */
+    public function getExportsWhitelist(): array
+    {
+        return $this->config['exports'] ?? [];
+    }
+
 
 
     /**
@@ -477,14 +507,46 @@ class Controller
 
 
     /**
+     * Get composer config
+     *
+     * @return array<string, mixed>
+     */
+    public function getComposerConfig(): array
+    {
+        if (!isset($this->composerConfig)) {
+            return $this->reloadComposerConfig();
+        }
+
+        return $this->composerConfig;
+    }
+
+    /**
+     * Reload composer config
+     *
+     * @return array<string, mixed>
+     */
+    public function reloadComposerConfig(): array
+    {
+        if ($this->composerFile->exists()) {
+            /** @var array<string, mixed> */
+            $json = json_decode($this->composerFile->getContents(), true);
+            $this->composerConfig = $json;
+        } else {
+            $this->composerConfig = [];
+        }
+
+        return $this->composerConfig;
+    }
+
+
+    /**
      * Load composer config
      *
      * @phpstan-return TConfig
      */
     protected function loadConfig(): array
     {
-        /** @var array<string, mixed> */
-        $json = json_decode($this->composerFile->getContents(), true);
+        $json = $this->getComposerConfig();
         /** @phpstan-ignore-next-line */
         $output = $this->parseConfig(Coercion::toArray($json['extra']['effigy'] ?? []));
 
@@ -533,10 +595,12 @@ class Controller
 
                     // array<string>
                 case 'codeDirs':
+                case 'exports':
                     if (null !== ($value = Coercion::toArrayOrNull($value))) {
                         $output[$key] = [];
 
                         foreach ($value as $param) {
+                            /** @phpstan-ignore-next-line */
                             $output[$key][] = Coercion::forceString($param);
                         }
                     }
@@ -572,5 +636,24 @@ class Controller
         }
 
         return $config;
+    }
+
+
+    /**
+     * Export for dump inspection
+     */
+    public function glitchDump(): iterable
+    {
+        yield 'properties' => [
+            '*local' => $this->local,
+            '*config' => $this->config,
+            '*newConfig' => $this->newConfig,
+            '*scripts' => $this->scripts,
+            '*entryFile' => $this->entryFile,
+            'runDir' => $this->runDir,
+            'rootDir' => $this->rootDir,
+            'composerFile' => $this->composerFile->exists() ? $this->composerFile : null,
+            'userFile' => $this->userFile->exists() ? $this->userFile : null
+        ];
     }
 }

@@ -10,6 +10,7 @@ declare(strict_types=1);
 namespace DecodeLabs\Effigy\Command;
 
 use DecodeLabs\Effigy\Command;
+use DecodeLabs\Effigy\Command\GenerateEcsConfig\EcsTemplate;
 use DecodeLabs\Effigy\Controller;
 use DecodeLabs\Exceptional;
 use DecodeLabs\Terminus as Cli;
@@ -67,38 +68,8 @@ class Format implements Command
         $ecsFile = $this->controller->rootDir->getFile('ecs.php');
 
         if (!$ecsFile->exists()) {
-            $dirs = $this->controller->getCodeDirs();
-
-            if (empty($dirs)) {
-                return false;
-            }
-
-            $paths = [];
-
-            foreach ($dirs as $name => $dir) {
-                $paths[] = '__DIR__.\'/' . $name . '\'';
-            }
-
-            $pathString = '[' . implode(', ', $paths) . ']';
-
-            $content = <<<ECS
-<?php
-
-// ecs.php
-
-declare(strict_types=1);
-
-use Symplify\EasyCodingStandard\Config\ECSConfig;
-use Symplify\EasyCodingStandard\ValueObject\Set\SetList;
-
-return static function (ECSConfig \$ecsConfig): void {
-    \$ecsConfig->paths($pathString);
-    \$ecsConfig->sets([SetList::CLEAN_CODE, SetList::PSR_12]);
-};
-
-ECS;
-
-            $ecsFile->putContents($content);
+            $template = new EcsTemplate($this->controller);
+            $template->saveTo($ecsFile);
         }
 
         return true;

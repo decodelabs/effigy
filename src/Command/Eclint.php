@@ -11,6 +11,7 @@ namespace DecodeLabs\Effigy\Command;
 
 use DecodeLabs\Effigy\Command;
 use DecodeLabs\Effigy\Controller;
+use DecodeLabs\Effigy\Template;
 use DecodeLabs\Exceptional;
 use DecodeLabs\Systemic;
 use DecodeLabs\Terminus as Cli;
@@ -71,30 +72,12 @@ class Eclint implements Command
         $confFile = $this->controller->rootDir->getFile('.editorconfig');
 
         if (!$confFile->exists()) {
-            $content = <<<CONF
-# https://EditorConfig.org
+            $template = new Template(
+                $this->controller,
+                __DIR__ . '/GenerateEditorConfig/editorconfig.template'
+            );
 
-root = true
-
-[*]
-indent_style = space
-indent_size = 4
-end_of_line = lf
-charset = utf-8
-trim_trailing_whitespace = true
-insert_final_newline = true
-block_comment_start = /*
-block_comment = *
-block_comment_end = */
-
-[*.yml]
-indent_size = 2
-
-[*.md]
-trim_trailing_whitespace = false
-CONF;
-
-            $confFile->putContents($content);
+            $template->saveTo($confFile);
         }
 
         return true;

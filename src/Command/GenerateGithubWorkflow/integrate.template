@@ -5,11 +5,11 @@ name: "Integrate"
 on:
   push:
     branches:
-      - "develop"
+      - "{{ gitBranch }}"
   pull_request: null
 
 env:
-  PHP_EXTENSIONS: "intl"
+  PHP_EXTENSIONS: "{{ phpExtensions }}"
 
 jobs:
   file_consistency:
@@ -51,6 +51,47 @@ jobs:
         run: |
           composer global exec effigy lint
 
+##  unit_tests:
+##    name: "2️⃣ Unit and functional tests"
+##    needs:
+##      - "file_consistency"
+##    strategy:
+##      matrix:
+##        php-version:
+##          - "8.0"
+##          - "8.1"
+##          - "8.2"
+##        dependencies:
+##          - "lowest"
+##          - "highest"
+##    runs-on: "ubuntu-latest"
+##    steps:
+##      - name: "Set up PHP"
+##        uses: "shivammathur/setup-php@v2"
+##        with:
+##          php-version: "${{ matrix.php-version }}"
+##          extensions: "${{ env.PHP_EXTENSIONS }}"
+##          ini-values: "post_max_size=256M"
+##
+##      - name: "Checkout code"
+##        uses: "actions/checkout@v3"
+##
+##      - name: "Install dependencies"
+##        uses: "ramsey/composer-install@v2"
+##        with:
+##          dependency-versions: "${{ matrix.dependencies }}"
+##
+##      - name: "Execute unit tests"
+##        run: "composer run-script --no-interaction phpunit -- --verbose"
+##
+##      - name: Send coverage to Coveralls
+##        if: "matrix.php-version == '8.1' && matrix.dependencies == 'highest'"
+##        env:
+##          COVERALLS_REPO_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
+##        run: |
+##          wget "https://github.com/php-coveralls/php-coveralls/releases/download/v2.5.2/php-coveralls.phar"
+##          php ./php-coveralls.phar -v
+##
   static_analysis:
     name: "3️⃣ Static Analysis"
     needs:

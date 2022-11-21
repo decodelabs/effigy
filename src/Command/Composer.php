@@ -27,6 +27,13 @@ class Composer implements Command
         /** @var array<string> */
         $args = array_values(Cli::getRequest()->getArguments());
 
+        if (
+            $this->controller->isLocal() &&
+            $args[0] === 'global'
+        ) {
+            array_shift($args);
+        }
+
         return $this->controller->newComposerLauncher($args)
             ->launch()
             ->wasSuccessful();
