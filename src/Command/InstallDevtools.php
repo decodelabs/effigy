@@ -38,6 +38,12 @@ class InstallDevtools implements Command
 
         Cli::prepareArguments();
 
+        if (!$this->controller->run(
+            'composer', 'config', 'allow-plugins.phpstan/extension-installer', 'true'
+        )) {
+            return false;
+        }
+
         if ($this->controller->isLocal()) {
             $args = ['composer', 'require', '--dev'];
         } else {
