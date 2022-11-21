@@ -1,3 +1,7 @@
+## v0.1.11 (2022-11-21)
+* Fixed analyze command
+* Fixed remove-local command
+
 ## v0.1.10 (2022-11-21)
 * Use effigy dependencies for prep
 
