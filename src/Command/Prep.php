@@ -89,7 +89,7 @@ class Prep implements Command
         // Non ascii
         Cli::info('Check for non-ASCII characters');
 
-        if (!$this->controller->run('non-ascii')) {
+        if (!$this->controller->run('check-non-ascii')) {
             return false;
         }
 

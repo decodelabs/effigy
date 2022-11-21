@@ -11,6 +11,7 @@ namespace DecodeLabs\Effigy\Command;
 
 use DecodeLabs\Effigy\Command;
 use DecodeLabs\Effigy\Controller;
+use DecodeLabs\Terminus as Cli;
 
 class SelfUpdate implements Command
 {
@@ -23,8 +24,37 @@ class SelfUpdate implements Command
 
     public function execute(): bool
     {
-        // TODO: Check if running local copy
+        if (
+            !$this->controller->isLocal() &&
+            !$this->controller->run('composer', 'global', 'update')
+        ) {
+            return false;
+        }
 
-        return $this->controller->run('composer', 'global', 'update');
+        Cli::newLine();
+        Cli::info('Re-requiring effigy...');
+        Cli::newLine();
+
+        if (!$this->controller->run('composer', 'global', 'require', 'decodelabs/effigy')) {
+            return false;
+        }
+
+
+
+        if ($this->controller->isLocal()) {
+            Cli::newLine();
+            Cli::info('Re-installing local executable...');
+            Cli::newLine();
+
+            if (!$this->controller->run('install-local')) {
+                return false;
+            }
+        }
+
+        Cli::newLine();
+        Cli::success('done');
+        Cli::newLine();
+
+        return true;
     }
 }

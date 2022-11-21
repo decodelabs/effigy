@@ -1,0 +1,4 @@
+parameters:
+    paths:
+        {{ paths }}
+    level: max

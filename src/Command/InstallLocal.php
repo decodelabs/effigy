@@ -34,12 +34,8 @@ class InstallLocal implements Command
         Cli::{'success'}('done');
 
         umask($umask);
-
         Cli::newLine();
-        $args = ['require', 'decodelabs/effigy'];
 
-        return $this->controller->newComposerLauncher($args)
-            ->launch()
-            ->wasSuccessful();
+        return $this->controller->run('composer', 'require', 'decodelabs/effigy');
     }
 }

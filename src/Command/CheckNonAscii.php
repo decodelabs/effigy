@@ -13,7 +13,7 @@ use DecodeLabs\Effigy\Command;
 use DecodeLabs\Effigy\Controller;
 use DecodeLabs\Terminus as Cli;
 
-class NonAscii implements Command
+class CheckNonAscii implements Command
 {
     protected Controller $controller;
 
@@ -30,6 +30,8 @@ class NonAscii implements Command
             return true;
         }
 
+        chdir((string)$this->controller->rootDir);
+
         $pathString = implode(' ', array_keys($dirs));
         $command = "! LC_ALL=C.UTF-8 find $pathString -type f -name \"*.php\" -print0 | xargs -0 -- grep -PHn \"[^ -~]\" | grep -v '// @ignore-non-ascii$'";
         $output = exec($command);
@@ -42,6 +44,8 @@ class NonAscii implements Command
             Cli::success('No non-ascii characters causing issues');
             Cli::newLine();
         }
+
+        chdir((string)$this->controller->runDir);
 
         return $output === '';
     }

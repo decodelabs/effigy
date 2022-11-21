@@ -10,6 +10,7 @@ declare(strict_types=1);
 namespace DecodeLabs\Effigy\Command;
 
 use DecodeLabs\Effigy\Command;
+use DecodeLabs\Effigy\Command\GeneratePhpstanConfig\PhpstanTemplate;
 use DecodeLabs\Effigy\Controller;
 use DecodeLabs\Exceptional;
 use DecodeLabs\Terminus as Cli;
@@ -96,28 +97,8 @@ class Analyze implements Command
         $neonFile = $this->controller->rootDir->getFile('phpstan.neon');
 
         if (!$neonFile->exists()) {
-            $dirs = $this->controller->getCodeDirs();
-
-            if (empty($dirs)) {
-                return false;
-            }
-
-            $paths = [];
-
-            foreach ($dirs as $name => $dir) {
-                $paths[] = '- ' . $name;
-            }
-
-            $pathString = implode("\n        ", $paths);
-
-            $content = <<<NEON
-parameters:
-    paths:
-        $pathString
-    level: max
-NEON;
-
-            $neonFile->putContents($content);
+            $template = new PhpstanTemplate($this->controller);
+            $template->saveTo($neonFile);
         }
 
         return true;

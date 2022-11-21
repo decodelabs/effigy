@@ -1,0 +1,24 @@
+{
+    "name": "{{ pkgName }}",
+    "description": "{{ pkgDescription }}",
+    "type": "{{ pkgType }}",
+    "keywords": [],
+    "license": "{{ pkgLicense }}",
+    "authors": {{ pkgAuthors }},
+    "require": {
+        "php": "^8.0"
+    },
+    "require-dev": {
+        "php": "^8.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "{{ classRoot }}": "src/"
+        }
+    },
+    "extra": {
+        "branch-alias": {
+            "dev-develop": "0.1.x-dev"
+        }
+    }
+}
