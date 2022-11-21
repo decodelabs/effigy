@@ -131,6 +131,13 @@ class Template
 
             case 'gitBranch':
                 return $this->getGitBranch();
+
+            case '__effigyVersion':
+                if ($this->getSlot('pkgName') === 'decodelabs/effigy') {
+                    return 'dev-develop';
+                } else {
+                    return '';
+                }
         }
 
         return null;
@@ -143,7 +150,7 @@ class Template
     public function saveTo(
         string|File $file
     ): File {
-        $content = (string)preg_replace_callback('/{{ ?([a-zA-Z0-9]+) ?}}/', function ($matches) {
+        $content = (string)preg_replace_callback('/{{ ?([a-zA-Z0-9_]+) ?}}/', function ($matches) {
             $name = $matches[1];
             $output = $this->getSlot($name);
 

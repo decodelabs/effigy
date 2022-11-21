@@ -57,13 +57,6 @@ class Format implements Command
 
     protected function ensureInstalled(): bool
     {
-        // Dependencies
-        $pkgDir = $this->controller->rootDir->getDir('vendor/symplify/easy-coding-standard');
-
-        if (!$pkgDir->exists()) {
-            $this->controller->run('install-devtools');
-        }
-
         // ECS file
         $ecsFile = $this->controller->rootDir->getFile('ecs.php');
 

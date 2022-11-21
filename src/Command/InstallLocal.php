@@ -36,6 +36,6 @@ class InstallLocal implements Command
         umask($umask);
         Cli::newLine();
 
-        return $this->controller->run('composer', 'require', 'decodelabs/effigy');
+        return $this->controller->run('composer', 'require', 'decodelabs/effigy', '--dev');
     }
 }

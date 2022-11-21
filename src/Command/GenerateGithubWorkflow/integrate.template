@@ -28,7 +28,7 @@ jobs:
 
       - name: Install Effigy
         run: |
-          composer global require decodelabs/effigy
+          composer global require decodelabs/effigy {{ __effigyVersion }}
           composer global exec effigy install-devtools -- --global
 
       - name: "Install dependencies"
@@ -117,7 +117,7 @@ jobs:
 
       - name: Install Effigy
         run: |
-          composer global require decodelabs/effigy
+          composer global require decodelabs/effigy {{ __effigyVersion }}
           composer global exec effigy install-devtools -- --global
 
       - name: "Validate Composer configuration"
@@ -157,7 +157,7 @@ jobs:
 
       - name: Install Effigy
         run: |
-          composer global require decodelabs/effigy
+          composer global require decodelabs/effigy {{ __effigyVersion }}
           composer global exec effigy install-devtools -- --global
 
       - name: "Install dependencies"

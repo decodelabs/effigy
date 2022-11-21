@@ -11,7 +11,6 @@ namespace DecodeLabs\Effigy\Command;
 
 use DecodeLabs\Effigy\Command;
 use DecodeLabs\Effigy\Controller;
-use DecodeLabs\Exceptional;
 
 class Lint implements Command
 {
@@ -24,10 +23,6 @@ class Lint implements Command
 
     public function execute(): bool
     {
-        if (!$this->ensureInstalled()) {
-            throw Exceptional::ComponentUnavailable('Unable to use php-parallel-lint/php-parallel-lint');
-        }
-
         $dirs = $this->controller->getCodeDirs();
 
         if (empty($dirs)) {
@@ -36,17 +31,5 @@ class Lint implements Command
 
         $paths = array_keys($dirs);
         return $this->controller->run('composer', 'global', 'exec', 'parallel-lint', ...$paths);
-    }
-
-    protected function ensureInstalled(): bool
-    {
-        // Dependencies
-        $pkgDir = $this->controller->rootDir->getDir('vendor/php-parallel-lint/php-parallel-lint');
-
-        if (!$pkgDir->exists()) {
-            $this->controller->run('install-devtools');
-        }
-
-        return true;
     }
 }

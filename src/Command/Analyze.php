@@ -84,13 +84,6 @@ class Analyze implements Command
 
     protected function ensureInstalled(): bool
     {
-        // Dependencies
-        $execFile = $this->controller->rootDir->getFile('vendor/bin/phpstan');
-
-        if (!$execFile->exists()) {
-            $this->controller->run('install-devtools');
-        }
-
         // Neon file
         $neonFile = $this->controller->rootDir->getFile('phpstan.neon');
 
