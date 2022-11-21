@@ -37,7 +37,7 @@ class Format implements Command
         Cli::prepareArguments();
 
 
-        $args = ['composer', 'exec', 'ecs'];
+        $args = ['composer', 'global', 'exec', 'ecs'];
         $composerArgs = ['--'];
 
         if (Cli::getArgument('headless')) {
@@ -61,7 +61,7 @@ class Format implements Command
         $pkgDir = $this->controller->rootDir->getDir('vendor/symplify/easy-coding-standard');
 
         if (!$pkgDir->exists()) {
-            $this->controller->run('composer', 'require', 'symplify/easy-coding-standard', '--dev');
+            $this->controller->run('install-devtools');
         }
 
         // ECS file

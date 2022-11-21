@@ -35,7 +35,7 @@ class Lint implements Command
         }
 
         $paths = array_keys($dirs);
-        return $this->controller->run('composer', 'exec', 'parallel-lint', ...$paths);
+        return $this->controller->run('composer', 'global', 'exec', 'parallel-lint', ...$paths);
     }
 
     protected function ensureInstalled(): bool
@@ -44,7 +44,7 @@ class Lint implements Command
         $pkgDir = $this->controller->rootDir->getDir('vendor/php-parallel-lint/php-parallel-lint');
 
         if (!$pkgDir->exists()) {
-            $this->controller->run('composer', 'require', 'php-parallel-lint/php-parallel-lint', '--dev');
+            $this->controller->run('install-devtools');
         }
 
         return true;

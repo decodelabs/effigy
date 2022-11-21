@@ -28,12 +28,14 @@ trait GenerateFileTrait
         Cli::getCommandDefinition()
             ->addArgument('-check|c', 'Check if file exists');
 
+        Cli::prepareArguments();
+
         $target = $this->getTargetFile();
 
         if (
             $target->exists() &&
             (
-                !Cli::getArgument('check') ||
+                Cli::getArgument('check') ||
                 !Cli::confirm($target->getName() . ' exists - overwrite?')
             )
         ) {
