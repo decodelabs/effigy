@@ -84,6 +84,14 @@ class Analyze implements Command
 
     protected function ensureInstalled(): bool
     {
+        // ext dir
+        $config = $this->controller->getComposerConfig();
+
+        /** @phpstan-ignore-next-line */
+        if (!isset($config['require-dev']['decodelabs/phpstan-decodelabs'])) {
+            $this->controller->run('composer', 'require', 'decodelabs/phpstan-decodelabs', '--dev');
+        }
+
         // Neon file
         $neonFile = $this->controller->rootDir->getFile('phpstan.neon');
 

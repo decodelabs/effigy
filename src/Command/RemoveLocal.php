@@ -31,10 +31,8 @@ class RemoveLocal implements Command
         Cli::{'success'}('done');
 
         Cli::newLine();
-        $args = ['remove', 'decodelabs/effigy', '--dev'];
 
-        return $this->controller->newComposerLauncher($args)
-            ->launch()
-            ->wasSuccessful();
+        $args = ['composer', 'remove', ...InstallLocal::PACKAGES, '--dev'];
+        return $this->controller->run(...$args);
     }
 }

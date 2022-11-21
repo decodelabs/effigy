@@ -23,7 +23,8 @@ class GenerateComposerConfig implements Command
     ];
 
     public const DEV_PACKAGES = [
-        'decodelabs/glitch'
+        'decodelabs/glitch',
+        'decodelabs/phpstan-decodelabs'
     ];
 
     protected function getTargetFile(): File
