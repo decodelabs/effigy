@@ -28,7 +28,8 @@ jobs:
 
       - name: Install Effigy
         run: |
-          composer global require decodelabs/effigy dev-develop
+          composer global require decodelabs/effigy
+          composer global exec install-devtools -- --global
 
       - name: "Install dependencies"
         uses: "ramsey/composer-install@v2"
@@ -75,7 +76,8 @@ jobs:
 
       - name: Install Effigy
         run: |
-          composer global require decodelabs/effigy dev-develop
+          composer global require decodelabs/effigy
+          composer global exec install-devtools -- --global
 
       - name: "Validate Composer configuration"
         run: "composer validate --strict"
@@ -114,7 +116,8 @@ jobs:
 
       - name: Install Effigy
         run: |
-          composer global require decodelabs/effigy dev-develop
+          composer global require decodelabs/effigy
+          composer global exec install-devtools -- --global
 
       - name: "Install dependencies"
         uses: "ramsey/composer-install@v2"
