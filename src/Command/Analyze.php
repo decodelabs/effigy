@@ -39,7 +39,7 @@ class Analyze implements Command
 
         // Clear
         if (Cli::getArgument('clear')) {
-            return $this->controller->run('composer', 'exec', 'phpstan', 'clear-result-cache');
+            return $this->controller->run('composer', 'global', 'exec', 'phpstan', 'clear-result-cache');
         }
 
 
@@ -74,7 +74,7 @@ class Analyze implements Command
                 continue;
             }
 
-            if (!$this->controller->run('composer', 'run-script', $script)) {
+            if (!$this->controller->run('composer', 'global', 'run-script', $script)) {
                 return false;
             }
         }
@@ -84,15 +84,6 @@ class Analyze implements Command
 
     protected function ensureInstalled(): bool
     {
-        // Dependencies
-        $execFile = $this->controller->rootDir->getFile('vendor/bin/phpstan');
-
-        if (!$execFile->exists()) {
-            $this->controller->run('composer', 'require', 'phpstan/phpstan', '--dev');
-            $this->controller->run('composer', 'require', 'phpstan/extension-installer', '--dev');
-            $this->controller->run('composer', 'require', 'decodelabs/phpstan-decodelabs', '--dev');
-        }
-
         // Neon file
         $neonFile = $this->controller->rootDir->getFile('phpstan.neon');
 

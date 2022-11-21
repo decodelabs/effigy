@@ -1,3 +1,6 @@
+## v0.1.10 (2022-11-21)
+* Use effigy dependencies for prep
+
 ## v0.1.9 (2022-11-21)
 * Added Template and file generator structure
 * Added package initiator commands

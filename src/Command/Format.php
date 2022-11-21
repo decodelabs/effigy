@@ -37,7 +37,7 @@ class Format implements Command
         Cli::prepareArguments();
 
 
-        $args = ['composer', 'exec', 'ecs'];
+        $args = ['composer', 'global', 'exec', 'ecs'];
         $composerArgs = ['--'];
 
         if (Cli::getArgument('headless')) {
@@ -57,13 +57,6 @@ class Format implements Command
 
     protected function ensureInstalled(): bool
     {
-        // Dependencies
-        $pkgDir = $this->controller->rootDir->getDir('vendor/symplify/easy-coding-standard');
-
-        if (!$pkgDir->exists()) {
-            $this->controller->run('composer', 'require', 'symplify/easy-coding-standard', '--dev');
-        }
-
         // ECS file
         $ecsFile = $this->controller->rootDir->getFile('ecs.php');
 

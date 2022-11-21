@@ -28,7 +28,8 @@ jobs:
 
       - name: Install Effigy
         run: |
-          composer global require decodelabs/effigy
+          composer global config --no-plugins allow-plugins.phpstan/extension-installer true
+          composer global require decodelabs/effigy {{ __effigyVersion }}
 
       - name: "Install dependencies"
         uses: "ramsey/composer-install@v2"
@@ -116,7 +117,8 @@ jobs:
 
       - name: Install Effigy
         run: |
-          composer global require decodelabs/effigy
+          composer global config --no-plugins allow-plugins.phpstan/extension-installer true
+          composer global require decodelabs/effigy {{ __effigyVersion }}
 
       - name: "Validate Composer configuration"
         run: "composer validate --strict"
@@ -155,7 +157,8 @@ jobs:
 
       - name: Install Effigy
         run: |
-          composer global require decodelabs/effigy
+          composer global config --no-plugins allow-plugins.phpstan/extension-installer true
+          composer global require decodelabs/effigy {{ __effigyVersion }}
 
       - name: "Install dependencies"
         uses: "ramsey/composer-install@v2"
