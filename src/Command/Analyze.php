@@ -44,7 +44,7 @@ class Analyze implements Command
 
 
         // Main analyze
-        $args = ['composer', 'exec', 'phpstan'];
+        $args = ['composer', 'global', 'exec', 'phpstan'];
         $composerArgs = ['--'];
 
         if (Cli::getArgument('headless')) {
