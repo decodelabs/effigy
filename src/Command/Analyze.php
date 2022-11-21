@@ -74,7 +74,7 @@ class Analyze implements Command
                 continue;
             }
 
-            if (!$this->controller->run('composer', 'global', 'run-script', $script)) {
+            if (!$this->controller->run('composer', 'run-script', $script)) {
                 return false;
             }
         }

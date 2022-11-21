@@ -1,3 +1,6 @@
+## v0.1.13 (2022-11-21)
+* Fixed local specialised phpstan script calls
+
 ## v0.1.12 (2022-11-21)
 * Fixed phpstan dependency handling
 
