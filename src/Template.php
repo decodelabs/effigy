@@ -134,7 +134,7 @@ class Template
 
             case '__effigyVersion':
                 if ($this->getSlot('pkgName') === 'decodelabs/effigy') {
-                    return 'dev-develop';
+                    return ' dev-develop';
                 } else {
                     return '';
                 }

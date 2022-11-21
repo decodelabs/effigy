@@ -18,6 +18,12 @@ class InstallLocal implements Command
 {
     protected Controller $controller;
 
+    public const PACKAGES = [
+        'phpstan/phpstan',
+        'decodelabs/effigy',
+        'phpstan/extension-installer'
+    ];
+
     public function __construct(Controller $controller)
     {
         $this->controller = $controller;
@@ -36,6 +42,7 @@ class InstallLocal implements Command
         umask($umask);
         Cli::newLine();
 
-        return $this->controller->run('composer', 'require', 'decodelabs/effigy', '--dev');
+        $args = ['composer', 'require', ...static::PACKAGES, '--dev'];
+        return $this->controller->run(...$args);
     }
 }
