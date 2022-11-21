@@ -1,3 +1,7 @@
+## v0.1.9 (2022-11-21)
+* Added Template and file generator structure
+* Added package initiator commands
+* Added check for local-install mode
 * Migrated to use effigy in CI workflow
 
 ## v0.1.8 (2022-11-19)
