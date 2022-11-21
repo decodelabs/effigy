@@ -1,3 +1,6 @@
+## v0.1.12 (2022-11-21)
+* Fixed phpstan dependency handling
+
 ## v0.1.11 (2022-11-21)
 * Fixed analyze command
 * Fixed remove-local command
