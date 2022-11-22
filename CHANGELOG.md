@@ -1,3 +1,4 @@
+## v0.2.0 (2022-11-22)
 * Switched to Clip for process initialisation
 * Renamed Command to Task
 * Register Controller as Veneer facade
