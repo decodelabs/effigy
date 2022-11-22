@@ -1,4 +1,5 @@
 * Fixed check for phpstan-decodelabs
+* Added null check in template config lookups
 
 ## v0.1.13 (2022-11-21)
 * Fixed local specialised phpstan script calls
