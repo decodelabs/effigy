@@ -9,20 +9,18 @@ declare(strict_types=1);
 
 namespace DecodeLabs\Effigy;
 
-use DecodeLabs\Archetype;
-use DecodeLabs\Archetype\Exception as ArchetypeException;
 use DecodeLabs\Atlas;
 use DecodeLabs\Atlas\Dir;
 use DecodeLabs\Atlas\File;
+use DecodeLabs\Clip\Controller as ControllerInterface;
+use DecodeLabs\Clip\Controller\Generic as GenericController;
 use DecodeLabs\Coercion;
-use DecodeLabs\Dictum;
 use DecodeLabs\Exceptional;
 use DecodeLabs\Glitch\Dumpable;
 use DecodeLabs\Systemic;
 use DecodeLabs\Systemic\Process\Launcher;
 use DecodeLabs\Terminus as Cli;
-
-use Throwable;
+use DecodeLabs\Veneer\Plugin;
 
 /**
  * @phpstan-type TConfig array{
@@ -33,13 +31,22 @@ use Throwable;
  *     'exports'?: array<string>
  * }
  */
-class Controller implements Dumpable
+class Controller extends GenericController implements
+    ControllerInterface,
+    Dumpable
 {
     public const USER_FILENAME = 'effigy.json';
 
+    #[Plugin]
     public Dir $runDir;
+
+    #[Plugin]
     public Dir $rootDir;
+
+    #[Plugin]
     public File $composerFile;
+
+    #[Plugin]
     public File $userFile;
 
     protected bool $local = false;
@@ -68,54 +75,26 @@ class Controller implements Dumpable
     /**
      * Initialize paths
      */
-    public function __construct()
-    {
-        set_exception_handler(function (Throwable $e) {
-            Cli::newLine();
-            Cli::error($e->getMessage());
-            Cli::newLine();
-            exit(1);
-        });
+    public function __construct(
+        Dir $rootDir,
+        Dir $runDir,
+        File $composerFile
+    ) {
+        $this->rootDir = $rootDir;
+        $this->runDir = $runDir;
+        $this->composerFile = $composerFile;
 
-        if (false === ($dir = getcwd())) {
-            throw Exceptional::Runtime('Unable to get current working directory');
-        }
-
-        $this->runDir = Atlas::dir($dir);
-        $this->composerFile = $this->findComposerJson();
-
-        if (!$root = $this->composerFile->getParent()) {
-            throw Exceptional::Runtime('Unable to find project root directory');
-        }
-
-        $this->rootDir = $root;
         $this->userFile = $this->loadUserFile();
         $this->config = $this->loadConfig();
 
         $entry = Atlas::file((string)realpath($_SERVER['PHP_SELF']));
-        $this->local = (string)$entry->getParent() === (string)$this->rootDir;
+
+        $parent = (string)$entry->getParent();
+        $this->local =
+            $parent === (string)$this->rootDir ||
+            $parent === (string)$this->rootDir->getDir('bin');
     }
 
-
-    /**
-     * Find composer json
-     */
-    protected function findComposerJson(): File
-    {
-        $dir = $this->runDir;
-
-        do {
-            $file = $dir->getFile('composer.json');
-
-            if ($file->exists()) {
-                return $file;
-            }
-
-            $dir = $dir->getParent();
-        } while ($dir !== null);
-
-        return $this->runDir->getFile('composer.json');
-    }
 
     /**
      * Load user config file
@@ -158,34 +137,40 @@ class Controller implements Dumpable
      * Run controller
      */
     public function run(
+        string $arg,
         string ...$args
     ): bool {
-        if (empty($args)) {
-            /** @var array<string> */
-            $args = array_values(Cli::getRequest()->getArguments());
+        // Composer script
+        if (in_array($arg, $this->scripts)) {
+            return $this->newComposerLauncher($args)
+                ->launch()
+                ->wasSuccessful();
         }
 
-        $first = $args[0] ?? null;
 
-        if ($first !== null) {
-            // Composer script
-            if (in_array($first, $this->scripts)) {
-                $result = $this->newComposerLauncher($args)
-                    ->launch();
-
-                return $result->wasSuccessful();
-            }
-
-
-            // Commands
-            $result = $this->runCommand($first, array_slice($args, 1));
-
-            if ($result === true) {
+        // Commands
+        if ($this->taskExists($arg)) {
+            if ($this->runTask($arg, $args)) {
                 $this->saveConfig();
                 return true;
-            } elseif ($result === false) {
+            } else {
                 return false;
             }
+        }
+
+
+        // Bin
+        if (
+            false === strpos($arg, '/') &&
+            $this->rootDir->getFile('vendor/bin/' . $arg)->exists()
+        ) {
+            return Systemic::$process->launch(
+                'vendor/bin/' . $arg,
+                $args,
+                $this->rootDir,
+                Cli::getSession()
+            )
+                ->wasSuccessful();
         }
 
         // Entry file
@@ -193,10 +178,9 @@ class Controller implements Dumpable
         $this->saveConfig();
 
         // Launch script
-        $result = $this->newScriptLauncher($entry->getPath(), $args)
-            ->launch();
-
-        return $result->wasSuccessful();
+        return $this->newScriptLauncher($entry->getPath(), $args)
+            ->launch()
+            ->wasSuccessful();
     }
 
     /**
@@ -255,7 +239,7 @@ class Controller implements Dumpable
     {
         return
             $this->hasComposerScript($name) ||
-            $this->hasCommand($name);
+            $this->taskExists($name);
     }
 
 
@@ -276,57 +260,6 @@ class Controller implements Dumpable
     {
         return in_array($name, $this->scripts);
     }
-
-
-    /**
-     * Has command
-     */
-    public function hasCommand(string $name): bool
-    {
-        return (bool)$this->getCommandClass($name);
-    }
-
-
-    /**
-     * Run command
-     * @param array<string> $args
-     */
-    public function runCommand(
-        string $name,
-        array $args = []
-    ): ?bool {
-        if (!$class = $this->getCommandClass($name)) {
-            return null;
-        }
-
-        $args = [$name, ...$args];
-
-        /** @phpstan-ignore-next-line */
-        Cli::setRequest(Cli::newRequest($args));
-
-        $command = new $class($this);
-
-        if (!$command->execute()) {
-            return false;
-        }
-
-        return true;
-    }
-
-    /**
-     * Get command class
-     *
-     * @phpstan-return class-string<Command>|null
-     */
-    protected function getCommandClass(string $command): ?string
-    {
-        try {
-            return Archetype::resolve(Command::class, Dictum::id($command));
-        } catch (ArchetypeException $e) {
-            return null;
-        }
-    }
-
 
 
 
