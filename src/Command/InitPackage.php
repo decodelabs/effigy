@@ -68,6 +68,11 @@ class InitPackage implements Command
             return false;
         }
 
+        // CI
+        if (!$this->controller->run('generate-github-workflow')) {
+            return false;
+        }
+
         return true;
     }
 }
