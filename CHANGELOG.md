@@ -1,3 +1,12 @@
+## v0.1.14 (2022-11-22)
+* Fixed check for phpstan-decodelabs
+* Added null check in template config lookups
+* Init repo before init-package
+* Reload composer config after init-package
+* Generate CI workflow after init-package
+* Replaced template comment pattern
+* Fixed phpstan-decodelabs install check
+
 ## v0.1.13 (2022-11-21)
 * Fixed local specialised phpstan script calls
 

@@ -87,8 +87,12 @@ class Analyze implements Command
         // ext dir
         $config = $this->controller->getComposerConfig();
 
-        /** @phpstan-ignore-next-line */
-        if (!isset($config['require-dev']['decodelabs/phpstan-decodelabs'])) {
+        if (
+            /** @phpstan-ignore-next-line */
+            !isset($config['require-dev']['decodelabs/phpstan-decodelabs']) &&
+            /** @phpstan-ignore-next-line */
+            !isset($config['require']['decodelabs/phpstan-decodelabs'])
+        ) {
             $this->controller->run('composer', 'require', 'decodelabs/phpstan-decodelabs', '--dev');
         }
 

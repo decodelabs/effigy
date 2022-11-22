@@ -23,6 +23,11 @@ class InitPackage implements Command
 
     public function execute(): bool
     {
+        // Init repo
+        if (!$this->controller->run('init-repo')) {
+            return false;
+        }
+
         // Composer.json
         if (!$this->controller->run('generate-composer-config', '--check')) {
             return false;
@@ -60,6 +65,11 @@ class InitPackage implements Command
 
         // Readme
         if (!$this->controller->run('generate-readme', '--check')) {
+            return false;
+        }
+
+        // CI
+        if (!$this->controller->run('generate-github-workflow')) {
             return false;
         }
 

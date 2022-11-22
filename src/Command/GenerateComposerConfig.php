@@ -55,6 +55,7 @@ class GenerateComposerConfig implements Command
             return false;
         }
 
+        $this->controller->reloadComposerConfig();
         return true;
     }
 }

@@ -95,7 +95,7 @@ class Template
             case 'pkgName':
                 $config = $this->controller->getComposerConfig();
 
-                return Coercion::toStringOrNull($config['name']) ??
+                return Coercion::toStringOrNull($config['name'] ?? null) ??
                     Cli::ask('What is your full package name?', function () {
                         $name = $this->controller->rootDir->getName();
                         return $this->controller->rootDir->getParent()?->getName() . '/' . $name;
@@ -107,17 +107,17 @@ class Template
 
             case 'pkgDescription':
                 $config = $this->controller->getComposerConfig();
-                return Coercion::toStringOrNull($config['description']) ??
+                return Coercion::toStringOrNull($config['description'] ?? null) ??
                     Cli::ask('Describe your package');
 
             case 'pkgType':
                 $config = $this->controller->getComposerConfig();
-                return Coercion::toStringOrNull($config['type']) ??
+                return Coercion::toStringOrNull($config['type'] ?? null) ??
                     Cli::ask('What type of package is this?', 'library');
 
             case 'pkgLicense':
                 $config = $this->controller->getComposerConfig();
-                return Coercion::toStringOrNull($config['license']) ??
+                return Coercion::toStringOrNull($config['license'] ?? null) ??
                     Cli::ask('What license does your package use?', 'MIT');
 
             case 'pkgIntro':
@@ -161,7 +161,7 @@ class Template
             return $output;
         }, $this->templateFile->getContents());
 
-        $content = (string)preg_replace('/^\#\#(.*)\n/m', '', $content);
+        $content = (string)preg_replace('/^\#\!(.*)\n/m', '', $content);
 
         $file = Atlas::file($file);
         $file->putContents($content);
