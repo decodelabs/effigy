@@ -1,3 +1,6 @@
+## v0.2.1 (2022-11-22)
+* Fixed error handling
+
 ## v0.2.0 (2022-11-22)
 * Switched to Clip for process initialisation
 * Renamed Command to Task
