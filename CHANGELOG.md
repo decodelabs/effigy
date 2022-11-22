@@ -1,3 +1,10 @@
+## v0.2.0 (2022-11-22)
+* Switched to Clip for process initialisation
+* Renamed Command to Task
+* Register Controller as Veneer facade
+* Passthrough to available vendor bins
+* Create src folder during init-package
+
 ## v0.1.14 (2022-11-22)
 * Fixed check for phpstan-decodelabs
 * Added null check in template config lookups

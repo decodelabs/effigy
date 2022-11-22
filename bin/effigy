@@ -9,7 +9,8 @@ declare(strict_types=1);
 
 namespace DecodeLabs\Effigy;
 
-use DecodeLabs\Effigy\Controller;
+use DecodeLabs\Genesis;
+use DecodeLabs\Effigy\Hub;
 
 foreach ([
     __DIR__ . '/../../../autoload.php',
@@ -22,4 +23,5 @@ foreach ([
     }
 }
 
-(new Controller())->run();
+
+Genesis::run(Hub::class);

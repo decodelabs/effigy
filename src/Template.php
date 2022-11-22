@@ -13,6 +13,7 @@ use DecodeLabs\Atlas;
 use DecodeLabs\Atlas\File;
 use DecodeLabs\Coercion;
 use DecodeLabs\Dictum;
+use DecodeLabs\Effigy;
 use DecodeLabs\Exceptional;
 use DecodeLabs\Terminus as Cli;
 
@@ -24,13 +25,10 @@ class Template
     protected array $slots = [];
 
     protected File $templateFile;
-    protected Controller $controller;
 
     public function __construct(
-        Controller $controller,
         string|File $templateFile
     ) {
-        $this->controller = $controller;
         $this->templateFile = Atlas::file($templateFile);
 
         if (!$this->templateFile->exists()) {
@@ -93,12 +91,12 @@ class Template
     {
         switch ($name) {
             case 'pkgName':
-                $config = $this->controller->getComposerConfig();
+                $config = Effigy::getComposerConfig();
 
                 return Coercion::toStringOrNull($config['name'] ?? null) ??
                     Cli::ask('What is your full package name?', function () {
-                        $name = $this->controller->rootDir->getName();
-                        return $this->controller->rootDir->getParent()?->getName() . '/' . $name;
+                        $name = Effigy::$rootDir->getName();
+                        return Effigy::$rootDir->getParent()?->getName() . '/' . $name;
                     });
 
             case 'pkgTitle':
@@ -106,17 +104,17 @@ class Template
                 return Dictum::name(array_pop($parts));
 
             case 'pkgDescription':
-                $config = $this->controller->getComposerConfig();
+                $config = Effigy::getComposerConfig();
                 return Coercion::toStringOrNull($config['description'] ?? null) ??
                     Cli::ask('Describe your package');
 
             case 'pkgType':
-                $config = $this->controller->getComposerConfig();
+                $config = Effigy::getComposerConfig();
                 return Coercion::toStringOrNull($config['type'] ?? null) ??
                     Cli::ask('What type of package is this?', 'library');
 
             case 'pkgLicense':
-                $config = $this->controller->getComposerConfig();
+                $config = Effigy::getComposerConfig();
                 return Coercion::toStringOrNull($config['license'] ?? null) ??
                     Cli::ask('What license does your package use?', 'MIT');
 
@@ -193,7 +191,7 @@ class Template
      */
     protected function getPackagePhpExtensions(): array
     {
-        $config = $this->controller->getComposerConfig();
+        $config = Effigy::getComposerConfig();
         $output = ['intl'];
 
         foreach ([
