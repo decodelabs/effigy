@@ -33,6 +33,9 @@ class InitPackage implements Command
             return false;
         }
 
+        // Make src folder
+        $this->controller->rootDir->getDir('src')->ensureExists();
+
         // Editor config
         if (!$this->controller->run('generate-editor-config', '--check')) {
             return false;
