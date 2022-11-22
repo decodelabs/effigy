@@ -161,7 +161,7 @@ class Template
             return $output;
         }, $this->templateFile->getContents());
 
-        $content = (string)preg_replace('/^\#\#(.*)\n/m', '', $content);
+        $content = (string)preg_replace('/^\#\!(.*)\n/m', '', $content);
 
         $file = Atlas::file($file);
         $file->putContents($content);

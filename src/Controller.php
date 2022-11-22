@@ -538,6 +538,20 @@ class Controller implements Dumpable
         return $this->composerConfig;
     }
 
+    /**
+     * Is package installed
+     */
+    public function isInstalled(string $name): bool
+    {
+        $config = $this->getComposerConfig();
+
+        return
+            /** @phpstan-ignore-next-line */
+            isset($config['require'][$name]) ||
+            /** @phpstan-ignore-next-line */
+            isset($config['require-dev'][$name]);
+    }
+
 
     /**
      * Load composer config
