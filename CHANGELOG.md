@@ -1,3 +1,5 @@
+* Improved fall-through error handling
+
 ## v0.2.1 (2022-11-22)
 * Fixed error handling
 
