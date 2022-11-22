@@ -23,6 +23,11 @@ class InitPackage implements Command
 
     public function execute(): bool
     {
+        // Init repo
+        if (!$this->controller->run('init-repo')) {
+            return false;
+        }
+
         // Composer.json
         if (!$this->controller->run('generate-composer-config', '--check')) {
             return false;

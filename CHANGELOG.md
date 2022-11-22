@@ -1,5 +1,6 @@
 * Fixed check for phpstan-decodelabs
 * Added null check in template config lookups
+* Init repo before init-package
 * Reload composer config after init-package
 
 ## v0.1.13 (2022-11-21)
