@@ -183,7 +183,7 @@ class Controller extends GenericController implements
         $this->saveConfig();
 
         // Launch script
-        return $this->newScriptLauncher($entry->getPath(), $args)
+        return $this->newScriptLauncher($entry->getPath(), [$arg, ...$args])
             ->launch()
             ->wasSuccessful();
     }
