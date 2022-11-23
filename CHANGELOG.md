@@ -1,3 +1,5 @@
+## v0.2.2 (2022-11-23)
+* Fixed arg passthrough to entry
 * Improved fall-through error handling
 
 ## v0.2.1 (2022-11-22)
