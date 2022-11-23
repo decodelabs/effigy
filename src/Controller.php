@@ -174,11 +174,16 @@ class Controller extends GenericController implements
         }
 
         // Entry file
-        $entry = $this->getEntryFile();
+        if (!$entry = $this->getEntryFile()) {
+            throw Exceptional::NotFound(
+                'Effigy couldn\'t find any appropriate ways to run "' . $arg . '"'
+            );
+        }
+
         $this->saveConfig();
 
         // Launch script
-        return $this->newScriptLauncher($entry->getPath(), $args)
+        return $this->newScriptLauncher($entry->getPath(), [$arg, ...$args])
             ->launch()
             ->wasSuccessful();
     }
@@ -275,7 +280,7 @@ class Controller extends GenericController implements
     /**
      * Get entry file
      */
-    public function getEntryFile(): File
+    public function getEntryFile(): ?File
     {
         if ($this->entryFile !== null) {
             return $this->entryFile;
@@ -289,7 +294,7 @@ class Controller extends GenericController implements
                 return $file;
             }
 
-            throw Exceptional::NotFound('Unable to find a suitable entry file');
+            return null;
         }
 
 
