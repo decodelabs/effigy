@@ -1,3 +1,4 @@
+* Use run dir for cwd when calling bins
 * Improved version task
 * Added signal handlers to bin launcher
 

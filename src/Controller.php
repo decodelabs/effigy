@@ -141,7 +141,7 @@ class Controller extends GenericController implements
             return Systemic::$process->newLauncher(
                 'vendor/bin/' . $name,
                 $args,
-                Integra::$rootDir,
+                Integra::$runDir,
                 Cli::getSession()
             )
                 ->addSignal('SIGINT', 'SIGTERM', 'SIGQUIT')
