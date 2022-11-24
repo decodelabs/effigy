@@ -11,12 +11,19 @@ namespace DecodeLabs\Effigy\Task;
 
 use DecodeLabs\Clip\Task;
 use DecodeLabs\Integra;
+use Composer\InstalledVersions;
 use DecodeLabs\Terminus as Cli;
 
 class Version implements Task
 {
     public function execute(): bool
     {
-        return Integra::runGlobal('show', 'decodelabs/effigy', '|grep \'versions :\'');
+        Cli::newLine();
+        Cli::{'brightCyan'}('Effigy ');
+        Cli::{'white'}(': ');
+        Cli::{'.brightYellow'}(InstalledVersions::getVersion('decodelabs/effigy'));
+        Cli::newLine();
+
+        return true;
     }
 }
