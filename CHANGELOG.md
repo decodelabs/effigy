@@ -1,3 +1,12 @@
+## v0.3.0 (2022-11-24)
+* Switched composer integration to Integra
+* Moved config handling to standalone class
+* Added version task
+* Improved self-update task
+* Simplified arg handling
+* Added CI mode detection
+* Simplified bin path detection
+
 ## v0.2.2 (2022-11-23)
 * Fixed arg passthrough to entry
 * Improved fall-through error handling
