@@ -11,7 +11,6 @@ namespace DecodeLabs\Effigy\Task;
 
 use DecodeLabs\Atlas;
 use DecodeLabs\Clip\Task;
-use DecodeLabs\Effigy;
 use DecodeLabs\Integra;
 use DecodeLabs\Terminus as Cli;
 
@@ -36,7 +35,6 @@ class InstallLocal implements Task
         umask($umask);
         Cli::newLine();
 
-        $args = ['composer', 'require', ...static::PACKAGES, '--dev'];
-        return Effigy::run(...$args);
+        return Integra::installDev(...static::PACKAGES);
     }
 }

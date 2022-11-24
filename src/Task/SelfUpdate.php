@@ -11,6 +11,7 @@ namespace DecodeLabs\Effigy\Task;
 
 use DecodeLabs\Clip\Task;
 use DecodeLabs\Effigy;
+use DecodeLabs\Integra;
 use DecodeLabs\Terminus as Cli;
 
 class SelfUpdate implements Task
@@ -19,7 +20,7 @@ class SelfUpdate implements Task
     {
         if (
             !Effigy::isLocal() &&
-            !Effigy::run('composer', 'global', 'update')
+            !Integra::runGlobal('update')
         ) {
             return false;
         }
@@ -28,7 +29,7 @@ class SelfUpdate implements Task
         Cli::info('Re-requiring effigy...');
         Cli::newLine();
 
-        if (!Effigy::run('composer', 'global', 'require', 'decodelabs/effigy')) {
+        if (!Integra::installGlobal('decodelabs/effigy')) {
             return false;
         }
 

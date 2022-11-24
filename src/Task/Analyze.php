@@ -26,35 +26,29 @@ class Analyze implements Task
 
         Cli::getCommandDefinition()
             ->addArgument('-clear|c', 'Clear cache')
-            ->addArgument('-debug|d', 'Debug mode')
-            ->addArgument('-headless|h', 'No interaction mode');
+            ->addArgument('-debug|d', 'Debug mode');
 
         Cli::prepareArguments();
 
         // Clear
         if (Cli::getArgument('clear')) {
-            return Effigy::run('composer', 'global', 'exec', 'phpstan', 'clear-result-cache');
+            return Integra::runGlobalBin('phpstan', 'clear-result-cache');
         }
+
 
 
         // Main analyze
-        $args = ['composer', 'global', 'exec', 'phpstan'];
-        $composerArgs = ['--'];
-
-        if (Cli::getArgument('headless')) {
-            $args[] = '--no-interaction';
-        }
-
+        $args = ['phpstan'];
 
         if (Cli::getArgument('debug')) {
-            $composerArgs[] = '--debug';
+            $args[] = '--debug';
         }
 
-        if (Cli::getArgument('headless')) {
-            $composerArgs[] = '--no-progress';
+        if (Effigy::isCiMode()) {
+            $args[] = '--no-progress';
         }
 
-        if (!Effigy::run(...$args, ...$composerArgs)) {
+        if (!Integra::runGlobalBin(...$args)) {
             return false;
         }
 
@@ -68,7 +62,7 @@ class Analyze implements Task
                 continue;
             }
 
-            if (!Effigy::run('composer', 'run-script', $script)) {
+            if (!Integra::runScript($script)) {
                 return false;
             }
         }

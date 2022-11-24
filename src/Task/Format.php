@@ -25,28 +25,22 @@ class Format implements Task
         }
 
         Cli::getCommandDefinition()
-            ->addArgument('-check|c', 'Check standards only')
-            ->addArgument('-headless|h', 'No interaction mode');
+            ->addArgument('-check|c', 'Check standards only');
 
         Cli::prepareArguments();
 
 
-        $args = ['composer', 'global', 'exec', 'ecs'];
-        $composerArgs = ['--'];
-
-        if (Cli::getArgument('headless')) {
-            $args[] = '--no-interaction';
-        }
+        $args = ['ecs'];
 
         if (!Cli::getArgument('check')) {
-            $composerArgs[] = '--fix';
+            $args[] = '--fix';
         }
 
-        if (Cli::getArgument('headless')) {
-            $composerArgs[] = '--no-progress-bar';
+        if (Effigy::isCiMode()) {
+            $args[] = '--no-progress-bar';
         }
 
-        return Effigy::run(...$args, ...$composerArgs);
+        return Integra::runGlobalBin(...$args);
     }
 
     protected function ensureInstalled(): bool

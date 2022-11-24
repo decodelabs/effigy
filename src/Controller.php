@@ -21,6 +21,7 @@ use DecodeLabs\Systemic;
 use DecodeLabs\Systemic\Process\Launcher;
 use DecodeLabs\Terminus as Cli;
 use DecodeLabs\Veneer\Plugin;
+use OndraM\CiDetector\CiDetector;
 
 /**
  * @phpstan-type TConfig array{
@@ -41,6 +42,7 @@ class Controller extends GenericController implements
     public Config $config;
 
     protected bool $local = false;
+    protected bool $ciMode;
     protected ?File $entryFile = null;
 
 
@@ -67,6 +69,7 @@ class Controller extends GenericController implements
 
         // Integra config
         Integra::setPhpBinary($this->config->getPhpBinary());
+        Integra::setCiMode($this->isCiMode());
     }
 
 
@@ -76,6 +79,30 @@ class Controller extends GenericController implements
     public function isLocal(): bool
     {
         return $this->local;
+    }
+
+    /**
+     * Set CI mode
+     *
+     * @return $this
+     */
+    public function setCiMode(bool $mode): static
+    {
+        $this->ciMode = $mode;
+        return $this;
+    }
+
+    /**
+     * Get CI mode
+     */
+    public function isCiMode(): bool
+    {
+        if (isset($this->ciMode)) {
+            return $this->ciMode;
+        }
+
+        $detector = new CiDetector();
+        return $this->ciMode = $detector->isCiDetected();
     }
 
 
@@ -157,6 +184,44 @@ class Controller extends GenericController implements
 
         return Systemic::$process->newLauncher(Integra::getPhpBinary(), $args, null, null, $user)
             ->setSession(Cli::getSession());
+    }
+
+    /**
+     * Run git command
+     */
+    public function runGit(
+        string $name,
+        string ...$args
+    ): bool {
+        return Systemic::$process->launch(
+            'git',
+            [$name, ...$args],
+            Integra::$rootDir,
+            Cli::getSession()
+        )
+            ->wasSuccessful();
+    }
+
+    /**
+     * Ask git quietly
+     */
+    public function askGit(
+        string $name,
+        string ...$args
+    ): ?string {
+        $result = Systemic::$process->newLauncher(
+            'git',
+            [$name, ...$args],
+            Integra::$rootDir
+        )
+            ->setDecoratable(false)
+            ->launch();
+
+        if (!$result->wasSuccessful()) {
+            return null;
+        }
+
+        return $result->getOutput();
     }
 
 

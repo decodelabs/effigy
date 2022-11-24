@@ -10,7 +10,6 @@ declare(strict_types=1);
 namespace DecodeLabs\Effigy\Task;
 
 use DecodeLabs\Clip\Task;
-use DecodeLabs\Effigy;
 use DecodeLabs\Integra;
 use DecodeLabs\Terminus as Cli;
 
@@ -26,7 +25,6 @@ class RemoveLocal implements Task
 
         Cli::newLine();
 
-        $args = ['composer', 'remove', ...InstallLocal::PACKAGES, '--dev'];
-        return Effigy::run(...$args);
+        return Integra::uninstallDev(...InstallLocal::PACKAGES);
     }
 }
