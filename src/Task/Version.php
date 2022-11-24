@@ -9,9 +9,8 @@ declare(strict_types=1);
 
 namespace DecodeLabs\Effigy\Task;
 
-use DecodeLabs\Clip\Task;
-use DecodeLabs\Integra;
 use Composer\InstalledVersions;
+use DecodeLabs\Clip\Task;
 use DecodeLabs\Terminus as Cli;
 
 class Version implements Task
