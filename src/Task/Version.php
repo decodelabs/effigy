@@ -20,7 +20,7 @@ class Version implements Task
         Cli::newLine();
         Cli::{'brightCyan'}('Effigy ');
         Cli::{'white'}(': ');
-        Cli::{'.brightYellow'}(InstalledVersions::getVersion('decodelabs/effigy'));
+        Cli::{'.brightYellow'}(InstalledVersions::getPrettyVersion('decodelabs/effigy'));
         Cli::newLine();
 
         return true;
