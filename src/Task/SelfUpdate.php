@@ -18,24 +18,45 @@ class SelfUpdate implements Task
 {
     public function execute(): bool
     {
+        Cli::getCommandDefinition()
+            ->addArgument('-dev|d', 'Dev version from repo')
+            ->addArgument('-global|g', 'Force global');
+        Cli::prepareArguments();
+
+
+        // Local / global
+        if (Cli::getArgument('global')) {
+            Integra::forceLocal(false);
+        }
+
+
+        // Update
         if (
-            !Effigy::isLocal() &&
+            !Integra::isForcedLocal() &&
             !Integra::runGlobal('update', '--with-all-dependencies')
         ) {
             return false;
         }
 
+
+        // Install
         Cli::newLine();
-        Cli::info('Re-requiring effigy...');
+        Cli::info('Re-installing effigy...');
         Cli::newLine();
 
-        if (!Integra::installGlobal('decodelabs/effigy')) {
+
+        if (!Integra::installGlobal(
+            Integra::preparePackageInstallName(
+                'decodelabs/effigy',
+                Cli::getArgument('dev') ? 'dev-develop' : null
+            )
+        )) {
             return false;
         }
 
 
-
-        if (Effigy::isLocal()) {
+        // Exec
+        if (Integra::isForcedLocal()) {
             Cli::newLine();
             Cli::info('Re-installing local executable...');
             Cli::newLine();
