@@ -10,12 +10,14 @@
     }],
     "require": {
         "php": "^8.0",
+        "composer-runtime-api": "^2.2",
 
         "decodelabs/archetype": "^0.2.9",
         "decodelabs/atlas": "^0.10.5",
-        "decodelabs/clip": "^0.2",
+        "decodelabs/clip": "dev-develop",
         "decodelabs/dictum": "^0.4.3",
         "decodelabs/exceptional": "^0.4",
+        "decodelabs/integra": "dev-develop",
         "decodelabs/systemic": "^0.10.1",
         "decodelabs/terminus": "^0.9.3",
         "decodelabs/veneer": "^0.10.12",

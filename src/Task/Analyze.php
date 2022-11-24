@@ -13,6 +13,7 @@ use DecodeLabs\Clip\Task;
 use DecodeLabs\Effigy;
 use DecodeLabs\Effigy\Task\GeneratePhpstanConfig\PhpstanTemplate;
 use DecodeLabs\Exceptional;
+use DecodeLabs\Integra;
 use DecodeLabs\Terminus as Cli;
 
 class Analyze implements Task
@@ -78,19 +79,12 @@ class Analyze implements Task
     protected function ensureInstalled(): bool
     {
         // ext dir
-        $config = Effigy::getComposerConfig();
-
-        if (
-            /** @phpstan-ignore-next-line */
-            !isset($config['require-dev']['decodelabs/phpstan-decodelabs']) &&
-            /** @phpstan-ignore-next-line */
-            !isset($config['require']['decodelabs/phpstan-decodelabs'])
-        ) {
-            Effigy::run('composer', 'require', 'decodelabs/phpstan-decodelabs', '--dev');
+        if (!Integra::hasPackage('decodelabs/phpstan-decodelabs')) {
+            Integra::installDev('decodelabs/phpstan-decodelabs');
         }
 
         // Neon file
-        $neonFile = Effigy::$rootDir->getFile('phpstan.neon');
+        $neonFile = Integra::$rootDir->getFile('phpstan.neon');
 
         if (!$neonFile->exists()) {
             $template = new PhpstanTemplate();

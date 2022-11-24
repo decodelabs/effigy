@@ -11,8 +11,8 @@ namespace DecodeLabs\Effigy\Task;
 
 use DecodeLabs\Atlas\File;
 use DecodeLabs\Clip\Task;
-use DecodeLabs\Effigy;
 use DecodeLabs\Effigy\Template;
+use DecodeLabs\Integra;
 
 class GenerateChangelog implements Task
 {
@@ -20,7 +20,7 @@ class GenerateChangelog implements Task
 
     protected function getTargetFile(): File
     {
-        return Effigy::$rootDir->getFile('CHANGELOG.md');
+        return Integra::$rootDir->getFile('CHANGELOG.md');
     }
 
     protected function getTemplate(): Template

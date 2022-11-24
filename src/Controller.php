@@ -14,9 +14,9 @@ use DecodeLabs\Atlas\Dir;
 use DecodeLabs\Atlas\File;
 use DecodeLabs\Clip\Controller as ControllerInterface;
 use DecodeLabs\Clip\Controller\Generic as GenericController;
-use DecodeLabs\Coercion;
 use DecodeLabs\Exceptional;
 use DecodeLabs\Glitch\Dumpable;
+use DecodeLabs\Integra;
 use DecodeLabs\Systemic;
 use DecodeLabs\Systemic\Process\Launcher;
 use DecodeLabs\Terminus as Cli;
@@ -38,89 +38,35 @@ class Controller extends GenericController implements
     public const USER_FILENAME = 'effigy.json';
 
     #[Plugin]
-    public Dir $runDir;
-
-    #[Plugin]
-    public Dir $rootDir;
-
-    #[Plugin]
-    public File $composerFile;
-
-    #[Plugin]
-    public File $userFile;
+    public Config $config;
 
     protected bool $local = false;
     protected ?File $entryFile = null;
 
-    /**
-     * @phpstan-var TConfig
-     */
-    protected array $config;
-
-    /**
-     * @phpstan-var TConfig
-     */
-    protected array $newConfig = [];
-
-    /**
-     * @var array<string>
-     */
-    protected array $scripts = [];
-
-    /**
-     * @var array<string, mixed>
-     */
-    protected array $composerConfig;
 
     /**
      * Initialize paths
      */
-    public function __construct(
-        Dir $rootDir,
-        Dir $runDir,
-        File $composerFile
-    ) {
-        $this->rootDir = $rootDir;
-        $this->runDir = $runDir;
-        $this->composerFile = $composerFile;
+    public function __construct()
+    {
+        $this->config = new Config(
+            Integra::$rootDir->getFile(self::USER_FILENAME)
+        );
 
-        $this->userFile = $this->loadUserFile();
-        $this->config = $this->loadConfig();
-
+        // Local
         $entry = Atlas::file((string)realpath($_SERVER['PHP_SELF']));
-
         $parent = (string)$entry->getParent();
+
         $this->local =
-            $parent === (string)$this->rootDir ||
-            $parent === (string)$this->rootDir->getDir('bin');
-    }
+            $parent === (string)Integra::$rootDir ||
+            $parent === (string)Integra::$rootDir->getDir('bin');
 
-
-    /**
-     * Load user config file
-     */
-    protected function loadUserFile(): File
-    {
-        return $this->rootDir->getFile(self::USER_FILENAME);
-    }
-
-
-
-    /**
-     * Parse composer scripts
-     *
-     * @param array<string, mixed> $scripts
-     * @return array<string>
-     */
-    protected function parseComposerScripts(array $scripts): array
-    {
-        $output = [];
-
-        foreach ($scripts as $name => $def) {
-            $output[] = $name;
+        if ($this->local) {
+            Integra::forceLocal(true);
         }
 
-        return $output;
+        // Integra config
+        Integra::setPhpBinary($this->config->getPhpBinary());
     }
 
 
@@ -137,21 +83,25 @@ class Controller extends GenericController implements
      * Run controller
      */
     public function run(
-        string $arg,
+        string $name,
         string ...$args
     ): bool {
+        // Composer direct
+        if ($name === 'composer') {
+            return Integra::run(...$args);
+        }
+
+
         // Composer script
-        if (in_array($arg, $this->scripts)) {
-            return $this->newComposerLauncher($args)
-                ->launch()
-                ->wasSuccessful();
+        if ($this->hasComposerScript($name)) {
+            return $this->runComposerScript($name, ...$args);
         }
 
 
         // Commands
-        if ($this->taskExists($arg)) {
-            if ($this->runTask($arg, $args)) {
-                $this->saveConfig();
+        if ($this->hasTask($name)) {
+            if ($this->runTask($name, $args)) {
+                $this->config->save();
                 return true;
             } else {
                 return false;
@@ -160,32 +110,31 @@ class Controller extends GenericController implements
 
 
         // Bin
-        if (
-            false === strpos($arg, '/') &&
-            $this->rootDir->getFile('vendor/bin/' . $arg)->exists()
-        ) {
+        if ($this->hasVendorBin($name)) {
             return Systemic::$process->launch(
-                'vendor/bin/' . $arg,
+                'vendor/bin/' . $name,
                 $args,
-                $this->rootDir,
+                Integra::$rootDir,
                 Cli::getSession()
             )
                 ->wasSuccessful();
         }
 
+
         // Entry file
-        if (!$entry = $this->getEntryFile()) {
-            throw Exceptional::NotFound(
-                'Effigy couldn\'t find any appropriate ways to run "' . $arg . '"'
-            );
+        if ($entry = $this->getEntryFile()) {
+            $this->config->save();
+
+            // Launch script
+            return $this->newScriptLauncher($entry->getPath(), [$name, ...$args])
+                ->launch()
+                ->wasSuccessful();
         }
 
-        $this->saveConfig();
 
-        // Launch script
-        return $this->newScriptLauncher($entry->getPath(), [$arg, ...$args])
-            ->launch()
-            ->wasSuccessful();
+        throw Exceptional::NotFound(
+            'Effigy couldn\'t find any appropriate ways to run "' . $name . '"'
+        );
     }
 
     /**
@@ -206,32 +155,7 @@ class Controller extends GenericController implements
         array_unshift($args, $path);
         $user = Systemic::$process->getCurrent()->getOwnerName();
 
-        return Systemic::$process->newLauncher($this->getPhpBinary(), $args, null, null, $user)
-            ->setSession(Cli::getSession());
-    }
-
-    /**
-     * New composer launcher
-     *
-     * @param string|array<string>|null $args
-     */
-    public function newComposerLauncher(
-        string|array|null $args = null
-    ): Launcher {
-        if ($args === null) {
-            $args = [];
-        } elseif (!is_array($args)) {
-            $args = (array)$args;
-        }
-
-        if (null === ($composer = Systemic::$os->which('composer'))) {
-            throw Exceptional::NotFound('Unable to locate global composer executable');
-        }
-
-        array_unshift($args, $composer);
-        $user = Systemic::$process->getCurrent()->getOwnerName();
-
-        return Systemic::$process->newLauncher($this->getPhpBinary(), $args, null, null, $user)
+        return Systemic::$process->newLauncher(Integra::getPhpBinary(), $args, null, null, $user)
             ->setSession(Cli::getSession());
     }
 
@@ -244,7 +168,8 @@ class Controller extends GenericController implements
     {
         return
             $this->hasComposerScript($name) ||
-            $this->taskExists($name);
+            $this->hasTask($name) ||
+            $this->hasVendorBin($name);
     }
 
 
@@ -255,7 +180,7 @@ class Controller extends GenericController implements
      */
     public function getComposerScripts(): array
     {
-        return $this->scripts;
+        return Integra::getScripts();
     }
 
     /**
@@ -263,18 +188,39 @@ class Controller extends GenericController implements
      */
     public function hasComposerScript(string $name): bool
     {
-        return in_array($name, $this->scripts);
+        return Integra::hasScript($name);
+    }
+
+    /**
+     * Run composer script
+     */
+    public function runComposerScript(
+        string $name,
+        string ...$args
+    ): bool {
+        return Integra::run($name, ...$args);
     }
 
 
 
     /**
-     * Get PHP binary
+     * Get vendor bins
+     *
+     * @return array<File>
      */
-    public function getPhpBinary(): string
+    public function getVendorBins(): array
     {
-        return $this->config['php'] ?? Systemic::$os->which('php') ?? 'php';
+        return Integra::getBins();
     }
+
+    /**
+     * Composer vendor bin exists
+     */
+    public function hasVendorBin(string $name): bool
+    {
+        return Integra::hasBin($name);
+    }
+
 
 
     /**
@@ -287,8 +233,8 @@ class Controller extends GenericController implements
         }
 
         // Fallback to generic entry.php
-        if (!isset($this->config['entry'])) {
-            $file = $this->rootDir->getFile('entry.php');
+        if (!$this->config->hasEntry()) {
+            $file = Integra::$rootDir->getFile('entry.php');
 
             if ($file->exists()) {
                 return $file;
@@ -299,7 +245,7 @@ class Controller extends GenericController implements
 
 
         // Parse config
-        $entry = $this->config['entry'];
+        $entry = (string)$this->config->getEntry();
         $matches = [];
 
         if (false === preg_match_all('|{{([a-zA-Z0-9\-_]+)}}|', $entry, $matches)) {
@@ -314,38 +260,22 @@ class Controller extends GenericController implements
             Cli::{'..brightYellow'}($entry);
 
             foreach ($matches as $slug) {
-                $param = $this->getParam($slug);
+                $param = $this->config->getParam($slug);
                 $entry = str_replace('{{' . $slug . '}}', $param, $entry);
             }
         }
 
-        $file = $this->rootDir->getFile($entry);
+        $file = Integra::$rootDir->getFile($entry);
 
         if ($file->exists()) {
-            $this->newConfig['entry'] = $entry;
+            $this->config->set('entry', $entry);
             return $file;
         }
 
         throw Exceptional::NotFound('Entry file ' . $entry . ' does not exist');
     }
 
-    /**
-     * Get param from config or user
-     */
-    protected function getParam(string $slug): string
-    {
-        if (isset($this->config['params'][$slug])) {
-            return $this->config['params'][$slug];
-        }
 
-        $value = (string)Cli::ask('What is your "' . $slug . '" value?', null, function ($value) {
-            return strlen($value) > 0;
-        });
-
-        $this->newConfig['params'][$slug] = $value;
-
-        return $value;
-    }
 
 
     /**
@@ -355,23 +285,7 @@ class Controller extends GenericController implements
      */
     public function getCodeDirs(): array
     {
-        if (isset($this->config['codeDirs'])) {
-            $dirs = $this->config['codeDirs'];
-        } else {
-            static $dirs = ['src', 'tests', 'stubs'];
-        }
-
-        $output = [];
-
-        foreach ($dirs as $name) {
-            $dir = $this->rootDir->getDir($name);
-
-            if ($dir->exists()) {
-                $output[(string)$name] = $dir;
-            }
-        }
-
-        return $output;
+        return $this->config->getCodeDirs();
     }
 
     /**
@@ -381,214 +295,9 @@ class Controller extends GenericController implements
      */
     public function getExportsWhitelist(): array
     {
-        return $this->config['exports'] ?? [];
+        return $this->config->getExportsWhitelist();
     }
 
-
-
-    /**
-     * Set config to save
-     */
-    public function setConfig(
-        string $key,
-        mixed $value
-    ): void {
-        /** @phpstan-var TConfig $config */
-        $config = $this->mergeConfig(
-            $this->newConfig,
-            $this->parseConfig([$key => $value])
-        );
-
-        $this->newConfig = $config;
-    }
-
-    /**
-     * Save user config
-     */
-    protected function saveConfig(): void
-    {
-        if (empty($this->newConfig)) {
-            return;
-        }
-
-
-        // Merge data
-        $data = [];
-
-        if ($this->userFile->exists()) {
-            $json = json_decode($this->userFile->getContents(), true);
-            $data = $this->parseConfig(Coercion::toArray($json));
-        }
-
-        $data = $this->mergeConfig($data, $this->newConfig);
-        $json = json_encode($data, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES);
-
-
-        // Save data
-        $this->userFile->putContents($json);
-
-        // Ensure .gitignore
-        $gitFile = $this->rootDir->getFile('.gitignore');
-        $gitIgnore = '';
-
-        if ($gitFile->exists()) {
-            $gitIgnore = $gitFile->getContents();
-
-            if (preg_match('|effigy\.json|', $gitIgnore)) {
-                return;
-            }
-        }
-
-        $gitIgnore .= "\n" . 'effigy.json' . "\n";
-        $gitFile->putContents($gitIgnore);
-    }
-
-
-    /**
-     * Get composer config
-     *
-     * @return array<string, mixed>
-     */
-    public function getComposerConfig(): array
-    {
-        if (!isset($this->composerConfig)) {
-            return $this->reloadComposerConfig();
-        }
-
-        return $this->composerConfig;
-    }
-
-    /**
-     * Reload composer config
-     *
-     * @return array<string, mixed>
-     */
-    public function reloadComposerConfig(): array
-    {
-        if ($this->composerFile->exists()) {
-            /** @var array<string, mixed> */
-            $json = json_decode($this->composerFile->getContents(), true);
-            $this->composerConfig = $json;
-        } else {
-            $this->composerConfig = [];
-        }
-
-        return $this->composerConfig;
-    }
-
-    /**
-     * Is package installed
-     */
-    public function isInstalled(string $name): bool
-    {
-        $config = $this->getComposerConfig();
-
-        return
-            /** @phpstan-ignore-next-line */
-            isset($config['require'][$name]) ||
-            /** @phpstan-ignore-next-line */
-            isset($config['require-dev'][$name]);
-    }
-
-
-    /**
-     * Load composer config
-     *
-     * @phpstan-return TConfig
-     */
-    protected function loadConfig(): array
-    {
-        $json = $this->getComposerConfig();
-        /** @phpstan-ignore-next-line */
-        $output = $this->parseConfig(Coercion::toArray($json['extra']['effigy'] ?? []));
-
-        /** @phpstan-ignore-next-line */
-        $this->scripts = $this->parseComposerScripts($json['scripts'] ?? []);
-
-        if ($this->userFile->exists()) {
-            $json = json_decode($this->userFile->getContents(), true);
-            $output = array_merge($output, $this->parseConfig(Coercion::toArray($json)));
-        }
-
-        return $output;
-    }
-
-
-    /**
-     * Parse config
-     *
-     * @param array<string, mixed> $config
-     * @phpstan-return TConfig
-     */
-    protected function parseConfig(array $config): array
-    {
-        $output = [];
-
-        foreach ($config as $key => $value) {
-            switch ($key) {
-                // string
-                case 'entry':
-                case 'php':
-                    if (null !== ($value = Coercion::toStringOrNull($value))) {
-                        $output[$key] = $value;
-                    }
-                    break;
-
-                    // array<string, string>
-                case 'params':
-                    if (null !== ($value = Coercion::toArrayOrNull($value))) {
-                        $output[$key] = [];
-
-                        foreach ($value as $slug => $param) {
-                            $output[$key][Coercion::forceString($slug)] = Coercion::forceString($param);
-                        }
-                    }
-                    break;
-
-                    // array<string>
-                case 'codeDirs':
-                case 'exports':
-                    if (null !== ($value = Coercion::toArrayOrNull($value))) {
-                        $output[$key] = [];
-
-                        foreach ($value as $param) {
-                            /** @phpstan-ignore-next-line */
-                            $output[$key][] = Coercion::forceString($param);
-                        }
-                    }
-                    break;
-            }
-        }
-
-        /** @phpstan-var TConfig */
-        return $output;
-    }
-
-
-    /**
-     * Merge config data
-     *
-     * @param array<string, mixed> $config,
-     * @param array<string, mixed> $newConfig
-     * @return array<string, mixed>
-     */
-    protected function mergeConfig(
-        array $config,
-        array $newConfig
-    ): array {
-        foreach ($newConfig as $key => $value) {
-            if (is_array($value)) {
-                $config[$key] = $this->mergeConfig(
-                    Coercion::toArray($config[$key] ?? []),
-                    $value
-                );
-            } else {
-                $config[$key] = $value;
-            }
-        }
-
-        return $config;
-    }
 
 
     /**
@@ -599,13 +308,7 @@ class Controller extends GenericController implements
         yield 'properties' => [
             '*local' => $this->local,
             '*config' => $this->config,
-            '*newConfig' => $this->newConfig,
-            '*scripts' => $this->scripts,
-            '*entryFile' => $this->entryFile,
-            'runDir' => $this->runDir,
-            'rootDir' => $this->rootDir,
-            'composerFile' => $this->composerFile->exists() ? $this->composerFile : null,
-            'userFile' => $this->userFile->exists() ? $this->userFile : null
+            '*entryFile' => $this->entryFile
         ];
     }
 }

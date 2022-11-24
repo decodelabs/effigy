@@ -10,7 +10,7 @@ declare(strict_types=1);
 namespace DecodeLabs\Effigy\Task;
 
 use DecodeLabs\Clip\Task;
-use DecodeLabs\Effigy;
+use DecodeLabs\Integra;
 use Decodelabs\Systemic;
 use DecodeLabs\Terminus as Cli;
 
@@ -33,7 +33,7 @@ class CheckExecutablePermissions implements Task
         $result = Systemic::$process->launch(
             'find . -type f ' . implode(' ', $exStr) . ' -executable',
             [],
-            Effigy::$rootDir
+            Integra::$rootDir
         );
 
         if (!$result->wasSuccessful()) {
@@ -41,10 +41,7 @@ class CheckExecutablePermissions implements Task
         }
 
         $paths = explode("\n", trim((string)$result->getOutput()));
-        $config = Effigy::getComposerConfig();
-
-        /** @var array<string> $bins */
-        $bins = $config['bin'] ?? [];
+        $bins = Integra::getLocalManifest()->getBinFiles();
         $output = [];
 
         foreach ($paths as $path) {

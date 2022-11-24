@@ -11,6 +11,7 @@ namespace DecodeLabs\Effigy\Task;
 
 use DecodeLabs\Clip\Task;
 use DecodeLabs\Effigy;
+use DecodeLabs\Integra;
 use DecodeLabs\Systemic;
 use DecodeLabs\Terminus as Cli;
 
@@ -26,7 +27,7 @@ class CheckGitExports implements Task
             $exclude[] = '--exclude="' . $name . '/*"';
         }
 
-        if (Effigy::$rootDir->getDir('bin')->exists()) {
+        if (Integra::$rootDir->getDir('bin')->exists()) {
             $exclude[] = '--exclude="bin"';
             $exclude[] = '--exclude="bin/*"';
         }
@@ -34,7 +35,7 @@ class CheckGitExports implements Task
         $result = Systemic::$process->launch(
             'git archive HEAD | tar --list ' . implode(' ', $exclude),
             [],
-            Effigy::$rootDir
+            Integra::$rootDir
         );
 
         if (!$result->wasSuccessful()) {

@@ -26,12 +26,7 @@ class Hub extends ClipHub
 
         Archetype::extend(TaskInterface::class, Task::class);
 
-        $controller = new Controller(
-            $this->appDir,
-            $this->runDir,
-            $this->composerFile
-        );
-
+        $controller = new Controller();
         $this->context->container->bindShared(ControllerInterface::class, $controller);
         $this->context->container->bindShared(Controller::class, $controller);
 

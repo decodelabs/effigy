@@ -11,13 +11,14 @@ namespace DecodeLabs\Effigy\Task;
 
 use DecodeLabs\Clip\Task;
 use DecodeLabs\Effigy;
+use DecodeLabs\Integra;
 use DecodeLabs\Terminus as Cli;
 
 class RemoveLocal implements Task
 {
     public function execute(): bool
     {
-        $binFile = Effigy::$rootDir->getFile('effigy');
+        $binFile = Integra::$rootDir->getFile('effigy');
 
         Cli::{'brightMagenta'}('Deleting effigy executable... ');
         $binFile->delete();

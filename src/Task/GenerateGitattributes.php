@@ -11,8 +11,8 @@ namespace DecodeLabs\Effigy\Task;
 
 use DecodeLabs\Atlas\File;
 use DecodeLabs\Clip\Task;
-use DecodeLabs\Effigy;
 use DecodeLabs\Effigy\Template;
+use DecodeLabs\Integra;
 
 class GenerateGitattributes implements Task
 {
@@ -20,7 +20,7 @@ class GenerateGitattributes implements Task
 
     protected function getTargetFile(): File
     {
-        return Effigy::$rootDir->getFile('.gitattributes');
+        return Integra::$rootDir->getFile('.gitattributes');
     }
 
     protected function getTemplate(): Template

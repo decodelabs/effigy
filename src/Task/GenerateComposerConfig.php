@@ -14,6 +14,7 @@ use DecodeLabs\Clip\Task;
 use DecodeLabs\Effigy;
 use DecodeLabs\Effigy\Task\GenerateComposerConfig\ComposerTemplate;
 use DecodeLabs\Effigy\Template;
+use DecodeLabs\Integra;
 
 class GenerateComposerConfig implements Task
 {
@@ -30,7 +31,7 @@ class GenerateComposerConfig implements Task
 
     protected function getTargetFile(): File
     {
-        return Effigy::$rootDir->getFile('composer.json');
+        return Integra::$rootDir->getFile('composer.json');
     }
 
     protected function getTemplate(): Template
@@ -56,7 +57,7 @@ class GenerateComposerConfig implements Task
             return false;
         }
 
-        Effigy::reloadComposerConfig();
+        Integra::getLocalManifest()->reload();
         return true;
     }
 }

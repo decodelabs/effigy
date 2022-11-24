@@ -13,6 +13,7 @@ use DecodeLabs\Clip\Task;
 use DecodeLabs\Effigy;
 use DecodeLabs\Effigy\Task\GenerateEcsConfig\EcsTemplate;
 use DecodeLabs\Exceptional;
+use DecodeLabs\Integra;
 use DecodeLabs\Terminus as Cli;
 
 class Format implements Task
@@ -51,7 +52,7 @@ class Format implements Task
     protected function ensureInstalled(): bool
     {
         // ECS file
-        $ecsFile = Effigy::$rootDir->getFile('ecs.php');
+        $ecsFile = Integra::$rootDir->getFile('ecs.php');
 
         if (!$ecsFile->exists()) {
             $template = new EcsTemplate();

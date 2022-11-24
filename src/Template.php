@@ -11,10 +11,9 @@ namespace DecodeLabs\Effigy;
 
 use DecodeLabs\Atlas;
 use DecodeLabs\Atlas\File;
-use DecodeLabs\Coercion;
 use DecodeLabs\Dictum;
-use DecodeLabs\Effigy;
 use DecodeLabs\Exceptional;
+use DecodeLabs\Integra;
 use DecodeLabs\Terminus as Cli;
 
 class Template
@@ -89,14 +88,14 @@ class Template
 
     protected function generateSlot(string $name): ?string
     {
+        $manifest = Integra::getLocalManifest();
+
         switch ($name) {
             case 'pkgName':
-                $config = Effigy::getComposerConfig();
-
-                return Coercion::toStringOrNull($config['name'] ?? null) ??
+                return $manifest->getName() ??
                     Cli::ask('What is your full package name?', function () {
-                        $name = Effigy::$rootDir->getName();
-                        return Effigy::$rootDir->getParent()?->getName() . '/' . $name;
+                        $name = Integra::$rootDir->getName();
+                        return Integra::$rootDir->getParent()?->getName() . '/' . $name;
                     });
 
             case 'pkgTitle':
@@ -104,18 +103,25 @@ class Template
                 return Dictum::name(array_pop($parts));
 
             case 'pkgDescription':
-                $config = Effigy::getComposerConfig();
-                return Coercion::toStringOrNull($config['description'] ?? null) ??
+                return $manifest->getDescription() ??
                     Cli::ask('Describe your package');
 
             case 'pkgType':
-                $config = Effigy::getComposerConfig();
-                return Coercion::toStringOrNull($config['type'] ?? null) ??
+                return $manifest->getType() ??
                     Cli::ask('What type of package is this?', 'library');
 
             case 'pkgLicense':
-                $config = Effigy::getComposerConfig();
-                return Coercion::toStringOrNull($config['license'] ?? null) ??
+                $license = $manifest->getLicense();
+
+                if (is_array($license)) {
+                    if (empty($license)) {
+                        $license = null;
+                    } else {
+                        return (string)json_encode($license);
+                    }
+                }
+
+                return $license ??
                     Cli::ask('What license does your package use?', 'MIT');
 
             case 'pkgIntro':
@@ -191,24 +197,10 @@ class Template
      */
     protected function getPackagePhpExtensions(): array
     {
-        $config = Effigy::getComposerConfig();
-        $output = ['intl'];
-
-        foreach ([
-            ...array_keys(Coercion::toArray($config['require'] ?? [])),
-            ...array_keys(Coercion::toArray($config['require-dev'] ?? []))
-        ] as $package) {
-            $matches = [];
-
-            if (!preg_match('/^ext-([a-zA-Z0-9-_]+)$/', (string)$package, $matches)) {
-                continue;
-            }
-
-            $name = $matches[1];
-            $output[] = $name;
-        }
-
-        return array_unique($output);
+        return array_unique(array_merge(
+            ['intl'],
+            Integra::getLocalManifest()->getRequiredExtensions()
+        ));
     }
 
     /**

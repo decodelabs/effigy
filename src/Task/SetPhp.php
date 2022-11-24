@@ -28,7 +28,7 @@ class SetPhp implements Task
 
         // TODO: validate binary
 
-        Effigy::setConfig('php', $binName);
+        Effigy::$config->set('php', $binName);
         return true;
     }
 }

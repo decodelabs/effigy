@@ -10,7 +10,7 @@ declare(strict_types=1);
 namespace DecodeLabs\Effigy\Task;
 
 use DecodeLabs\Clip\Task;
-use DecodeLabs\Effigy;
+use DecodeLabs\Integra;
 use DecodeLabs\Systemic;
 use DecodeLabs\Terminus as Cli;
 
@@ -19,11 +19,11 @@ class InitRepo implements Task
     public function execute(): bool
     {
         // Git init
-        if (!Effigy::$rootDir->getFile('.git/config')->exists()) {
+        if (!Integra::$rootDir->getFile('.git/config')->exists()) {
             $result = Systemic::$process->launch(
                 'git init',
                 [],
-                Effigy::$rootDir,
+                Integra::$rootDir,
                 Cli::getSession()
             );
 
@@ -40,7 +40,7 @@ class InitRepo implements Task
             Systemic::$process->launch(
                 'git branch main',
                 [],
-                Effigy::$rootDir,
+                Integra::$rootDir,
                 Cli::getSession()
             );
         }
@@ -49,7 +49,7 @@ class InitRepo implements Task
             Systemic::$process->launch(
                 'git branch develop',
                 [],
-                Effigy::$rootDir,
+                Integra::$rootDir,
                 Cli::getSession()
             );
         }
@@ -57,7 +57,7 @@ class InitRepo implements Task
         Systemic::$process->launch(
             'git checkout develop',
             [],
-            Effigy::$rootDir,
+            Integra::$rootDir,
             Cli::getSession()
         );
 
@@ -67,7 +67,7 @@ class InitRepo implements Task
             Systemic::$process->launch(
                 'git flow init',
                 [],
-                Effigy::$rootDir,
+                Integra::$rootDir,
                 Cli::getSession()
             );
         }
@@ -83,7 +83,7 @@ class InitRepo implements Task
         $result = Systemic::$process->newLauncher(
             'git branch --list ' . $branch,
             [],
-            Effigy::$rootDir
+            Integra::$rootDir
         )
             ->setDecoratable(false)
             ->launch();
@@ -96,7 +96,7 @@ class InitRepo implements Task
         $result = Systemic::$process->newLauncher(
             'git flow version',
             [],
-            Effigy::$rootDir
+            Integra::$rootDir
         )
             ->setDecoratable(false)
             ->launch();
