@@ -1,3 +1,6 @@
+* Improved version task
+* Added signal handlers to bin launcher
+
 ## v0.3.0 (2022-11-24)
 * Switched composer integration to Integra
 * Moved config handling to standalone class
