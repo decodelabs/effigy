@@ -20,7 +20,7 @@ class SelfUpdate implements Task
     {
         if (
             !Effigy::isLocal() &&
-            !Integra::runGlobal('update')
+            !Integra::runGlobal('update', '--with-all-dependencies')
         ) {
             return false;
         }
