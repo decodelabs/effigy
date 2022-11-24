@@ -17,6 +17,6 @@ class Version implements Task
 {
     public function execute(): bool
     {
-        return Integra::runGlobal('show', 'decodelabs/effigy');
+        return Integra::runGlobal('show', 'decodelabs/effigy', '|grep \'versions :\'');
     }
 }
