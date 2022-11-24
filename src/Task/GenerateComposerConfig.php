@@ -11,9 +11,9 @@ namespace DecodeLabs\Effigy\Task;
 
 use DecodeLabs\Atlas\File;
 use DecodeLabs\Clip\Task;
-use DecodeLabs\Effigy;
 use DecodeLabs\Effigy\Task\GenerateComposerConfig\ComposerTemplate;
 use DecodeLabs\Effigy\Template;
+use DecodeLabs\Integra;
 
 class GenerateComposerConfig implements Task
 {
@@ -30,7 +30,7 @@ class GenerateComposerConfig implements Task
 
     protected function getTargetFile(): File
     {
-        return Effigy::$rootDir->getFile('composer.json');
+        return Integra::$rootDir->getFile('composer.json');
     }
 
     protected function getTemplate(): Template
@@ -41,22 +41,22 @@ class GenerateComposerConfig implements Task
     protected function afterFileSave(File $file): bool
     {
         foreach (static::PACKAGES as $package) {
-            if (!Effigy::run('composer', 'require', $package)) {
+            if (!Integra::install($package)) {
                 return false;
             }
         }
 
         foreach (static::DEV_PACKAGES as $package) {
-            if (!Effigy::run('composer', 'require', $package, '--dev')) {
+            if (!Integra::installDev($package)) {
                 return false;
             }
         }
 
-        if (!Effigy::run('composer', 'remove', 'php', '--dev')) {
+        if (!Integra::uninstallDev('php')) {
             return false;
         }
 
-        Effigy::reloadComposerConfig();
+        Integra::getLocalManifest()->reload();
         return true;
     }
 }

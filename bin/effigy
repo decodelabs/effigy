@@ -12,16 +12,5 @@ namespace DecodeLabs\Effigy;
 use DecodeLabs\Genesis;
 use DecodeLabs\Effigy\Hub;
 
-foreach ([
-    __DIR__ . '/../../../autoload.php',
-    __DIR__ . '/vendor/autoload.php',
-    __DIR__ . '/../vendor/autoload.php'
-] as $file) {
-    if (file_exists($file)) {
-        require $file;
-        break;
-    }
-}
-
-
+require_once $_composer_autoload_path ?? __DIR__ . '/../vendor/autoload.php';
 Genesis::run(Hub::class);

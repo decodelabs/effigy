@@ -13,6 +13,7 @@ use DecodeLabs\Clip\Task;
 use DecodeLabs\Effigy;
 use DecodeLabs\Effigy\Task\GeneratePhpstanConfig\PhpstanTemplate;
 use DecodeLabs\Exceptional;
+use DecodeLabs\Integra;
 use DecodeLabs\Terminus as Cli;
 
 class Analyze implements Task
@@ -25,35 +26,29 @@ class Analyze implements Task
 
         Cli::getCommandDefinition()
             ->addArgument('-clear|c', 'Clear cache')
-            ->addArgument('-debug|d', 'Debug mode')
-            ->addArgument('-headless|h', 'No interaction mode');
+            ->addArgument('-debug|d', 'Debug mode');
 
         Cli::prepareArguments();
 
         // Clear
         if (Cli::getArgument('clear')) {
-            return Effigy::run('composer', 'global', 'exec', 'phpstan', 'clear-result-cache');
+            return Integra::runGlobalBin('phpstan', 'clear-result-cache');
         }
+
 
 
         // Main analyze
-        $args = ['composer', 'global', 'exec', 'phpstan'];
-        $composerArgs = ['--'];
-
-        if (Cli::getArgument('headless')) {
-            $args[] = '--no-interaction';
-        }
-
+        $args = ['phpstan'];
 
         if (Cli::getArgument('debug')) {
-            $composerArgs[] = '--debug';
+            $args[] = '--debug';
         }
 
-        if (Cli::getArgument('headless')) {
-            $composerArgs[] = '--no-progress';
+        if (Effigy::isCiMode()) {
+            $args[] = '--no-progress';
         }
 
-        if (!Effigy::run(...$args, ...$composerArgs)) {
+        if (!Integra::runGlobalBin(...$args)) {
             return false;
         }
 
@@ -67,7 +62,7 @@ class Analyze implements Task
                 continue;
             }
 
-            if (!Effigy::run('composer', 'run-script', $script)) {
+            if (!Integra::runScript($script)) {
                 return false;
             }
         }
@@ -78,19 +73,12 @@ class Analyze implements Task
     protected function ensureInstalled(): bool
     {
         // ext dir
-        $config = Effigy::getComposerConfig();
-
-        if (
-            /** @phpstan-ignore-next-line */
-            !isset($config['require-dev']['decodelabs/phpstan-decodelabs']) &&
-            /** @phpstan-ignore-next-line */
-            !isset($config['require']['decodelabs/phpstan-decodelabs'])
-        ) {
-            Effigy::run('composer', 'require', 'decodelabs/phpstan-decodelabs', '--dev');
+        if (!Integra::hasPackage('decodelabs/phpstan-decodelabs')) {
+            Integra::installDev('decodelabs/phpstan-decodelabs');
         }
 
         // Neon file
-        $neonFile = Effigy::$rootDir->getFile('phpstan.neon');
+        $neonFile = Integra::$rootDir->getFile('phpstan.neon');
 
         if (!$neonFile->exists()) {
             $template = new PhpstanTemplate();

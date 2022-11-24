@@ -11,8 +11,8 @@ namespace DecodeLabs\Effigy\Task;
 
 use DecodeLabs\Atlas\File;
 use DecodeLabs\Clip\Task;
-use DecodeLabs\Effigy;
 use DecodeLabs\Effigy\Template;
+use DecodeLabs\Integra;
 
 class GenerateGitignore implements Task
 {
@@ -20,7 +20,7 @@ class GenerateGitignore implements Task
 
     protected function getTargetFile(): File
     {
-        return Effigy::$rootDir->getFile('.gitignore');
+        return Integra::$rootDir->getFile('.gitignore');
     }
 
     protected function getTemplate(): Template

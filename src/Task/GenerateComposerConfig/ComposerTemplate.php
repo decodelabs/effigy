@@ -9,10 +9,10 @@ declare(strict_types=1);
 
 namespace DecodeLabs\Effigy\Task\GenerateComposerConfig;
 
-use DecodeLabs\Coercion;
 use DecodeLabs\Dictum;
-use DecodeLabs\Effigy;
 use DecodeLabs\Effigy\Template;
+use DecodeLabs\Integra;
+use DecodeLabs\Integra\Structure\Author;
 
 /**
  * @phpstan-type TAuthors array<array{
@@ -33,11 +33,10 @@ class ComposerTemplate extends Template
     {
         switch ($name) {
             case 'pkgAuthors':
-                $config = Effigy::getComposerConfig();
+                $manifest = Integra::getLocalManifest();
+                $authors = $manifest->getAuthors();
 
-                if (isset($config['authors'])) {
-                    /** @phpstan-var TAuthors $authors */
-                    $authors = Coercion::toArray($config['authors']);
+                if (!empty($authors)) {
                     return $this->generateAuthorsJson($authors);
                 } else {
                     return $this->generateAuthorsJson($this->generateAuthors());
@@ -54,14 +53,14 @@ class ComposerTemplate extends Template
     /**
      * Generate json for authors list
      *
-     * @phpstan-param TAuthors $authors
+     * @param array<Author> $authors
      */
     protected function generateAuthorsJson(array $authors): string
     {
         $list = [];
 
         foreach ($authors as $author) {
-            $list[] = '{' . "\n        " . '"name": "' . $author['name'] . '",' . "\n        " . '"email": "' . $author['email'] . '"' . "\n    }";
+            $list[] = '{' . "\n        " . '"name": "' . $author->name . '",' . "\n        " . '"email": "' . $author->email . '"' . "\n    }";
         }
 
         return '[' . implode(', ', $list) . ']';
@@ -70,7 +69,7 @@ class ComposerTemplate extends Template
     /**
      * Generate authors list
      *
-     * @phpstan-return TAuthors
+     * @return array<Author>
      */
     protected function generateAuthors(): array
     {
@@ -80,10 +79,10 @@ class ComposerTemplate extends Template
             return [];
         }
 
-        return [[
-            'name' => $name,
-            'email' => (string)exec('git config user.email')
-        ]];
+        return [new Author(
+            $name,
+            (string)exec('git config user.email')
+        )];
     }
 
 

@@ -13,6 +13,7 @@ use DecodeLabs\Clip\Task;
 use DecodeLabs\Effigy;
 use DecodeLabs\Effigy\Template;
 use DecodeLabs\Exceptional;
+use DecodeLabs\Integra;
 use DecodeLabs\Systemic;
 use DecodeLabs\Terminus as Cli;
 
@@ -62,7 +63,7 @@ class Eclint implements Task
             return false;
         }
 
-        $confFile = Effigy::$rootDir->getFile('.editorconfig');
+        $confFile = Integra::$rootDir->getFile('.editorconfig');
 
         if (!$confFile->exists()) {
             $template = new Template(

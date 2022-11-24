@@ -11,9 +11,9 @@ namespace DecodeLabs\Effigy\Task;
 
 use DecodeLabs\Atlas\File;
 use DecodeLabs\Clip\Task;
-use DecodeLabs\Effigy;
 use DecodeLabs\Effigy\Task\GeneratePhpstanConfig\PhpstanTemplate;
 use DecodeLabs\Effigy\Template;
+use DecodeLabs\Integra;
 
 class GeneratePhpstanConfig implements Task
 {
@@ -21,7 +21,7 @@ class GeneratePhpstanConfig implements Task
 
     protected function getTargetFile(): File
     {
-        return Effigy::$rootDir->getFile('phpstan.neon');
+        return Integra::$rootDir->getFile('phpstan.neon');
     }
 
     protected function getTemplate(): Template

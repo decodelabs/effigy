@@ -11,8 +11,8 @@ namespace DecodeLabs\Effigy\Task;
 
 use DecodeLabs\Atlas\File;
 use DecodeLabs\Clip\Task;
-use DecodeLabs\Effigy;
 use DecodeLabs\Effigy\Template;
+use DecodeLabs\Integra;
 
 class GenerateGithubWorkflow implements Task
 {
@@ -20,7 +20,7 @@ class GenerateGithubWorkflow implements Task
 
     protected function getTargetFile(): File
     {
-        return Effigy::$rootDir->getFile('.github/workflows/integrate.yml');
+        return Integra::$rootDir->getFile('.github/workflows/integrate.yml');
     }
 
     protected function getTemplate(): Template

@@ -10,12 +10,14 @@
     }],
     "require": {
         "php": "^8.0",
+        "composer-runtime-api": "^2.2",
 
         "decodelabs/archetype": "^0.2.9",
         "decodelabs/atlas": "^0.10.5",
-        "decodelabs/clip": "^0.2",
+        "decodelabs/clip": "^0.3",
         "decodelabs/dictum": "^0.4.3",
         "decodelabs/exceptional": "^0.4",
+        "decodelabs/integra": "^0.1",
         "decodelabs/systemic": "^0.10.1",
         "decodelabs/terminus": "^0.9.3",
         "decodelabs/veneer": "^0.10.12",
@@ -24,7 +26,8 @@
         "phpstan/extension-installer": "^1.2",
         "decodelabs/phpstan-decodelabs": "^0.6.1",
         "symplify/easy-coding-standard": "^11.1",
-        "php-parallel-lint/php-parallel-lint": "^1.3"
+        "php-parallel-lint/php-parallel-lint": "^1.3",
+        "ondram/ci-detector": "^4.1"
     },
     "require-dev": {
         "decodelabs/glitch": "^0.18.5"
@@ -39,7 +42,7 @@
     ],
     "extra": {
         "branch-alias": {
-            "dev-develop": "0.2.x-dev"
+            "dev-develop": "0.3.x-dev"
         }
     },
     "config": {

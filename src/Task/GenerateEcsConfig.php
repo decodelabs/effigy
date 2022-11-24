@@ -11,9 +11,9 @@ namespace DecodeLabs\Effigy\Task;
 
 use DecodeLabs\Atlas\File;
 use DecodeLabs\Clip\Task;
-use DecodeLabs\Effigy;
 use DecodeLabs\Effigy\Task\GenerateEcsConfig\EcsTemplate;
 use DecodeLabs\Effigy\Template;
+use DecodeLabs\Integra;
 
 class GenerateEcsConfig implements Task
 {
@@ -21,7 +21,7 @@ class GenerateEcsConfig implements Task
 
     protected function getTargetFile(): File
     {
-        return Effigy::$rootDir->getFile('ecs.php');
+        return Integra::$rootDir->getFile('ecs.php');
     }
 
     protected function getTemplate(): Template
