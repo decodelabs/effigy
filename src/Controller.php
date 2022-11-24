@@ -139,7 +139,7 @@ class Controller extends GenericController implements
         // Bin
         if ($this->hasVendorBin($name)) {
             return Systemic::$process->newLauncher(
-                'vendor/bin/' . $name,
+                Integra::$rootDir->getFile('vendor/bin/' . $name),
                 $args,
                 Integra::$runDir,
                 Cli::getSession()
