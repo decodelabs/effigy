@@ -1,4 +1,5 @@
 * Moved GenerateFileTrait to Clip
+* Added signals to app scripts
 
 ## v0.3.1 (2022-11-25)
 * Use run dir for cwd when calling bins
