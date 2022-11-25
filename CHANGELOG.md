@@ -1,3 +1,5 @@
+* Moved GenerateFileTrait to Clip
+
 ## v0.3.1 (2022-11-25)
 * Use run dir for cwd when calling bins
 * Moved body of Template to Genesis
