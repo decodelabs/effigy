@@ -1,3 +1,9 @@
+## v0.3.1 (2022-11-25)
+* Use run dir for cwd when calling bins
+* Moved body of Template to Genesis
+* Improved version task
+* Added signal handlers to bin launcher
+
 ## v0.3.0 (2022-11-24)
 * Switched composer integration to Integra
 * Moved config handling to standalone class

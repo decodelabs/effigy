@@ -18,6 +18,7 @@
         "decodelabs/dictum": "^0.4.3",
         "decodelabs/exceptional": "^0.4",
         "decodelabs/integra": "^0.1",
+        "decodelabs/genesis": "^0.7.1",
         "decodelabs/systemic": "^0.10.1",
         "decodelabs/terminus": "^0.9.3",
         "decodelabs/veneer": "^0.10.12",
