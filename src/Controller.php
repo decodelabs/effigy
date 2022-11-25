@@ -156,6 +156,7 @@ class Controller extends GenericController implements
 
             // Launch script
             return $this->newScriptLauncher($entry->getPath(), [$name, ...$args])
+                ->addSignal('SIGINT', 'SIGTERM', 'SIGQUIT')
                 ->launch()
                 ->wasSuccessful();
         }
