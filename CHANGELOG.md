@@ -1,3 +1,5 @@
+* Ignore html.php template files in non-ascii check
+
 ## v0.3.2 (2022-11-25)
 * Moved GenerateFileTrait to Clip
 * Added signals to app scripts
