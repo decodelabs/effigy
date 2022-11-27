@@ -186,7 +186,8 @@ class Controller extends GenericController implements
         $user = Systemic::$process->getCurrent()->getOwnerName();
 
         return Systemic::$process->newLauncher(Integra::getPhpBinary(), $args, null, null, $user)
-            ->setSession(Cli::getSession());
+            ->setSession(Cli::getSession())
+            ->setDecoratable(false);
     }
 
     /**
