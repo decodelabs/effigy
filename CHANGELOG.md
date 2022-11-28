@@ -1,3 +1,4 @@
+* Updated Dictum dependency
 * Ignore html.php template files in non-ascii check
 
 ## v0.3.2 (2022-11-25)
