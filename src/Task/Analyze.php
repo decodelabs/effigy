@@ -52,7 +52,7 @@ class Analyze implements Task
 
         if ($confName === null) {
             if ($confFile = Cli::getArgument('configuration')) {
-                $args[] = '--configuration='.$confFile;
+                $args[] = '--configuration=' . $confFile;
             }
 
             if (!Integra::runGlobalBin(...$args)) {
@@ -83,7 +83,7 @@ class Analyze implements Task
                 continue;
             }
 
-            $config = '--configuration=phpstan.'.$name.'.neon';
+            $config = '--configuration=phpstan.' . $name . '.neon';
 
             if (!Integra::runGlobalBin(...[...$args, $config])) {
                 return false;
