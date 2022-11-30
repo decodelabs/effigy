@@ -32,9 +32,8 @@ class CheckGitExports implements Task
             $exclude[] = '--exclude="bin/*"';
         }
 
-        $result = Systemic::$process->launch(
+        $result = Systemic::capture(
             'git archive HEAD | tar --list ' . implode(' ', $exclude),
-            [],
             Integra::$rootDir
         );
 

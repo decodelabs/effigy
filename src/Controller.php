@@ -18,7 +18,6 @@ use DecodeLabs\Exceptional;
 use DecodeLabs\Glitch\Dumpable;
 use DecodeLabs\Integra;
 use DecodeLabs\Systemic;
-use DecodeLabs\Systemic\Process\Launcher;
 use DecodeLabs\Terminus as Cli;
 use DecodeLabs\Veneer\Plugin;
 use OndraM\CiDetector\CiDetector;
@@ -138,15 +137,13 @@ class Controller extends GenericController implements
 
         // Bin
         if ($this->hasVendorBin($name)) {
-            return Systemic::$process->newLauncher(
-                Integra::$rootDir->getFile('vendor/bin/' . $name),
-                $args,
-                Integra::$runDir,
-                Cli::getSession()
-            )
+            return Systemic::command([
+                    (string)Integra::$rootDir->getFile('vendor/bin/' . $name),
+                    ...$args
+                ])
+                ->setWorkingDirectory(Integra::$runDir)
                 ->addSignal('SIGINT', 'SIGTERM', 'SIGQUIT')
-                ->launch()
-                ->wasSuccessful();
+                ->run();
         }
 
 
@@ -155,10 +152,14 @@ class Controller extends GenericController implements
             $this->config->save();
 
             // Launch script
-            return $this->newScriptLauncher($entry->getPath(), [$name, ...$args])
+            return Systemic::command([
+                    Integra::getPhpBinary(),
+                    $entry->getPath(),
+                    $name,
+                    ...$args
+                ])
                 ->addSignal('SIGINT', 'SIGTERM', 'SIGQUIT')
-                ->launch()
-                ->wasSuccessful();
+                ->run();
         }
 
 
@@ -168,42 +169,16 @@ class Controller extends GenericController implements
     }
 
     /**
-     * New script launcher
-     *
-     * @param string|array<string>|null $args
-     */
-    public function newScriptLauncher(
-        string $path,
-        string|array|null $args = null
-    ): Launcher {
-        if ($args === null) {
-            $args = [];
-        } elseif (!is_array($args)) {
-            $args = (array)$args;
-        }
-
-        array_unshift($args, $path);
-        $user = Systemic::$process->getCurrent()->getOwnerName();
-
-        return Systemic::$process->newLauncher(Integra::getPhpBinary(), $args, null, null, $user)
-            ->setSession(Cli::getSession())
-            ->setDecoratable(false);
-    }
-
-    /**
      * Run git command
      */
     public function runGit(
         string $name,
         string ...$args
     ): bool {
-        return Systemic::$process->launch(
-            'git',
-            [$name, ...$args],
-            Integra::$rootDir,
-            Cli::getSession()
-        )
-            ->wasSuccessful();
+        return Systemic::run(
+            ['git', $name, ...$args],
+            Integra::$rootDir
+        );
     }
 
     /**
@@ -213,13 +188,10 @@ class Controller extends GenericController implements
         string $name,
         string ...$args
     ): ?string {
-        $result = Systemic::$process->newLauncher(
-            'git',
-            [$name, ...$args],
+        $result = Systemic::capture(
+            ['git', $name, ...$args],
             Integra::$rootDir
-        )
-            ->setDecoratable(false)
-            ->launch();
+        );
 
         if (!$result->wasSuccessful()) {
             return null;

@@ -1,3 +1,4 @@
+* Switched to Systemic v0.11
 * Updated Dictum dependency
 * Ignore html.php template files in non-ascii check
 
