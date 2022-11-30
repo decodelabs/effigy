@@ -39,18 +39,18 @@ class Analyze implements Task
 
         $confName = Cli::getArgument('config');
 
+        // Main analyze
+        $args = ['phpstan'];
+
+        if (Cli::getArgument('debug')) {
+            $args[] = '--debug';
+        }
+
+        if (Effigy::isCiMode()) {
+            $args[] = '--no-progress';
+        }
+
         if ($confName === null) {
-            // Main analyze
-            $args = ['phpstan'];
-
-            if (Cli::getArgument('debug')) {
-                $args[] = '--debug';
-            }
-
-            if (Effigy::isCiMode()) {
-                $args[] = '--no-progress';
-            }
-
             if ($confFile = Cli::getArgument('configuration')) {
                 $args[] = '--configuration='.$confFile;
             }
