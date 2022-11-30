@@ -26,7 +26,9 @@ class Analyze implements Task
 
         Cli::getCommandDefinition()
             ->addArgument('-clear|c', 'Clear cache')
-            ->addArgument('-debug|d', 'Debug mode');
+            ->addArgument('-debug|d', 'Debug mode')
+            ->addArgument('-config=', 'Composer script name')
+            ->addArgument('-configuration=', 'Configuration file name');
 
         Cli::prepareArguments();
 
@@ -35,7 +37,7 @@ class Analyze implements Task
             return Integra::runGlobalBin('phpstan', 'clear-result-cache');
         }
 
-
+        $confName = Cli::getArgument('config');
 
         // Main analyze
         $args = ['phpstan'];
@@ -48,8 +50,18 @@ class Analyze implements Task
             $args[] = '--no-progress';
         }
 
-        if (!Integra::runGlobalBin(...$args)) {
-            return false;
+        if ($confName === null) {
+            if ($confFile = Cli::getArgument('configuration')) {
+                $args[] = '--configuration=' . $confFile;
+            }
+
+            if (!Integra::runGlobalBin(...$args)) {
+                return false;
+            }
+
+            if ($confFile) {
+                return true;
+            }
         }
 
 
@@ -58,11 +70,22 @@ class Analyze implements Task
         $scripts = Effigy::getComposerScripts();
 
         foreach ($scripts as $name => $script) {
-            if (!preg_match('/^analyze\-/', $name)) {
+            if (!preg_match('/^analyze\-([a-zA-Z0-9-_]+)$/', $name, $matches)) {
                 continue;
             }
 
-            if (!Integra::runScript($name)) {
+            $name = $matches[1];
+
+            if (
+                $confName !== null &&
+                $name !== $confName
+            ) {
+                continue;
+            }
+
+            $config = '--configuration=phpstan.' . $name . '.neon';
+
+            if (!Integra::runGlobalBin(...[...$args, $config])) {
                 return false;
             }
         }
