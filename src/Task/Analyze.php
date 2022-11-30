@@ -58,11 +58,13 @@ class Analyze implements Task
         $scripts = Effigy::getComposerScripts();
 
         foreach ($scripts as $name => $script) {
-            if (!preg_match('/^analyze\-/', $name)) {
+            if (!preg_match('/^analyze\-([a-zA-Z0-9-_]+)$/', $name, $matches)) {
                 continue;
             }
 
-            if (!Integra::runScript($name)) {
+            $config = '--configuration=phpstan.'.$matches[1].'.neon';
+
+            if (!Integra::runGlobalBin(...[...$args, $config])) {
                 return false;
             }
         }
