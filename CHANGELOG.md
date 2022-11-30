@@ -1,3 +1,5 @@
+* Improved config selection in Analyze task
+
 ## v0.3.4 (2022-11-30)
 * Fixed custom analyze script list
 
