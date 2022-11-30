@@ -57,12 +57,12 @@ class Analyze implements Task
         // Specialised analyze
         $scripts = Effigy::getComposerScripts();
 
-        foreach ($scripts as $script) {
-            if (!preg_match('/^analyze\-/', $script)) {
+        foreach ($scripts as $name => $script) {
+            if (!preg_match('/^analyze\-/', $name)) {
                 continue;
             }
 
-            if (!Integra::runScript($script)) {
+            if (!Integra::runScript($name)) {
                 return false;
             }
         }
