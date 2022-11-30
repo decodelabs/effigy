@@ -1,3 +1,4 @@
+## v0.3.3 (2022-11-30)
 * Switched to Systemic v0.11
 * Updated Dictum dependency
 * Ignore html.php template files in non-ascii check
