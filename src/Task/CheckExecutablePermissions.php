@@ -30,9 +30,8 @@ class CheckExecutablePermissions implements Task
             $exStr[] = '-not -path \'' . $glob . '\'';
         }
 
-        $result = Systemic::$process->launch(
+        $result = Systemic::capture(
             'find . -type f ' . implode(' ', $exStr) . ' -executable',
-            [],
             Integra::$rootDir
         );
 

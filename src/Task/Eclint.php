@@ -42,13 +42,10 @@ class Eclint implements Task
         $command = 'check';
         $paths = array_keys($dirs);
 
-        $result = Systemic::$process->newLauncher('eclint', [
-                $command, ...$paths
-            ])
-            ->setSession(Cli::getSession())
-            ->launch();
+        $output = Systemic::run([
+            'eclint', $command, ...$paths
+        ]);
 
-        $output = $result->wasSuccessful();
 
         if ($output) {
             Cli::success('No linting issues found');
