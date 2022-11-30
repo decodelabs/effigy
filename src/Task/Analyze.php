@@ -26,7 +26,9 @@ class Analyze implements Task
 
         Cli::getCommandDefinition()
             ->addArgument('-clear|c', 'Clear cache')
-            ->addArgument('-debug|d', 'Debug mode');
+            ->addArgument('-debug|d', 'Debug mode')
+            ->addArgument('-config=', 'Composer script name')
+            ->addArgument('-configuration=', 'Configuration file name');
 
         Cli::prepareArguments();
 
@@ -35,21 +37,31 @@ class Analyze implements Task
             return Integra::runGlobalBin('phpstan', 'clear-result-cache');
         }
 
+        $confName = Cli::getArgument('config');
 
+        if ($confName === null) {
+            // Main analyze
+            $args = ['phpstan'];
 
-        // Main analyze
-        $args = ['phpstan'];
+            if (Cli::getArgument('debug')) {
+                $args[] = '--debug';
+            }
 
-        if (Cli::getArgument('debug')) {
-            $args[] = '--debug';
-        }
+            if (Effigy::isCiMode()) {
+                $args[] = '--no-progress';
+            }
 
-        if (Effigy::isCiMode()) {
-            $args[] = '--no-progress';
-        }
+            if ($confFile = Cli::getArgument('configuration')) {
+                $args[] = '--configuration='.$confFile;
+            }
 
-        if (!Integra::runGlobalBin(...$args)) {
-            return false;
+            if (!Integra::runGlobalBin(...$args)) {
+                return false;
+            }
+
+            if ($confFile) {
+                return true;
+            }
         }
 
 
@@ -62,7 +74,16 @@ class Analyze implements Task
                 continue;
             }
 
-            $config = '--configuration=phpstan.'.$matches[1].'.neon';
+            $name = $matches[1];
+
+            if (
+                $confName !== null &&
+                $name !== $confName
+            ) {
+                continue;
+            }
+
+            $config = '--configuration=phpstan.'.$name.'.neon';
 
             if (!Integra::runGlobalBin(...[...$args, $config])) {
                 return false;
