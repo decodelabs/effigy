@@ -1,3 +1,4 @@
+## v0.3.5 (2022-11-30)
 * Improved config selection in Analyze task
 
 ## v0.3.4 (2022-11-30)
