@@ -27,7 +27,7 @@ class CheckNonAscii implements Task
         chdir((string)Integra::$rootDir);
 
         $pathString = implode(' ', array_keys($dirs));
-        $command = "! LC_ALL=C.UTF-8 find $pathString -type f -name \"*.php\" -not -name \"*.html.php\" -print0 | xargs -0 -- grep -PHn \"[^ -~]\" | grep -v '// @ignore-non-ascii$'";
+        $command = "! LC_ALL=C.UTF-8 find $pathString -type f -name \"*.php\" -not -name \"*.html.php\" -not -name \"*.htm.php\" -print0 | xargs -0 -- grep -PHn \"[^ -~]\" | grep -v '// @ignore-non-ascii$'";
         $output = exec($command);
 
         if ($output !== '') {
