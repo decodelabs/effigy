@@ -1,3 +1,6 @@
+## v0.3.6 (2022-12-03)
+* Skip *.htm.php template files for non-ascii
+
 ## v0.3.5 (2022-11-30)
 * Improved config selection in Analyze task
 
