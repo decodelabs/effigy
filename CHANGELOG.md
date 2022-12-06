@@ -1,3 +1,4 @@
+## v0.3.8 (2022-12-06)
 * Clear caches after mounting
 
 ## v0.3.7 (2022-12-06)
