@@ -22,7 +22,8 @@ use DecodeLabs\Terminus as Cli;
  *     'entry'?: string,
  *     'params'?: array<string, string>,
  *     'codeDirs'?: array<string>,
- *     'exports'?: array<string>
+ *     'exports'?: array<string>,
+ *     'localRepos'?: array<string, string>
  * }
  */
 class Config
@@ -179,6 +180,16 @@ class Config
         return $this->data['exports'] ?? [];
     }
 
+    /**
+     * Get local repos list
+     *
+     * @return array<string, string>
+     */
+    public function getLocalRepos(): array
+    {
+        return $this->data['localRepos'] ?? [];
+    }
+
 
 
 
@@ -252,6 +263,7 @@ class Config
 
                     // array<string, string>
                 case 'params':
+                case 'localRepos':
                     if (null !== ($value = Coercion::toArrayOrNull($value))) {
                         $output[$key] = [];
 

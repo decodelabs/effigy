@@ -1,3 +1,6 @@
+## v0.3.7 (2022-12-06)
+* Added mount and unmount tasks for local repositories
+
 ## v0.3.6 (2022-12-03)
 * Skip *.htm.php template files for non-ascii
 
