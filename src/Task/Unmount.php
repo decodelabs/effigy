@@ -79,6 +79,13 @@ class Unmount implements Task
         }
 
         Integra::run('update');
+
+        clearstatcache();
+
+        if (function_exists('opcache_reset')) {
+            opcache_reset();
+        }
+
         return true;
     }
 
