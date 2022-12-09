@@ -1,3 +1,4 @@
+## v0.4.0 (2022-12-09)
 * Renamed update task to upgrade
 
 ## v0.3.8 (2022-12-06)
