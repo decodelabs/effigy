@@ -78,7 +78,14 @@ class Unmount implements Task
             return false;
         }
 
-        Integra::run('update');
+        if (
+            !empty($requires) ||
+            !empty($devRequires)
+        ) {
+            Integra::run('update');
+        } else {
+            Cli::operative('No packages mounted');
+        }
 
         clearstatcache();
 

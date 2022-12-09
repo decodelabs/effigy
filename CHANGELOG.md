@@ -1,3 +1,5 @@
+* Renamed update task to upgrade
+
 ## v0.3.8 (2022-12-06)
 * Clear caches after mounting
 

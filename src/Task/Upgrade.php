@@ -14,7 +14,7 @@ use DecodeLabs\Effigy;
 use DecodeLabs\Integra;
 use DecodeLabs\Terminus as Cli;
 
-class Update implements Task
+class Upgrade implements Task
 {
     public function execute(): bool
     {
