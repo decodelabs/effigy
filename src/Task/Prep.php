@@ -18,6 +18,7 @@ class Prep implements Task
     public function execute(): bool
     {
         // Unmount
+        Cli::newLine();
         Cli::info('Unmounting dev packages');
 
         if (!Effigy::run('unmount')) {
@@ -27,7 +28,7 @@ class Prep implements Task
         Cli::newLine();
 
         // Update
-        if (!Effigy::run('update')) {
+        if (!Effigy::run('upgrade')) {
             return false;
         }
 
