@@ -2,12 +2,12 @@
     "name": "decodelabs/effigy",
     "description": "Universal CLI entry point",
     "type": "library",
-    "keywords": ["entry", "CLI"],
+    "keywords": [ "entry", "CLI" ],
     "license": "MIT",
-    "authors": [{
-        "name": "Tom Wright",
-        "email": "tom@inflatablecookie.com"
-    }],
+    "authors": [ {
+            "name": "Tom Wright",
+            "email": "tom@inflatablecookie.com"
+        } ],
     "require": {
         "php": "^8.0",
         "composer-runtime-api": "^2.2",
@@ -44,7 +44,7 @@
     ],
     "extra": {
         "branch-alias": {
-            "dev-develop": "0.3.x-dev"
+            "dev-develop": "0.4.x-dev"
         }
     },
     "config": {
