@@ -14,12 +14,6 @@ use DecodeLabs\Effigy\Template;
 use DecodeLabs\Integra;
 use DecodeLabs\Integra\Structure\Author;
 
-/**
- * @phpstan-type TAuthors array<array{
- *     'name': string,
- *     'email': string
- * }>
- */
 class ComposerTemplate extends Template
 {
     public function __construct()

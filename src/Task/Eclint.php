@@ -26,10 +26,8 @@ class Eclint implements Task
         }
 
         /*
-        Cli::getCommandDefinition()
+        Cli::$command
             ->addArgument('-check|c', 'Check standards only');
-
-        Cli::prepareArguments();
         */
 
         $dirs = Effigy::getCodeDirs();
@@ -38,7 +36,7 @@ class Eclint implements Task
             return true;
         }
 
-        //$command = Cli::getArgument('check') ? 'check' : 'fix';
+        //$command = Cli::$command['check'] ? 'check' : 'fix';
         $command = 'check';
         $paths = array_keys($dirs);
 

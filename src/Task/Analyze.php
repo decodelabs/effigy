@@ -24,25 +24,23 @@ class Analyze implements Task
             throw Exceptional::Runtime('Unable to find or create a PHPStan neon config');
         }
 
-        Cli::getCommandDefinition()
+        Cli::$command
             ->addArgument('-clear|c', 'Clear cache')
             ->addArgument('-debug|d', 'Debug mode')
             ->addArgument('-config=', 'Composer script name')
             ->addArgument('-configuration=', 'Configuration file name');
 
-        Cli::prepareArguments();
-
         // Clear
-        if (Cli::getArgument('clear')) {
+        if (Cli::$command['clear']) {
             return Integra::runGlobalBin('phpstan', 'clear-result-cache');
         }
 
-        $confName = Cli::getArgument('config');
+        $confName = Cli::$command['config'];
 
         // Main analyze
         $args = ['phpstan'];
 
-        if (Cli::getArgument('debug')) {
+        if (Cli::$command['debug']) {
             $args[] = '--debug';
         }
 
@@ -51,7 +49,7 @@ class Analyze implements Task
         }
 
         if ($confName === null) {
-            if ($confFile = Cli::getArgument('configuration')) {
+            if ($confFile = Cli::$command['configuration']) {
                 $args[] = '--configuration=' . $confFile;
             }
 

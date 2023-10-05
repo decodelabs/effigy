@@ -24,15 +24,12 @@ class Format implements Task
             throw Exceptional::Runtime('Unable to find or create an ecs.php config');
         }
 
-        Cli::getCommandDefinition()
+        Cli::$command
             ->addArgument('-check|c', 'Check standards only');
-
-        Cli::prepareArguments();
-
 
         $args = ['ecs'];
 
-        if (!Cli::getArgument('check')) {
+        if (!Cli::$command['check']) {
             $args[] = '--fix';
         }
 

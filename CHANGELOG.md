@@ -1,3 +1,6 @@
+## v0.4.1 (2023-10-05)
+* Updated Terminus dependency
+
 ## v0.4.0 (2022-12-09)
 * Renamed update task to upgrade
 

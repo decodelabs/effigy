@@ -27,22 +27,20 @@ class Unmount implements Task
 
     public function execute(): bool
     {
-        Cli::getCommandDefinition()
+        Cli::$command
             ->addArgument('?packages*', 'Package name')
             ->addArgument('--all', 'All packages');
-
-        Cli::prepareArguments();
 
         $this->repositories = Integra::getLocalManifest()->getRepositoryConfig();
 
         if (
-            Cli::getArgument('all') ||
-            Cli::getArgument('packages') === null
+            Cli::$command['all'] ||
+            Cli::$command['packages'] === null
         ) {
             $packages = $this->lookupAllPackages();
         } else {
             /** @var array<string> $packages */
-            $packages = Cli::getArgument('packages');
+            $packages = Cli::$command['packages'];
             $packages = $this->lookupPackages($packages);
         }
 
