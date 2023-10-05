@@ -21,7 +21,7 @@
         "decodelabs/genesis": "^0.7.1",
         "decodelabs/lucid": "^0.3.8",
         "decodelabs/systemic": "^0.11",
-        "decodelabs/terminus": "^0.10",
+        "decodelabs/terminus": "^0.10.1",
         "decodelabs/veneer": "^0.10.12",
 
         "phpstan/phpstan": "^1.8",
