@@ -27,14 +27,12 @@ class Mount implements Task
 
     public function execute(): bool
     {
-        Cli::getCommandDefinition()
+        Cli::$command
             ->addArgument('packages*', 'Package names');
-
-        Cli::prepareArguments();
 
         $conf = Integra::getLocalManifest()->getRepositoryConfig();
         /** @var array<string> $packages */
-        $packages = Cli::getArgument('packages');
+        $packages = Cli::$command['packages'];
         $packages = $this->lookupPackages($packages);
         $requires = $devRequires = [];
 

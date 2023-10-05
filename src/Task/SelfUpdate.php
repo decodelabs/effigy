@@ -18,14 +18,13 @@ class SelfUpdate implements Task
 {
     public function execute(): bool
     {
-        Cli::getCommandDefinition()
+        Cli::$command
             ->addArgument('-dev|d', 'Dev version from repo')
             ->addArgument('-global|g', 'Force global');
-        Cli::prepareArguments();
 
 
         // Local / global
-        if (Cli::getArgument('global')) {
+        if (Cli::$command['global']) {
             Integra::forceLocal(false);
         }
 
@@ -48,7 +47,7 @@ class SelfUpdate implements Task
         if (!Integra::installGlobal(
             Integra::preparePackageInstallName(
                 'decodelabs/effigy',
-                Cli::getArgument('dev') ? 'dev-develop' : null
+                Cli::$command['dev'] ? 'dev-develop' : null
             )
         )) {
             return false;
