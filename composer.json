@@ -13,7 +13,7 @@
         "composer-runtime-api": "^2.2",
 
         "decodelabs/archetype": "^0.2.9",
-        "decodelabs/atlas": "^0.10.5",
+        "decodelabs/atlas": "^0.10.5|^0.11",
         "decodelabs/clip": "^0.3.2",
         "decodelabs/dictum": "^0.5",
         "decodelabs/exceptional": "^0.4",
@@ -21,7 +21,7 @@
         "decodelabs/genesis": "^0.7.1",
         "decodelabs/lucid": "^0.3.8",
         "decodelabs/systemic": "^0.11",
-        "decodelabs/terminus": "^0.10",
+        "decodelabs/terminus": "^0.10.1",
         "decodelabs/veneer": "^0.10.12",
 
         "phpstan/phpstan": "^1.8",
@@ -44,7 +44,7 @@
     ],
     "extra": {
         "branch-alias": {
-            "dev-develop": "0.5.x-dev"
+            "dev-develop": "0.4.x-dev"
         }
     },
     "config": {

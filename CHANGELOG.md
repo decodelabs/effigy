@@ -1,3 +1,6 @@
+## v0.4.2 (2023-10-16)
+* Updated Atlas dependency
+
 ## v0.4.1 (2023-10-05)
 * Updated Terminus dependency
 
