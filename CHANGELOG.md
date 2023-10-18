@@ -1,3 +1,5 @@
+* Updated Genesis dependency
+
 ## v0.4.2 (2023-10-16)
 * Updated Atlas dependency
 
