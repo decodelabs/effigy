@@ -1,3 +1,4 @@
+## v0.4.3 (2023-10-18)
 * Updated Genesis dependency
 
 ## v0.4.2 (2023-10-16)
