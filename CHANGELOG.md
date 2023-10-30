@@ -1,3 +1,6 @@
+## v0.4.5 (2023-10-30)
+* Fixed readme template badge
+
 ## v0.4.4 (2023-10-30)
 * Fixed README template
 * Updated Lucid dependency
