@@ -1,3 +1,4 @@
+## v0.4.4 (2023-10-30)
 * Fixed README template
 * Updated Lucid dependency
 
