@@ -3,7 +3,7 @@
 [![PHP from Packagist](https://img.shields.io/packagist/php-v/{{ pkgName }}?style=flat)](https://packagist.org/packages/{{ pkgName }})
 [![Latest Version](https://img.shields.io/packagist/v/{{ pkgName }}.svg?style=flat)](https://packagist.org/packages/{{ pkgName }})
 [![Total Downloads](https://img.shields.io/packagist/dt/{{ pkgName }}.svg?style=flat)](https://packagist.org/packages/{{ pkgName }})
-[![GitHub Workflow Status](https://img.shields.io/github/workflow/status/{{ pkgName }}/Integrate)](https://github.com/{{ pkgName }}/actions/workflows/integrate.yml)
+[![GitHub Workflow Status](https://img.shields.io/github/actions/workflow/status/{{ pkgName }}/integrate.yml?branch=develop)](https://github.com/{{ pkgName }}/actions/workflows/integrate.yml)
 [![PHPStan](https://img.shields.io/badge/PHPStan-enabled-44CC11.svg?longCache=true&style=flat)](https://github.com/phpstan/phpstan)
 [![License](https://img.shields.io/packagist/l/{{ pkgName }}?style=flat)](https://packagist.org/packages/{{ pkgName }})
 
