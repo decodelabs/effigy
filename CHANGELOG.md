@@ -1,3 +1,4 @@
+* Fixed README template
 * Updated Lucid dependency
 
 ## v0.4.3 (2023-10-18)
