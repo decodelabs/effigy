@@ -21,8 +21,9 @@ class PhpstanTemplate extends Template
         );
     }
 
-    protected function generateSlot(string $name): ?string
-    {
+    protected function generateSlot(
+        string $name
+    ): ?string {
         switch ($name) {
             case 'paths': return $this->generatePathString();
         }

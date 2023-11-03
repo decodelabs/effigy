@@ -40,8 +40,9 @@ class Config
      */
     protected array $new = [];
 
-    public function __construct(File $file)
-    {
+    public function __construct(
+        File $file
+    ) {
         $this->file = $file;
         $this->data = $this->loadData();
     }
@@ -103,8 +104,9 @@ class Config
     /**
      * Get param from config or user
      */
-    public function getParam(string $slug): string
-    {
+    public function getParam(
+        string $slug
+    ): string {
         if (isset($this->data['params'][$slug])) {
             return $this->data['params'][$slug];
         }

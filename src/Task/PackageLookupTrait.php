@@ -64,8 +64,9 @@ trait PackageLookupTrait
      * @param array<string> $packages
      * @return array<string, Package>
      */
-    protected function lookupPackages(array $packages): array
-    {
+    protected function lookupPackages(
+        array $packages
+    ): array {
         $output = [];
 
         foreach ($packages as $package) {
@@ -81,8 +82,9 @@ trait PackageLookupTrait
         return $output;
     }
 
-    protected function lookupPackage(string $key): Package
-    {
+    protected function lookupPackage(
+        string $key
+    ): Package {
         foreach ($this->getAllPackages() as $name => $package) {
             if (
                 $name === $key ||
@@ -98,8 +100,9 @@ trait PackageLookupTrait
     /**
      * @return array<string, Package>
      */
-    protected function lookupPackageGroup(string $group): array
-    {
+    protected function lookupPackageGroup(
+        string $group
+    ): array {
         $output = [];
         $group = substr($group, 0, -1);
 
@@ -112,8 +115,9 @@ trait PackageLookupTrait
         return $output;
     }
 
-    protected function isDevPackage(string $package): bool
-    {
+    protected function isDevPackage(
+        string $package
+    ): bool {
         return isset($this->requireDev[$package]);
     }
 }
