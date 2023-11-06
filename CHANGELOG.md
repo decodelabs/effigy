@@ -1,3 +1,5 @@
+* Updated templates to target PHP8.1
+
 ## v0.4.5 (2023-10-30)
 * Fixed readme template badge
 

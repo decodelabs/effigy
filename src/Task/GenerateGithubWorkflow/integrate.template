@@ -19,7 +19,7 @@ jobs:
       - name: "Set up PHP"
         uses: "shivammathur/setup-php@v2"
         with:
-          php-version: "8.0"
+          php-version: "8.1"
           extensions: "${{ env.PHP_EXTENSIONS }}"
           ini-values: "post_max_size=256M"
 
@@ -59,9 +59,9 @@ jobs:
 #!    strategy:
 #!      matrix:
 #!        php-version:
-#!          - "8.0"
 #!          - "8.1"
 #!          - "8.2"
+#!          - "8.3"
 #!        dependencies:
 #!          - "lowest"
 #!          - "highest"
@@ -101,9 +101,9 @@ jobs:
     strategy:
       matrix:
         php-version:
-          - "8.0"
           - "8.1"
           - "8.2"
+          - "8.3"
     steps:
       - name: "Set up PHP"
         uses: "shivammathur/setup-php@v2"
@@ -142,7 +142,7 @@ jobs:
       - name: "Set up PHP"
         uses: "shivammathur/setup-php@v2"
         with:
-          php-version: "8.0"
+          php-version: "8.1"
           extensions: "${{ env.PHP_EXTENSIONS }}"
           ini-values: "post_max_size=256M"
 
