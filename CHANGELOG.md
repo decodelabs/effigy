@@ -1,3 +1,4 @@
+* Support mounting unreferenced package
 * Updated templates to target PHP8.1
 * Updated gitignore template
 

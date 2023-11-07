@@ -33,7 +33,7 @@ class Mount implements Task
         $conf = Integra::getLocalManifest()->getRepositoryConfig();
         /** @var array<string> $packages */
         $packages = Cli::$command['packages'];
-        $packages = $this->lookupPackages($packages);
+        $packages = $this->lookupPackages($packages, true);
         $requires = $devRequires = [];
 
         if (empty($packages)) {

@@ -65,7 +65,8 @@ trait PackageLookupTrait
      * @return array<string, Package>
      */
     protected function lookupPackages(
-        array $packages
+        array $packages,
+        bool $allowUnknown = false
     ): array {
         $output = [];
 
@@ -75,7 +76,7 @@ trait PackageLookupTrait
                 continue;
             }
 
-            $package = $this->lookupPackage($package);
+            $package = $this->lookupPackage($package, $allowUnknown);
             $output[$package->name] = $package;
         }
 
@@ -83,7 +84,8 @@ trait PackageLookupTrait
     }
 
     protected function lookupPackage(
-        string $key
+        string $key,
+        bool $allowUnknown = false
     ): Package {
         foreach ($this->getAllPackages() as $name => $package) {
             if (
@@ -92,6 +94,13 @@ trait PackageLookupTrait
             ) {
                 return $package;
             }
+        }
+
+        if (
+            $allowUnknown &&
+            str_contains($key, '/')
+        ) {
+            return new Package($key, 'dev-develop');
         }
 
         throw Exceptional::InvalidArgument('Unable to resolve package: ' . $key);
