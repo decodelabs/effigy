@@ -85,8 +85,9 @@ class Controller extends GenericController implements
      *
      * @return $this
      */
-    public function setCiMode(bool $mode): static
-    {
+    public function setCiMode(
+        bool $mode
+    ): static {
         $this->ciMode = $mode;
         return $this;
     }
@@ -205,8 +206,9 @@ class Controller extends GenericController implements
     /**
      * Can run script or command
      */
-    public function canRun(string $name): bool
-    {
+    public function canRun(
+        string $name
+    ): bool {
         return
             $this->hasComposerScript($name) ||
             $this->hasTask($name) ||
@@ -227,8 +229,9 @@ class Controller extends GenericController implements
     /**
      * Composer script exists
      */
-    public function hasComposerScript(string $name): bool
-    {
+    public function hasComposerScript(
+        string $name
+    ): bool {
         return Integra::hasScript($name);
     }
 
@@ -257,8 +260,9 @@ class Controller extends GenericController implements
     /**
      * Composer vendor bin exists
      */
-    public function hasVendorBin(string $name): bool
-    {
+    public function hasVendorBin(
+        string $name
+    ): bool {
         return Integra::hasBin($name);
     }
 

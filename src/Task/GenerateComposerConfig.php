@@ -39,8 +39,9 @@ class GenerateComposerConfig implements Task
         return new ComposerTemplate();
     }
 
-    protected function afterFileSave(File $file): bool
-    {
+    protected function afterFileSave(
+        File $file
+    ): bool {
         foreach (static::PACKAGES as $package) {
             if (!Integra::install($package)) {
                 return false;

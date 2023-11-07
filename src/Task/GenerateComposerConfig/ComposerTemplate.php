@@ -23,8 +23,9 @@ class ComposerTemplate extends Template
         );
     }
 
-    protected function generateSlot(string $name): ?string
-    {
+    protected function generateSlot(
+        string $name
+    ): ?string {
         switch ($name) {
             case 'pkgAuthors':
                 $manifest = Integra::getLocalManifest();
@@ -49,8 +50,9 @@ class ComposerTemplate extends Template
      *
      * @param array<Author> $authors
      */
-    protected function generateAuthorsJson(array $authors): string
-    {
+    protected function generateAuthorsJson(
+        array $authors
+    ): string {
         $list = [];
 
         foreach ($authors as $author) {

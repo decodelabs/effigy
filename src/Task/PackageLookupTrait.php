@@ -64,8 +64,10 @@ trait PackageLookupTrait
      * @param array<string> $packages
      * @return array<string, Package>
      */
-    protected function lookupPackages(array $packages): array
-    {
+    protected function lookupPackages(
+        array $packages,
+        bool $allowUnknown = false
+    ): array {
         $output = [];
 
         foreach ($packages as $package) {
@@ -74,15 +76,17 @@ trait PackageLookupTrait
                 continue;
             }
 
-            $package = $this->lookupPackage($package);
+            $package = $this->lookupPackage($package, $allowUnknown);
             $output[$package->name] = $package;
         }
 
         return $output;
     }
 
-    protected function lookupPackage(string $key): Package
-    {
+    protected function lookupPackage(
+        string $key,
+        bool $allowUnknown = false
+    ): Package {
         foreach ($this->getAllPackages() as $name => $package) {
             if (
                 $name === $key ||
@@ -92,14 +96,22 @@ trait PackageLookupTrait
             }
         }
 
+        if (
+            $allowUnknown &&
+            str_contains($key, '/')
+        ) {
+            return new Package($key, 'dev-develop');
+        }
+
         throw Exceptional::InvalidArgument('Unable to resolve package: ' . $key);
     }
 
     /**
      * @return array<string, Package>
      */
-    protected function lookupPackageGroup(string $group): array
-    {
+    protected function lookupPackageGroup(
+        string $group
+    ): array {
         $output = [];
         $group = substr($group, 0, -1);
 
@@ -112,8 +124,9 @@ trait PackageLookupTrait
         return $output;
     }
 
-    protected function isDevPackage(string $package): bool
-    {
+    protected function isDevPackage(
+        string $package
+    ): bool {
         return isset($this->requireDev[$package]);
     }
 }

@@ -16,8 +16,9 @@ use DecodeLabs\Terminus as Cli;
 
 class Template extends FileTemplate
 {
-    protected function generateSlot(string $name): ?string
-    {
+    protected function generateSlot(
+        string $name
+    ): ?string {
         $manifest = Integra::getLocalManifest();
 
         switch ($name) {

@@ -45,12 +45,18 @@ class Unmount implements Task
         }
 
 
-        $requires = $devRequires = [];
+        $requires = $devRequires = $removes = [];
 
         foreach ($packages as $package) {
             Integra::run('config', '--unset', 'repositories.local:' . $package->name);
 
-            if (str_ends_with($package->version, '@dev')) {
+            if (!str_ends_with($package->version, '@dev')) {
+                continue;
+            }
+
+            if ($package->version === 'dev-develop@dev') {
+                $removes[] = $package->name;
+            } else {
                 $version = substr($package->version, 0, -4);
                 $require = $package->name . ':' . $version;
 
@@ -60,6 +66,13 @@ class Unmount implements Task
                     $requires[] = $require;
                 }
             }
+        }
+
+        if (
+            !empty($removes) &&
+            !Integra::run(...['remove', ...$removes, '--no-update'])
+        ) {
+            return false;
         }
 
         if (
@@ -78,7 +91,8 @@ class Unmount implements Task
 
         if (
             !empty($requires) ||
-            !empty($devRequires)
+            !empty($devRequires) ||
+            !empty($removes)
         ) {
             Integra::run('update');
         } else {

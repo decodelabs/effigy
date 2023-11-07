@@ -1,3 +1,8 @@
+## v0.4.6 (2023-11-07)
+* Support mounting unreferenced package
+* Updated templates to target PHP8.1
+* Updated gitignore template
+
 ## v0.4.5 (2023-10-30)
 * Fixed readme template badge
 

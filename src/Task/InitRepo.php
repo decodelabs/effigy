@@ -54,8 +54,9 @@ class InitRepo implements Task
     /**
      * Ask git if branch exists
      */
-    protected function hasBranch(string $branch): bool
-    {
+    protected function hasBranch(
+        string $branch
+    ): bool {
         $list = Effigy::askGit('branch', '--list', $branch);
         return trim(trim((string)$list, '*')) === $branch;
     }

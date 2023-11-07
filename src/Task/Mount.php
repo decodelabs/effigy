@@ -33,7 +33,7 @@ class Mount implements Task
         $conf = Integra::getLocalManifest()->getRepositoryConfig();
         /** @var array<string> $packages */
         $packages = Cli::$command['packages'];
-        $packages = $this->lookupPackages($packages);
+        $packages = $this->lookupPackages($packages, true);
         $requires = $devRequires = [];
 
         if (empty($packages)) {
@@ -89,8 +89,9 @@ class Mount implements Task
         return true;
     }
 
-    protected function getPath(Package $package): string
-    {
+    protected function getPath(
+        Package $package
+    ): string {
         $local = Effigy::$config->getLocalRepos();
 
         if (isset($local[$package->name])) {
@@ -111,8 +112,9 @@ class Mount implements Task
         return $path;
     }
 
-    protected function findPath(Package $package): string
-    {
+    protected function findPath(
+        Package $package
+    ): string {
         $keyName = explode('/', $package->name, 2)[1] ?? null;
 
         if (
