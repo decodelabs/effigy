@@ -1,3 +1,7 @@
+## v0.4.7 (2023-11-27)
+* Updated Dictum dependency
+* Made PHP8.1 minimum version
+
 ## v0.4.6 (2023-11-07)
 * Support mounting unreferenced package
 * Updated templates to target PHP8.1
