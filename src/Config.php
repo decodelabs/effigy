@@ -22,6 +22,7 @@ use DecodeLabs\Terminus as Cli;
  *     'entry'?: string,
  *     'params'?: array<string, string>,
  *     'codeDirs'?: array<string>,
+ *     'ignoredBins'?: array<string>,
  *     'exports'?: array<string>,
  *     'localRepos'?: array<string, string>
  * }
@@ -170,6 +171,16 @@ class Config
         }
 
         return $output;
+    }
+
+    /**
+     * Get ignored bins
+     *
+     * @return array<string>
+     */
+    public function getIgnoredBins(): array
+    {
+        return $this->data['ignoredBins'] ?? [];
     }
 
     /**

@@ -263,6 +263,12 @@ class Controller extends GenericController implements
     public function hasVendorBin(
         string $name
     ): bool {
+        $ignored = $this->config->getIgnoredBins();
+
+        if (in_array($name, $ignored)) {
+            return false;
+        }
+
         return Integra::hasBin($name);
     }
 
