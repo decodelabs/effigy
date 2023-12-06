@@ -1,3 +1,6 @@
+## v0.4.9 (2023-12-06)
+* Fixed ignoreBins config option
+
 ## v0.4.8 (2023-12-06)
 * Added ignoreBins option to config
 
