@@ -22,7 +22,7 @@ use DecodeLabs\Terminus as Cli;
  *     'entry'?: string,
  *     'params'?: array<string, string>,
  *     'codeDirs'?: array<string>,
- *     'ignoredBins'?: array<string>,
+ *     'ignoreBins'?: array<string>,
  *     'exports'?: array<string>,
  *     'localRepos'?: array<string, string>
  * }
@@ -180,7 +180,7 @@ class Config
      */
     public function getIgnoredBins(): array
     {
-        return $this->data['ignoredBins'] ?? [];
+        return $this->data['ignoreBins'] ?? [];
     }
 
     /**
@@ -289,6 +289,7 @@ class Config
 
                     // array<string>
                 case 'codeDirs':
+                case 'ignoreBins':
                 case 'exports':
                     if (null !== ($value = Coercion::toArrayOrNull($value))) {
                         $output[$key] = [];
