@@ -1,3 +1,6 @@
+## v0.4.8 (2023-12-06)
+* Added ignoreBins option to config
+
 ## v0.4.7 (2023-11-27)
 * Updated Dictum dependency
 * Made PHP8.1 minimum version
