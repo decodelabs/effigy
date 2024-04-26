@@ -24,7 +24,7 @@ class Hub extends ClipHub
     {
         parent::initializePlatform();
 
-        Archetype::extend(TaskInterface::class, Task::class);
+        Archetype::map(TaskInterface::class, Task::class);
 
         $controller = new Controller();
         $this->context->container->bindShared(ControllerInterface::class, $controller);
