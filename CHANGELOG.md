@@ -1,3 +1,7 @@
+## v0.4.10 (2024-04-26)
+* Updated Archetype dependency
+* Updated dependency list
+
 ## v0.4.9 (2023-12-06)
 * Fixed ignoreBins config option
 

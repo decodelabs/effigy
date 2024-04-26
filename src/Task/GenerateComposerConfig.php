@@ -25,7 +25,6 @@ class GenerateComposerConfig implements Task
     ];
 
     public const DEV_PACKAGES = [
-        'decodelabs/glitch',
         'decodelabs/phpstan-decodelabs'
     ];
 
