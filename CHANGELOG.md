@@ -1,4 +1,7 @@
-## v0.4.11 (2024-04-29)
+## v0.4.13 (2024-04-29)
+* Updated gitattributes template
+
+## v0.4.12 (2024-04-29)
 * Upgraded ECS to v12
 
 ## v0.4.11 (2024-04-26)
