@@ -1,3 +1,5 @@
+* Upgraded ECS to v12
+
 ## v0.4.11 (2024-04-26)
 * Reinstalled Lucid
 
