@@ -24,7 +24,7 @@ jobs:
           ini-values: "post_max_size=256M"
 
       - name: "Checkout code"
-        uses: "actions/checkout@v3"
+        uses: "actions/checkout@v4"
 
       - name: Install Effigy
         run: |
@@ -32,7 +32,7 @@ jobs:
           composer global require decodelabs/effigy{{ __effigyVersion }}
 
       - name: "Install dependencies"
-        uses: "ramsey/composer-install@v2"
+        uses: "ramsey/composer-install@v3"
         with:
           dependency-versions: "highest"
 
@@ -75,10 +75,10 @@ jobs:
 #!          ini-values: "post_max_size=256M"
 #!
 #!      - name: "Checkout code"
-#!        uses: "actions/checkout@v3"
+#!        uses: "actions/checkout@v4"
 #!
 #!      - name: "Install dependencies"
-#!        uses: "ramsey/composer-install@v2"
+#!        uses: "ramsey/composer-install@v3"
 #!        with:
 #!          dependency-versions: "${{ matrix.dependencies }}"
 #!
@@ -113,7 +113,7 @@ jobs:
           ini-values: "post_max_size=256M"
 
       - name: "Checkout code"
-        uses: "actions/checkout@v3"
+        uses: "actions/checkout@v4"
 
       - name: Install Effigy
         run: |
@@ -124,7 +124,7 @@ jobs:
         run: "composer validate --strict"
 
       - name: "Install dependencies"
-        uses: "ramsey/composer-install@v2"
+        uses: "ramsey/composer-install@v3"
         with:
           dependency-versions: "highest"
 
@@ -147,7 +147,7 @@ jobs:
           ini-values: "post_max_size=256M"
 
       - name: "Checkout code"
-        uses: "actions/checkout@v3"
+        uses: "actions/checkout@v4"
 
       - name: "Check EditorConfig configuration"
         run: "test -f .editorconfig"
@@ -161,7 +161,7 @@ jobs:
           composer global require decodelabs/effigy{{ __effigyVersion }}
 
       - name: "Install dependencies"
-        uses: "ramsey/composer-install@v2"
+        uses: "ramsey/composer-install@v3"
         with:
           dependency-versions: "highest"
 
