@@ -1,3 +1,5 @@
+* Updated github workflow template
+
 ## v0.4.13 (2024-04-29)
 * Updated gitattributes template
 
