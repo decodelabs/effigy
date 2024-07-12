@@ -1,3 +1,4 @@
+## v0.4.15 (2024-07-12)
 * Added clip bin fallback if no entry file
 
 ## v0.4.14 (2024-05-15)
