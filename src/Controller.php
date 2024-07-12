@@ -163,6 +163,18 @@ class Controller extends GenericController implements
                 ->run();
         }
 
+        // Clip
+        elseif ($this->hasVendorBin('clip')) {
+            return Systemic::command([
+                    (string)Integra::$rootDir->getFile('vendor/bin/clip'),
+                    $name,
+                    ...$args
+                ])
+                ->setWorkingDirectory(Integra::$runDir)
+                ->addSignal('SIGINT', 'SIGTERM', 'SIGQUIT')
+                ->run();
+        }
+
 
         throw Exceptional::NotFound(
             'Effigy couldn\'t find any appropriate ways to run "' . $name . '"'
