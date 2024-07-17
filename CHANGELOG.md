@@ -1,3 +1,6 @@
+## v0.4.16 (2024-07-17)
+* Updated Veneer dependency
+
 ## v0.4.15 (2024-07-12)
 * Added clip bin fallback if no entry file
 
