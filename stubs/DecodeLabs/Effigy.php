@@ -67,6 +67,9 @@ class Effigy implements Proxy
     public static function getExportsWhitelist(): array {
         return static::$instance->getExportsWhitelist();
     }
+    public static function getExecutablesWhitelist(): array {
+        return static::$instance->getExecutablesWhitelist();
+    }
     public static function glitchDump(): iterable {
         return static::$instance->glitchDump();
     }

@@ -363,6 +363,16 @@ class Controller extends GenericController implements
         return $this->config->getExportsWhitelist();
     }
 
+    /**
+     * Get executables whitelist
+     *
+     * @return array<string>
+     */
+    public function getExecutablesWhitelist(): array
+    {
+        return $this->config->getExecutablesWhitelist();
+    }
+
 
 
     /**

@@ -42,6 +42,11 @@
     "extra": {
         "branch-alias": {
             "dev-develop": "0.4.x-dev"
+        },
+        "effigy": {
+            "executables": [
+                "some/other"
+            ]
         }
     },
     "config": {

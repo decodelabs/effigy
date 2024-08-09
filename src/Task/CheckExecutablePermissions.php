@@ -10,6 +10,7 @@ declare(strict_types=1);
 namespace DecodeLabs\Effigy\Task;
 
 use DecodeLabs\Clip\Task;
+use DecodeLabs\Effigy;
 use DecodeLabs\Integra;
 use DecodeLabs\Systemic;
 use DecodeLabs\Terminus as Cli;
@@ -50,12 +51,16 @@ class CheckExecutablePermissions implements Task
 
         $paths = explode("\n", $result);
         $bins = array_keys(Integra::getLocalManifest()->getBinFiles());
+        $whitelist = Effigy::getExecutablesWhitelist();
         $output = [];
 
         foreach ($paths as $path) {
             $path = substr($path, 2);
 
-            if (!in_array($path, $bins)) {
+            if (
+                !in_array($path, $bins) &&
+                !in_array($path, $whitelist)
+            ) {
                 $output[] = $path;
             }
         }
