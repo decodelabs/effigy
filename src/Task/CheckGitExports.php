@@ -39,7 +39,9 @@ class CheckGitExports implements Task
             $exclude[] = '--exclude="bin/*"';
         }
 
-        $exclude = array_merge($exclude, self::ExcludeFiles);
+        foreach (self::ExcludeFiles as $file) {
+            $exclude[] = '--exclude="' . $file . '"';
+        }
 
         $result = Systemic::capture(
             'git archive HEAD | tar --list ' . implode(' ', $exclude),
@@ -47,16 +49,23 @@ class CheckGitExports implements Task
         );
 
         if (!$result->wasSuccessful()) {
+            Cli::error('Unable to capture export file list');
             return false;
         }
 
-        $files = explode("\n", trim((string)$result->getOutput()));
+        $result = trim((string)$result->getOutput());
+
+        if ($result === '') {
+            Cli::success('No unexpected files exported');
+            return true;
+        }
+
+        $files = explode("\n", $result);
         $exports = Effigy::getExportsWhitelist();
         $output = [];
 
         foreach ($files as $file) {
             $file = trim($file);
-
 
             if (!in_array($file, $exports)) {
                 $output[] = $file;
@@ -74,6 +83,7 @@ class CheckGitExports implements Task
             return false;
         }
 
+        Cli::success('All exports are accounted for');
         return true;
     }
 }
