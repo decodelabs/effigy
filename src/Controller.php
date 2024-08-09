@@ -14,11 +14,13 @@ use DecodeLabs\Atlas\Dir;
 use DecodeLabs\Atlas\File;
 use DecodeLabs\Clip\Controller as ControllerInterface;
 use DecodeLabs\Clip\Controller\Generic as GenericController;
+use DecodeLabs\Effigy;
 use DecodeLabs\Exceptional;
 use DecodeLabs\Glitch\Dumpable;
 use DecodeLabs\Integra;
 use DecodeLabs\Systemic;
 use DecodeLabs\Terminus as Cli;
+use DecodeLabs\Veneer;
 use DecodeLabs\Veneer\Plugin;
 use OndraM\CiDetector\CiDetector;
 
@@ -375,3 +377,6 @@ class Controller extends GenericController implements
         ];
     }
 }
+
+/** @phpstan-ignore-next-line */
+Veneer::register(Controller::class, Effigy::class);

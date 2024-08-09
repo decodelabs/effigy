@@ -13,10 +13,8 @@ use DecodeLabs\Archetype;
 use DecodeLabs\Clip\Controller as ControllerInterface;
 use DecodeLabs\Clip\Hub as ClipHub;
 use DecodeLabs\Clip\Task as TaskInterface;
-use DecodeLabs\Effigy;
 use DecodeLabs\Glitch;
 use DecodeLabs\Terminus;
-use DecodeLabs\Veneer;
 
 class Hub extends ClipHub
 {
@@ -40,8 +38,5 @@ class Hub extends ClipHub
                 Terminus::newLine();
             }
         });
-
-        /** @phpstan-ignore-next-line */
-        Veneer::register(Controller::class, Effigy::class);
     }
 }

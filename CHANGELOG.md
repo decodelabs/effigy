@@ -1,3 +1,9 @@
+* Fixed Controller stub
+* Added permission check to Prep task
+* Added git exports check to Prep task
+* Added ignored files to git exports task
+* Fixed check-executable-permissions task
+
 ## v0.4.16 (2024-07-17)
 * Updated Veneer dependency
 
