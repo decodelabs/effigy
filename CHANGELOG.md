@@ -1,3 +1,5 @@
+* Fixed git exports task
+
 ## v0.4.18 (2024-08-09)
 * Fixed test issues
 
