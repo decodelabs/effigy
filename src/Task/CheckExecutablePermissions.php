@@ -21,7 +21,8 @@ class CheckExecutablePermissions implements Task
         $exclude = [
             './.git/*',
             './vendor/*',
-            './effigy'
+            './effigy',
+            '*/node_modules/*',
         ];
 
         $exStr = [];
