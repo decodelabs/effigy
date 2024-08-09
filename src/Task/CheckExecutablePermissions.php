@@ -11,7 +11,7 @@ namespace DecodeLabs\Effigy\Task;
 
 use DecodeLabs\Clip\Task;
 use DecodeLabs\Integra;
-use Decodelabs\Systemic;
+use DecodeLabs\Systemic;
 use DecodeLabs\Terminus as Cli;
 
 class CheckExecutablePermissions implements Task
@@ -36,10 +36,18 @@ class CheckExecutablePermissions implements Task
         );
 
         if (!$result->wasSuccessful()) {
+            Cli::error('Unable to capture executable file list');
             return false;
         }
 
-        $paths = explode("\n", trim((string)$result->getOutput()));
+        $result = trim((string)$result->getOutput());
+
+        if ($result === '') {
+            Cli::success('No executable files found');
+            return true;
+        }
+
+        $paths = explode("\n", $result);
         $bins = array_keys(Integra::getLocalManifest()->getBinFiles());
         $output = [];
 
@@ -62,6 +70,7 @@ class CheckExecutablePermissions implements Task
             return false;
         }
 
+        Cli::success('All executable files are expected');
         return true;
     }
 }
