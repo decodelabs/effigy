@@ -24,6 +24,7 @@ use DecodeLabs\Terminus as Cli;
  *     'codeDirs'?: array<string>,
  *     'ignoreBins'?: array<string>,
  *     'exports'?: array<string>,
+ *     'executables'?: array<string>,
  *     'localRepos'?: array<string, string>
  * }
  */
@@ -194,6 +195,16 @@ class Config
     }
 
     /**
+     * Get executables whitelist
+     *
+     * @return array<string>
+     */
+    public function getExecutablesWhitelist(): array
+    {
+        return $this->data['executables'] ?? [];
+    }
+
+    /**
      * Get local repos list
      *
      * @return array<string, string>
@@ -291,6 +302,7 @@ class Config
                 case 'codeDirs':
                 case 'ignoreBins':
                 case 'exports':
+                case 'executables':
                     if (null !== ($value = Coercion::toArrayOrNull($value))) {
                         $output[$key] = [];
 
