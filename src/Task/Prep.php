@@ -89,12 +89,35 @@ class Prep implements Task
         Cli::newLine();
         Cli::newLine();
 
+        // Permissions
+        Cli::info('Check file permissions');
+
+        if (!Effigy::run('check-executable-permissions')) {
+            return false;
+        }
+
+
+        Cli::newLine();
+        Cli::newLine();
+
+        // Exports
+        Cli::info('Check package exports');
+
+        if (!Effigy::run('check-git-exports')) {
+            return false;
+        }
+
+
+        Cli::newLine();
+        Cli::newLine();
+
         // Non ascii
         Cli::info('Check for non-ASCII characters');
 
         if (!Effigy::run('check-non-ascii')) {
             return false;
         }
+
 
         return true;
     }

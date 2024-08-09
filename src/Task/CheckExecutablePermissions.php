@@ -40,7 +40,7 @@ class CheckExecutablePermissions implements Task
         }
 
         $paths = explode("\n", trim((string)$result->getOutput()));
-        $bins = Integra::getLocalManifest()->getBinFiles();
+        $bins = array_keys(Integra::getLocalManifest()->getBinFiles());
         $output = [];
 
         foreach ($paths as $path) {

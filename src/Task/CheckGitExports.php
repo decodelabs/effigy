@@ -17,6 +17,13 @@ use DecodeLabs\Terminus as Cli;
 
 class CheckGitExports implements Task
 {
+    public const ExcludeFiles = [
+        'LICENSE',
+        'README.md',
+        'CHANGELOG.md',
+        'composer.json'
+    ];
+
     public function execute(): bool
     {
         $dirs = Effigy::getCodeDirs();
@@ -31,6 +38,8 @@ class CheckGitExports implements Task
             $exclude[] = '--exclude="bin"';
             $exclude[] = '--exclude="bin/*"';
         }
+
+        $exclude = array_merge($exclude, self::ExcludeFiles);
 
         $result = Systemic::capture(
             'git archive HEAD | tar --list ' . implode(' ', $exclude),
