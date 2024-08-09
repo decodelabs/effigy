@@ -1,3 +1,4 @@
+## v0.4.20 (2024-08-09)
 * Ignore node_modules in executable permissions check
 
 ## v0.4.19 (2024-08-09)
