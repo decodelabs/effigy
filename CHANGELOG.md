@@ -1,6 +1,7 @@
+## v0.4.18 (2024-08-09)
 * Fixed test issues
 
-## v0.4.16 (2024-08-09)
+## v0.4.17 (2024-08-09)
 * Fixed Controller stub
 * Added permission check to Prep task
 * Added git exports check to Prep task
