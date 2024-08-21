@@ -1,3 +1,5 @@
+* Updated Veneer dependency and Stub
+
 ## v0.4.21 (2024-08-09)
 * Added executables whitelist
 
