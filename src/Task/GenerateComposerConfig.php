@@ -20,11 +20,11 @@ class GenerateComposerConfig implements Task
 {
     use GenerateFileTrait;
 
-    public const PACKAGES = [
+    protected const Packages = [
         'decodelabs/exceptional'
     ];
 
-    public const DEV_PACKAGES = [
+    protected const DevPackages = [
         'decodelabs/phpstan-decodelabs'
     ];
 
@@ -41,13 +41,13 @@ class GenerateComposerConfig implements Task
     protected function afterFileSave(
         File $file
     ): bool {
-        foreach (static::PACKAGES as $package) {
+        foreach (static::Packages as $package) {
             if (!Integra::install($package)) {
                 return false;
             }
         }
 
-        foreach (static::DEV_PACKAGES as $package) {
+        foreach (static::DevPackages as $package) {
             if (!Integra::installDev($package)) {
                 return false;
             }

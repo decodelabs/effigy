@@ -37,7 +37,7 @@ class Controller extends GenericController implements
     ControllerInterface,
     Dumpable
 {
-    public const USER_FILENAME = 'effigy.json';
+    protected const UserFilename = 'effigy.json';
 
     #[Plugin]
     public Config $config;
@@ -53,7 +53,7 @@ class Controller extends GenericController implements
     public function __construct()
     {
         $this->config = new Config(
-            Integra::$rootDir->getFile(self::USER_FILENAME)
+            Integra::$rootDir->getFile(self::UserFilename)
         );
 
         // Local

@@ -15,9 +15,8 @@ class Effigy implements Proxy
 {
     use ProxyTrait;
 
-    const VENEER = 'DecodeLabs\\Effigy';
-    const VENEER_TARGET = Inst::class;
-    const USER_FILENAME = Inst::USER_FILENAME;
+    const Veneer = 'DecodeLabs\\Effigy';
+    const VeneerTarget = Inst::class;
 
     public static Inst $instance;
     public static ConfigPlugin $config;

@@ -25,6 +25,6 @@ class RemoveLocal implements Task
 
         Cli::newLine();
 
-        return Integra::uninstallDev(...InstallLocal::PACKAGES);
+        return Integra::uninstallDev(...InstallLocal::Packages);
     }
 }
