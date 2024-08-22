@@ -16,7 +16,7 @@ use DecodeLabs\Terminus as Cli;
 
 class InstallLocal implements Task
 {
-    public const PACKAGES = [
+    public const Packages = [
         'phpstan/phpstan',
         'decodelabs/effigy',
         'phpstan/extension-installer'
@@ -35,6 +35,6 @@ class InstallLocal implements Task
         umask($umask);
         Cli::newLine();
 
-        return Integra::installDev(...static::PACKAGES);
+        return Integra::installDev(...static::Packages);
     }
 }
