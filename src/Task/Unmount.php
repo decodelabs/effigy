@@ -10,9 +10,12 @@ declare(strict_types=1);
 namespace DecodeLabs\Effigy\Task;
 
 use DecodeLabs\Clip\Task;
+use DecodeLabs\Coercion;
 use DecodeLabs\Collections\Tree;
+use DecodeLabs\Effigy;
 use DecodeLabs\Integra;
 use DecodeLabs\Integra\Structure\Package;
+use DecodeLabs\Systemic;
 use DecodeLabs\Terminus as Cli;
 use Throwable;
 
@@ -28,19 +31,26 @@ class Unmount implements Task
     public function execute(): bool
     {
         Cli::$command
+            ->addArgument('--global|g', 'Mount globally')
             ->addArgument('?packages*', 'Package name')
             ->addArgument('--all', 'All packages');
+
+        /** @var array<string>|null $packages */
+        $packages = Cli::$command['packages'];
+        $all = Coercion::toBool(Cli::$command['all']);
+
+        if (Cli::$command['global']) {
+            return $this->runGlobal($packages, $all);
+        }
 
         $this->repositories = Integra::getLocalManifest()->getRepositoryConfig();
 
         if (
-            Cli::$command['all'] ||
-            Cli::$command['packages'] === null
+            $all ||
+            empty($packages)
         ) {
             $packages = $this->lookupAllPackages();
         } else {
-            /** @var array<string> $packages */
-            $packages = Cli::$command['packages'];
             $packages = $this->lookupPackages($packages);
         }
 
@@ -106,6 +116,30 @@ class Unmount implements Task
         }
 
         return true;
+    }
+
+    /**
+     * @param array<string> $packages
+     */
+    protected function runGlobal(
+        ?array $packages,
+        bool $all
+    ): bool {
+        $path = Effigy::getGlobalPath();
+        $args = [
+            'effigy', 'unmount'
+        ];
+
+        if (
+            empty($packages) ||
+            $all
+        ) {
+            $args[] = '--all';
+        } else {
+            $args = array_merge($args, $packages);
+        }
+
+        return Systemic::run($args, $path);
     }
 
     /**

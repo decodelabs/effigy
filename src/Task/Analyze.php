@@ -32,7 +32,7 @@ class Analyze implements Task
 
         // Clear
         if (Cli::$command['clear']) {
-            return Integra::runGlobalBin('phpstan', 'clear-result-cache');
+            return Integra::runBin('phpstan', 'clear-result-cache');
         }
 
         $confName = Cli::$command['config'];
@@ -53,7 +53,7 @@ class Analyze implements Task
                 $args[] = '--configuration=' . $confFile;
             }
 
-            if (!Integra::runGlobalBin(...$args)) {
+            if (!Integra::runBin(...$args)) {
                 return false;
             }
 
@@ -83,7 +83,7 @@ class Analyze implements Task
 
             $config = '--configuration=phpstan.' . $name . '.neon';
 
-            if (!Integra::runGlobalBin(...[...$args, $config])) {
+            if (!Integra::runBin(...[...$args, $config])) {
                 return false;
             }
         }
@@ -93,9 +93,24 @@ class Analyze implements Task
 
     protected function ensureInstalled(): bool
     {
-        // ext dir
-        if (!Integra::hasPackage('decodelabs/phpstan-decodelabs')) {
-            Integra::installDev('decodelabs/phpstan-decodelabs');
+        $packages = [
+            'decodelabs/phpstan-decodelabs'
+        ];
+
+        $currentPackage = Integra::getLocalManifest()->getName();
+
+        foreach ($packages as $i => $package) {
+            if (
+                $package === $currentPackage ||
+                Integra::hasPackage($package)
+            ) {
+                unset($packages[$i]);
+            }
+        }
+
+        if (!empty($packages)) {
+            // @phpstan-ignore-next-line
+            Integra::installDev(...$packages);
         }
 
         // Neon file
