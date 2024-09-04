@@ -324,6 +324,10 @@ class Controller extends GenericController implements
     public function hasAppTask(
         string $name
     ): bool {
+        if ($name === 'effigy/has-task') {
+            return false;
+        }
+
         try {
             // Entry file
             if ($entry = $this->getEntryFile()) {
