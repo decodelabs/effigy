@@ -14,6 +14,7 @@ use DecodeLabs\Clip\Task;
 use DecodeLabs\Effigy;
 use DecodeLabs\Integra;
 use DecodeLabs\Integra\Structure\Package;
+use DecodeLabs\Systemic;
 use DecodeLabs\Terminus as Cli;
 
 class Mount implements Task
@@ -28,11 +29,17 @@ class Mount implements Task
     public function execute(): bool
     {
         Cli::$command
+            ->addArgument('--global|g', 'Mount globally')
             ->addArgument('packages*', 'Package names');
 
         $conf = Integra::getLocalManifest()->getRepositoryConfig();
         /** @var array<string> $packages */
         $packages = Cli::$command['packages'];
+
+        if (Cli::$command['global']) {
+            return $this->runGlobal($packages);
+        }
+
         $packages = $this->lookupPackages($packages, true);
         $requires = $devRequires = [];
 
@@ -87,6 +94,19 @@ class Mount implements Task
         }
 
         return true;
+    }
+
+    /**
+     * @param array<string> $packages
+     */
+    protected function runGlobal(
+        array $packages
+    ): bool {
+        $path = Effigy::getGlobalPath();
+
+        return Systemic::run([
+            'effigy', 'mount', ...$packages
+        ], $path);
     }
 
     protected function getPath(

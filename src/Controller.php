@@ -317,6 +317,7 @@ class Controller extends GenericController implements
             throw Exceptional::UnexpectedValue('Unable to parse entry file config', null, $entry);
         }
 
+        // @phpstan-ignore-next-line
         $matches = $matches[1] ?? [];
 
         if (!empty($matches)) {
@@ -371,6 +372,33 @@ class Controller extends GenericController implements
     public function getExecutablesWhitelist(): array
     {
         return $this->config->getExecutablesWhitelist();
+    }
+
+
+    /**
+     * Get global install path
+     */
+    public function getGlobalPath(): string
+    {
+        $result = Systemic::capture(
+            ['composer', 'config', 'home', '--global'],
+            Integra::$rootDir
+        );
+
+        if (!$result->wasSuccessful()) {
+            throw Exceptional::Runtime('Unable to locate global composer path');
+        }
+
+        $output = trim((string)$result->getOutput());
+
+        if (
+            empty($output) ||
+            !is_dir($output)
+        ) {
+            throw Exceptional::Runtime('Invalid global composer path: ' . $output);
+        }
+
+        return $output;
     }
 
 

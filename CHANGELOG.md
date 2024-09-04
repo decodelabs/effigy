@@ -1,3 +1,5 @@
+* Added --global option to mount tasks
+
 ## v0.4.22 (2024-08-21)
 * Converted consts to PascalCase
 * Updated dependencies
