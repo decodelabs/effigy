@@ -27,7 +27,6 @@ class Analyze implements Task
         Cli::$command
             ->addArgument('-clear|c', 'Clear cache')
             ->addArgument('-debug|d', 'Debug mode')
-            ->addArgument('-config=', 'Composer script name')
             ->addArgument('-configuration=', 'Configuration file name');
 
         // Clear
@@ -35,7 +34,6 @@ class Analyze implements Task
             return Integra::runBin('phpstan', 'clear-result-cache');
         }
 
-        $confName = Cli::$command['config'];
 
         // Main analyze
         $args = ['phpstan'];
@@ -48,42 +46,17 @@ class Analyze implements Task
             $args[] = '--no-progress';
         }
 
-        if ($confName === null) {
-            if ($confFile = Cli::$command['configuration']) {
-                $args[] = '--configuration=' . $confFile;
-            }
-
-            if (!Integra::runBin(...$args)) {
-                return false;
-            }
-
-            if ($confFile) {
-                return true;
-            }
+        if ($confFile = Cli::$command['configuration']) {
+            $confs = [$confFile];
+        } else {
+            $confs = $this->findConfigFiles();
         }
 
+        foreach ($confs as $conf) {
+            $runArgs = $args;
+            $runArgs[] = '--configuration=' . $conf;
 
-
-        // Specialised analyze
-        $scripts = Effigy::getComposerScripts();
-
-        foreach ($scripts as $name => $script) {
-            if (!preg_match('/^analyze\-([a-zA-Z0-9-_]+)$/', $name, $matches)) {
-                continue;
-            }
-
-            $name = $matches[1];
-
-            if (
-                $confName !== null &&
-                $name !== $confName
-            ) {
-                continue;
-            }
-
-            $config = '--configuration=phpstan.' . $name . '.neon';
-
-            if (!Integra::runBin(...[...$args, $config])) {
+            if (!Integra::runBin(...$runArgs)) {
                 return false;
             }
         }
@@ -109,7 +82,6 @@ class Analyze implements Task
         }
 
         if (!empty($packages)) {
-            // @phpstan-ignore-next-line
             Integra::installDev(...$packages);
         }
 
@@ -122,5 +94,33 @@ class Analyze implements Task
         }
 
         return true;
+    }
+
+    /**
+     * Find all PHPStan config files
+     *
+     * @return array<string>
+     */
+    protected function findConfigFiles(): array
+    {
+        $output = [];
+
+        foreach (Integra::$rootDir->scanFiles(function (string $name) {
+            return preg_match('/phpstan\.([a-zA-Z0-9-_]+\.)?neon$/', $name);
+        }) as $file) {
+            $output[] = $file->getName();
+        }
+
+        usort($output, function ($a, $b) {
+            if ($a == 'phpstan.neon') {
+                return -1;
+            } elseif ($b == 'phpstan.neon') {
+                return 1;
+            }
+
+            return strcmp($a, $b);
+        });
+
+        return $output;
     }
 }

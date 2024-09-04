@@ -1,3 +1,5 @@
+* Added analysis config automation
+
 ## v0.4.24 (2024-09-04)
 * Added app task check support
 
