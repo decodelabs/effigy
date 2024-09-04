@@ -1,3 +1,6 @@
+## v0.4.26 (2024-09-04)
+* Improved PHPStan config generation
+
 ## v0.4.25 (2024-09-04)
 * Added analysis config automation
 

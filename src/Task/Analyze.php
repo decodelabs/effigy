@@ -88,7 +88,10 @@ class Analyze implements Task
         // Neon file
         $neonFile = Integra::$rootDir->getFile('phpstan.neon');
 
-        if (!$neonFile->exists()) {
+        if (
+            !$neonFile->exists() &&
+            empty($this->findConfigFiles())
+        ) {
             $template = new PhpstanTemplate();
             $template->saveTo($neonFile);
         }
