@@ -1,3 +1,4 @@
+## v0.4.24 (2024-09-04)
 * Added app task check support
 
 ## v0.4.23 (2024-09-04)
