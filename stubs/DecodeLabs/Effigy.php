@@ -60,6 +60,12 @@ class Effigy implements Proxy
     public static function getEntryFile(): ?Ref0 {
         return static::$instance->getEntryFile();
     }
+    public static function hasAppTask(string $name): bool {
+        return static::$instance->hasAppTask(...func_get_args());
+    }
+    public static function runAppTask(string $name, string ...$args): bool {
+        return static::$instance->runAppTask(...func_get_args());
+    }
     public static function getCodeDirs(): array {
         return static::$instance->getCodeDirs();
     }

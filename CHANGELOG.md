@@ -1,3 +1,5 @@
+* Added app task check support
+
 ## v0.4.23 (2024-09-04)
 * Added --global option to mount tasks
 * Improved analysis locality

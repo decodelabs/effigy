@@ -23,6 +23,7 @@ use DecodeLabs\Terminus as Cli;
 use DecodeLabs\Veneer;
 use DecodeLabs\Veneer\Plugin;
 use OndraM\CiDetector\CiDetector;
+use Throwable;
 
 /**
  * @phpstan-type TConfig array{
@@ -121,6 +122,12 @@ class Controller extends GenericController implements
         }
 
 
+        // Confirmed app task
+        if ($this->hasAppTask($name)) {
+            return $this->runAppTask($name, ...$args);
+        }
+
+
         // Composer script
         if ($this->hasComposerScript($name)) {
             return $this->runComposerScript($name, ...$args);
@@ -150,37 +157,7 @@ class Controller extends GenericController implements
         }
 
 
-        // Entry file
-        if ($entry = $this->getEntryFile()) {
-            $this->config->save();
-
-            // Launch script
-            return Systemic::command([
-                    Integra::getPhpBinary(),
-                    $entry->getPath(),
-                    $name,
-                    ...$args
-                ])
-                ->addSignal('SIGINT', 'SIGTERM', 'SIGQUIT')
-                ->run();
-        }
-
-        // Clip
-        elseif ($this->hasVendorBin('clip')) {
-            return Systemic::command([
-                    (string)Integra::$rootDir->getFile('vendor/bin/clip'),
-                    $name,
-                    ...$args
-                ])
-                ->setWorkingDirectory(Integra::$runDir)
-                ->addSignal('SIGINT', 'SIGTERM', 'SIGQUIT')
-                ->run();
-        }
-
-
-        throw Exceptional::NotFound(
-            'Effigy couldn\'t find any appropriate ways to run "' . $name . '"'
-        );
+        return $this->runAppTask($name, ...$args);
     }
 
     /**
@@ -339,6 +316,88 @@ class Controller extends GenericController implements
         }
 
         throw Exceptional::NotFound('Entry file ' . $entry . ' does not exist');
+    }
+
+    /**
+     * Ask app if it supports a task
+     */
+    public function hasAppTask(
+        string $name
+    ): bool {
+        try {
+            // Entry file
+            if ($entry = $this->getEntryFile()) {
+                $this->config->save();
+
+                // Launch script
+                $result = Systemic::command([
+                        Integra::getPhpBinary(),
+                        $entry->getPath(),
+                        'effigy/has-task',
+                        $name
+                    ])
+                    ->addSignal('SIGINT', 'SIGTERM', 'SIGQUIT')
+                    ->capture();
+            }
+
+            // Clip
+            elseif ($this->hasVendorBin('clip')) {
+                $result = Systemic::command([
+                        (string)Integra::$rootDir->getFile('vendor/bin/clip'),
+                        'effigy/has-task',
+                        $name
+                    ])
+                    ->setWorkingDirectory(Integra::$runDir)
+                    ->addSignal('SIGINT', 'SIGTERM', 'SIGQUIT')
+                    ->capture();
+            } else {
+                return false;
+            }
+
+            return trim((string)$result->getOutput()) === 'true';
+        } catch (Throwable $e) {
+            return false;
+        }
+    }
+
+    /**
+     * Run app task via entry or clip
+     */
+    public function runAppTask(
+        string $name,
+        string ...$args
+    ): bool {
+        // Entry file
+        if ($entry = $this->getEntryFile()) {
+            $this->config->save();
+
+            // Launch script
+            return Systemic::command([
+                    Integra::getPhpBinary(),
+                    $entry->getPath(),
+                    $name,
+                    ...$args
+                ])
+                ->addSignal('SIGINT', 'SIGTERM', 'SIGQUIT')
+                ->run();
+        }
+
+        // Clip
+        elseif ($this->hasVendorBin('clip')) {
+            return Systemic::command([
+                    (string)Integra::$rootDir->getFile('vendor/bin/clip'),
+                    $name,
+                    ...$args
+                ])
+                ->setWorkingDirectory(Integra::$runDir)
+                ->addSignal('SIGINT', 'SIGTERM', 'SIGQUIT')
+                ->run();
+        }
+
+
+        throw Exceptional::NotFound(
+            'Effigy couldn\'t find any appropriate ways to run "' . $name . '"'
+        );
     }
 
 
