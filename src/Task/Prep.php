@@ -38,6 +38,7 @@ class Prep implements Task
 
 
         // Analysis
+        /*
         Cli::info('Clear PHPStan cache');
 
         if (!Effigy::run('analyze', '--clear')) {
@@ -46,6 +47,7 @@ class Prep implements Task
 
         Cli::newLine();
         Cli::newLine();
+        */
 
         Cli::info('Run PHPStan analysis');
 
