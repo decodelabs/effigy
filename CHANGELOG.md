@@ -1,3 +1,5 @@
+* Fixed git-exports whitelist handling
+
 ## v0.4.26 (2024-09-04)
 * Improved PHPStan config generation
 
