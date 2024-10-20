@@ -1,3 +1,5 @@
+* Added composer.lock to git export whitelist
+
 ## v0.4.27 (2024-10-20)
 * Fixed git-exports whitelist handling
 

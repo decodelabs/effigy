@@ -21,7 +21,8 @@ class CheckGitExports implements Task
         'LICENSE',
         'README.md',
         'CHANGELOG.md',
-        'composer.json'
+        'composer.json',
+        'composer.lock'
     ];
 
     public function execute(): bool
