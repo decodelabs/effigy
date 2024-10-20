@@ -1,3 +1,4 @@
+## v0.4.27 (2024-10-20)
 * Fixed git-exports whitelist handling
 
 ## v0.4.26 (2024-09-04)
