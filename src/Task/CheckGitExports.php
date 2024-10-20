@@ -73,14 +73,14 @@ class CheckGitExports implements Task
 
             foreach ($exports as $export) {
                 if (
-                    $file === 'export' ||
+                    $file === $export ||
                     str_starts_with($file, $export . '/')
                 ) {
-                    continue;
+                    continue 2;
                 }
-
-                $output[] = $file;
             }
+
+            $output[] = $file;
         }
 
         if (!empty($output)) {
