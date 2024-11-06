@@ -1,3 +1,5 @@
+* Improved executable file check command
+
 ## v0.4.28 (2024-10-20)
 * Added composer.lock to git export whitelist
 
