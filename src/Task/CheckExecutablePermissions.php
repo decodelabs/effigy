@@ -33,7 +33,7 @@ class CheckExecutablePermissions implements Task
         }
 
         $result = Systemic::capture(
-            'find . -type f ' . implode(' ', $exStr) . ' -executable',
+            'find . -type f \\( -perm -u=x -o -perm -g=x -o -perm -o=x \\) ' . implode(' ', $exStr) . ' -exec test -x {} \\; -print',
             Integra::$rootDir
         );
 
