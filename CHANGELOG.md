@@ -1,3 +1,4 @@
+## v0.4.29 (2024-11-06)
 * Improved executable file check command
 
 ## v0.4.28 (2024-10-20)
