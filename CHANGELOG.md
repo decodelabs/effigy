@@ -1,3 +1,5 @@
+* Added PHP8.4 to CI workflow
+
 ## v0.4.29 (2024-11-06)
 * Improved executable file check command
 
