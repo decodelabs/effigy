@@ -22,7 +22,9 @@ class Eclint implements Task
     public function execute(): bool
     {
         if (!$this->ensureInstalled()) {
-            throw Exceptional::ComponentUnavailable('eclint is not installed');
+            throw Exceptional::ComponentUnavailable(
+                message: 'eclint is not installed'
+            );
         }
 
         /*

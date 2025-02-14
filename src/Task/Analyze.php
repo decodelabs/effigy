@@ -10,6 +10,7 @@ declare(strict_types=1);
 namespace DecodeLabs\Effigy\Task;
 
 use DecodeLabs\Clip\Task;
+use DecodeLabs\Coercion;
 use DecodeLabs\Effigy;
 use DecodeLabs\Effigy\Task\GeneratePhpstanConfig\PhpstanTemplate;
 use DecodeLabs\Exceptional;
@@ -21,7 +22,9 @@ class Analyze implements Task
     public function execute(): bool
     {
         if (!$this->ensureInstalled()) {
-            throw Exceptional::Runtime('Unable to find or create a PHPStan neon config');
+            throw Exceptional::Runtime(
+                message: 'Unable to find or create a PHPStan neon config'
+            );
         }
 
         Cli::$command
@@ -46,7 +49,9 @@ class Analyze implements Task
             $args[] = '--no-progress';
         }
 
-        if ($confFile = Cli::$command['configuration']) {
+        if ($confFile = Coercion::toStringOrNull(
+            Cli::$command['configuration']
+        )) {
             $confs = [$confFile];
         } else {
             $confs = $this->findConfigFiles();

@@ -20,11 +20,17 @@ class GenerateComposerConfig implements Task
 {
     use GenerateFileTrait;
 
-    protected const Packages = [
+    /**
+     * @var array<string>
+     */
+    protected const array Packages = [
         'decodelabs/exceptional'
     ];
 
-    protected const DevPackages = [
+    /**
+     * @var array<string>
+     */
+    protected const array DevPackages = [
         'decodelabs/phpstan-decodelabs'
     ];
 

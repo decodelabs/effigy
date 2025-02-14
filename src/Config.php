@@ -56,12 +56,12 @@ class Config
      */
     protected function loadData(): array
     {
-        /** @phpstan-ignore-next-line */
         $output = $this->parse(Integra::getExtra()->effigy);
 
         if ($this->file->exists()) {
-            $json = json_decode($this->file->getContents(), true);
-            $output = array_merge($output, $this->parse(Coercion::toArray($json)));
+            /** @var array<string,mixed> */
+            $json = Coercion::toArray(json_decode($this->file->getContents(), true));
+            $output = array_merge($output, $this->parse($json));
         }
 
         return $output;
@@ -113,9 +113,12 @@ class Config
             return $this->data['params'][$slug];
         }
 
-        $value = (string)Cli::ask('What is your "' . $slug . '" value?', null, function ($value) {
-            return strlen($value) > 0;
-        });
+        $value = (string)Cli::ask(
+            message: 'What is your "' . $slug . '" value?',
+            validator: function (string $value) {
+                return strlen($value) > 0;
+            }
+        );
 
         $this->new['params'][$slug] = $value;
         return $value;
@@ -158,7 +161,7 @@ class Config
         if (isset($this->data['codeDirs'])) {
             $dirs = $this->data['codeDirs'];
         } else {
-            static $dirs = ['src', 'tests', 'stubs'];
+            $dirs = ['src', 'tests', 'stubs'];
         }
 
         $output = [];
@@ -232,8 +235,9 @@ class Config
         $data = [];
 
         if ($this->file->exists()) {
-            $json = json_decode($this->file->getContents(), true);
-            $data = $this->parse(Coercion::toArray($json));
+            /** @var array<string,mixed> */
+            $json = Coercion::toArray(json_decode($this->file->getContents(), true));
+            $data = $this->parse($json);
         }
 
         $data = $this->merge($data, $this->new);
@@ -315,16 +319,16 @@ class Config
             }
         }
 
-        /** @phpstan-var TConfig */
+        /** @phpstan-ignore-next-line */
         return $output;
     }
 
     /**
      * Merge config data
      *
-     * @param array<string, mixed> $config,
-     * @param array<string, mixed> $new
-     * @return array<string, mixed>
+     * @param array<string,mixed> $config,
+     * @param array<string,mixed> $new
+     * @return array<string,mixed>
      */
     public static function merge(
         array $config,
@@ -332,10 +336,10 @@ class Config
     ): array {
         foreach ($new as $key => $value) {
             if (is_array($value)) {
-                $config[$key] = self::merge(
-                    Coercion::toArray($config[$key] ?? []),
-                    $value
-                );
+                /** @var array<string,mixed> */
+                $data = Coercion::toArray($config[$key] ?? []);
+                /** @var array<string,mixed> $value */
+                $config[$key] = self::merge($data, $value);
             } else {
                 $config[$key] = $value;
             }
