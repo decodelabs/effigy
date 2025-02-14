@@ -103,7 +103,9 @@ trait PackageLookupTrait
             return new Package($key, 'dev-develop');
         }
 
-        throw Exceptional::InvalidArgument('Unable to resolve package: ' . $key);
+        throw Exceptional::InvalidArgument(
+            message: 'Unable to resolve package: ' . $key
+        );
     }
 
     /**

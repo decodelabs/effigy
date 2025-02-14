@@ -62,8 +62,12 @@ class Prep implements Task
         // Standards
         Cli::info('Ensure proper code formatting');
 
-        if (!Effigy::run('format')) {
-            return false;
+        if(version_compare(PHP_VERSION, '8.4.0', '>=')) {
+            Cli::warning('Skipping formatting until PHP-CS-Fixer is updated for PHP 8.4');
+        } else {
+            if (!Effigy::run('format')) {
+                return false;
+            }
         }
 
         Cli::newLine();

@@ -14,6 +14,7 @@ use DecodeLabs\Atlas\Dir;
 use DecodeLabs\Atlas\File;
 use DecodeLabs\Clip\Controller as ControllerInterface;
 use DecodeLabs\Clip\Controller\Generic as GenericController;
+use DecodeLabs\Coercion;
 use DecodeLabs\Effigy;
 use DecodeLabs\Exceptional;
 use DecodeLabs\Glitch\Dumpable;
@@ -58,7 +59,10 @@ class Controller extends GenericController implements
         );
 
         // Local
-        $entry = Atlas::file((string)realpath($_SERVER['PHP_SELF']));
+        $entry = Atlas::file((string)realpath(
+            Coercion::toString($_SERVER['PHP_SELF'])
+        ));
+
         $parent = (string)$entry->getParent();
 
         $this->local =
@@ -291,7 +295,10 @@ class Controller extends GenericController implements
         $matches = [];
 
         if (false === preg_match_all('|{{([a-zA-Z0-9\-_]+)}}|', $entry, $matches)) {
-            throw Exceptional::UnexpectedValue('Unable to parse entry file config', null, $entry);
+            throw Exceptional::UnexpectedValue(
+                message: 'Unable to parse entry file config',
+                data: $entry
+            );
         }
 
         // @phpstan-ignore-next-line
@@ -315,7 +322,9 @@ class Controller extends GenericController implements
             return $file;
         }
 
-        throw Exceptional::NotFound('Entry file ' . $entry . ' does not exist');
+        throw Exceptional::NotFound(
+            message: 'Entry file ' . $entry . ' does not exist'
+        );
     }
 
     /**
@@ -400,7 +409,7 @@ class Controller extends GenericController implements
 
 
         throw Exceptional::NotFound(
-            'Effigy couldn\'t find any appropriate ways to run "' . $name . '"'
+            message: 'Effigy couldn\'t find any appropriate ways to run "' . $name . '"'
         );
     }
 
@@ -449,7 +458,9 @@ class Controller extends GenericController implements
         );
 
         if (!$result->wasSuccessful()) {
-            throw Exceptional::Runtime('Unable to locate global composer path');
+            throw Exceptional::Runtime(
+                message: 'Unable to locate global composer path'
+            );
         }
 
         $output = trim((string)$result->getOutput());
@@ -458,7 +469,9 @@ class Controller extends GenericController implements
             empty($output) ||
             !is_dir($output)
         ) {
-            throw Exceptional::Runtime('Invalid global composer path: ' . $output);
+            throw Exceptional::Runtime(
+                message: 'Invalid global composer path: ' . $output
+            );
         }
 
         return $output;
@@ -479,5 +492,7 @@ class Controller extends GenericController implements
     }
 }
 
-/** @phpstan-ignore-next-line */
-Veneer::register(Controller::class, Effigy::class);
+Veneer::register(
+    Controller::class,
+    Effigy::class
+);

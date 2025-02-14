@@ -17,7 +17,10 @@ use DecodeLabs\Terminus as Cli;
 
 class CheckGitExports implements Task
 {
-    public const ExcludeFiles = [
+    /**
+     * @var array<string>
+     */
+    public const array ExcludeFiles = [
         'LICENSE',
         'README.md',
         'CHANGELOG.md',
@@ -46,7 +49,7 @@ class CheckGitExports implements Task
 
         $result = Systemic::capture(
             'git archive HEAD | tar --list ' . implode(' ', $exclude),
-            Integra::$rootDir
+            Integra::$rootDir->getPath()
         );
 
         if (!$result->wasSuccessful()) {

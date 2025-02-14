@@ -16,6 +16,7 @@ use DecodeLabs\Integra;
 use DecodeLabs\Integra\Structure\Package;
 use DecodeLabs\Systemic;
 use DecodeLabs\Terminus as Cli;
+use DecodeLabs\Terminus\Session;
 
 class Mount implements Task
 {
@@ -30,7 +31,7 @@ class Mount implements Task
     {
         Cli::$command
             ->addArgument('--global|g', 'Mount globally')
-            ->addArgument('packages*', 'Package names');
+            ->addArgument('packages[]', 'Package names');
 
         $conf = Integra::getLocalManifest()->getRepositoryConfig();
         /** @var array<string> $packages */
@@ -155,9 +156,11 @@ class Mount implements Task
         }
 
         return (string)Cli::ask(
-            'Where is your local copy of ' . $package->name . ' located?',
-            null,
-            function ($path, $session) {
+            message: 'Where is your local copy of ' . $package->name . ' located?',
+            validator: function (
+                string $path,
+                Session $session
+            ): bool {
                 if (str_starts_with($path, '/')) {
                     $file = Atlas::file($path . '/composer.json');
                 } else {
@@ -168,6 +171,8 @@ class Mount implements Task
                     $session->error('Path "' . $path . '" does not exist');
                     return false;
                 }
+
+                return true;
             }
         );
     }

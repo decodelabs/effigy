@@ -16,7 +16,10 @@ use DecodeLabs\Terminus as Cli;
 
 class InstallLocal implements Task
 {
-    public const Packages = [
+    /**
+     * @var array<string>
+     */
+    public const array Packages = [
         'phpstan/phpstan',
         'decodelabs/effigy',
         'phpstan/extension-installer'
@@ -28,7 +31,7 @@ class InstallLocal implements Task
         $umask = umask(0);
 
         Cli::{'brightMagenta'}('Copying effigy executable... ');
-        $target = $binFile->copyTo((string)Integra::$rootDir);
+        $target = $binFile->copyTo(Integra::$rootDir->getPath());
         $target->setPermissions(0777);
         Cli::{'success'}('done');
 

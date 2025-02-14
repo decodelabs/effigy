@@ -21,7 +21,9 @@ class Format implements Task
     public function execute(): bool
     {
         if (!$this->ensureInstalled()) {
-            throw Exceptional::Runtime('Unable to find or create an ecs.php config');
+            throw Exceptional::Runtime(
+                message: 'Unable to find or create an ecs.php config'
+            );
         }
 
         Cli::$command
