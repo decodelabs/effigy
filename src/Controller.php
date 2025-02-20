@@ -60,7 +60,7 @@ class Controller extends GenericController implements
 
         // Local
         $entry = Atlas::file((string)realpath(
-            Coercion::toString($_SERVER['PHP_SELF'])
+            Coercion::asString($_SERVER['PHP_SELF'])
         ));
 
         $parent = (string)$entry->getParent();

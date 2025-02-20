@@ -24,7 +24,7 @@ class Unmount implements Task
     use PackageLookupTrait;
 
     /**
-     * @var Tree<float|int|string|null>
+     * @var Tree<string|int|float|bool>
      */
     protected Tree $repositories;
 

@@ -60,7 +60,7 @@ class Config
 
         if ($this->file->exists()) {
             /** @var array<string,mixed> */
-            $json = Coercion::toArray(json_decode($this->file->getContents(), true));
+            $json = Coercion::asArray(json_decode($this->file->getContents(), true));
             $output = array_merge($output, $this->parse($json));
         }
 
@@ -154,7 +154,7 @@ class Config
     /**
      * Get code paths
      *
-     * @return array<string, Dir>
+     * @return array<string,Dir>
      */
     public function getCodeDirs(): array
     {
@@ -236,7 +236,7 @@ class Config
 
         if ($this->file->exists()) {
             /** @var array<string,mixed> */
-            $json = Coercion::toArray(json_decode($this->file->getContents(), true));
+            $json = Coercion::asArray(json_decode($this->file->getContents(), true));
             $data = $this->parse($json);
         }
 
@@ -267,7 +267,7 @@ class Config
     /**
      * Parse config
      *
-     * @param array<string, mixed>|Tree<mixed> $config
+     * @param array<string,mixed>|Tree<string|int|float|bool> $config
      * @phpstan-return TConfig
      */
     public static function parse(
@@ -284,7 +284,7 @@ class Config
                 // string
                 case 'entry':
                 case 'php':
-                    if (null !== ($value = Coercion::toStringOrNull($value))) {
+                    if (null !== ($value = Coercion::tryString($value))) {
                         $output[$key] = $value;
                     }
                     break;
@@ -292,12 +292,12 @@ class Config
                     // array<string, string>
                 case 'params':
                 case 'localRepos':
-                    if (null !== ($value = Coercion::toArrayOrNull($value))) {
+                    if (null !== ($value = Coercion::tryArray($value))) {
                         $output[$key] = [];
 
                         foreach ($value as $slug => $param) {
                             /** @phpstan-ignore-next-line */
-                            $output[$key][Coercion::forceString($slug)] = Coercion::forceString($param);
+                            $output[$key][Coercion::toString($slug)] = Coercion::toString($param);
                         }
                     }
                     break;
@@ -307,12 +307,12 @@ class Config
                 case 'ignoreBins':
                 case 'exports':
                 case 'executables':
-                    if (null !== ($value = Coercion::toArrayOrNull($value))) {
+                    if (null !== ($value = Coercion::tryArray($value))) {
                         $output[$key] = [];
 
                         foreach ($value as $param) {
                             /** @phpstan-ignore-next-line */
-                            $output[$key][] = Coercion::forceString($param);
+                            $output[$key][] = Coercion::toString($param);
                         }
                     }
                     break;
@@ -337,7 +337,7 @@ class Config
         foreach ($new as $key => $value) {
             if (is_array($value)) {
                 /** @var array<string,mixed> */
-                $data = Coercion::toArray($config[$key] ?? []);
+                $data = Coercion::asArray($config[$key] ?? []);
                 /** @var array<string,mixed> $value */
                 $config[$key] = self::merge($data, $value);
             } else {

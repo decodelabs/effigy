@@ -49,7 +49,7 @@ class Analyze implements Task
             $args[] = '--no-progress';
         }
 
-        if ($confFile = Coercion::toStringOrNull(
+        if ($confFile = Coercion::tryString(
             Cli::$command['configuration']
         )) {
             $confs = [$confFile];
