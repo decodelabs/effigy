@@ -1,3 +1,7 @@
+## v0.4.31 (2025-02-20)
+* Upgraded Coercion dependency
+* Upgraded Genesis dependency
+
 ## v0.4.30 (2025-02-14)
 * Upgraded PHPStan to v2
 * Upgraded dependencies
