@@ -1,3 +1,6 @@
+## v0.4.32 (2025-02-25)
+* Use absolute paths for eclint
+
 ## v0.4.31 (2025-02-20)
 * Upgraded Coercion dependency
 * Upgraded Genesis dependency

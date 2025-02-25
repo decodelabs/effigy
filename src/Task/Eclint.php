@@ -40,7 +40,10 @@ class Eclint implements Task
 
         //$command = Cli::$command['check'] ? 'check' : 'fix';
         $command = 'check';
-        $paths = array_keys($dirs);
+        $paths = array_map(
+            fn ($dir) => $dir->getPath(),
+            $dirs
+        );
 
         $output = Systemic::run([
             'eclint', $command, ...$paths
