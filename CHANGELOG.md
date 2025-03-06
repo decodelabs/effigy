@@ -1,3 +1,6 @@
+## v0.4.33 (2025-03-06)
+* Added package and vite files to exports
+
 ## v0.4.32 (2025-02-25)
 * Use absolute paths for eclint
 
