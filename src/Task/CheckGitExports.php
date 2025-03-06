@@ -25,7 +25,11 @@ class CheckGitExports implements Task
         'README.md',
         'CHANGELOG.md',
         'composer.json',
-        'composer.lock'
+        'composer.lock',
+        'package.json',
+        'package-lock.json',
+        'vite.config.js',
+        'vite.config.php'
     ];
 
     public function execute(): bool
