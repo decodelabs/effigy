@@ -28,8 +28,6 @@ class CheckGitExports implements Task
         'composer.lock',
         'package.json',
         'package-lock.json',
-        'vite.config.js',
-        'vite.config.php'
     ];
 
     public function execute(): bool
