@@ -1,3 +1,6 @@
+## v0.4.34 (2025-03-10)
+* Removed vite configs from excluded exports
+
 ## v0.4.33 (2025-03-06)
 * Added package and vite files to exports
 
