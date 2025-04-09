@@ -1,3 +1,8 @@
+## v0.5.0 (2025-04-09)
+* Upgraded Bootstrap handling
+* Replaced Genesis info with Monarch
+* Removed Clip bin support
+
 ## v0.4.34 (2025-03-10)
 * Removed vite configs from excluded exports
 

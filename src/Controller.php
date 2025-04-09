@@ -339,33 +339,21 @@ class Controller extends GenericController implements
 
         try {
             // Entry file
-            if ($entry = $this->getEntryFile()) {
-                $this->config->save();
-
-                // Launch script
-                $result = Systemic::command([
-                        Integra::getPhpBinary(),
-                        $entry->getPath(),
-                        'effigy/has-task',
-                        $name
-                    ])
-                    ->addSignal('SIGINT', 'SIGTERM', 'SIGQUIT')
-                    ->capture();
-            }
-
-            // Clip
-            elseif ($this->hasVendorBin('clip')) {
-                $result = Systemic::command([
-                        (string)Integra::$rootDir->getFile('vendor/bin/clip'),
-                        'effigy/has-task',
-                        $name
-                    ])
-                    ->setWorkingDirectory(Integra::$runDir)
-                    ->addSignal('SIGINT', 'SIGTERM', 'SIGQUIT')
-                    ->capture();
-            } else {
+            if (!$entry = $this->getEntryFile()) {
                 return false;
             }
+
+            $this->config->save();
+
+            // Launch script
+            $result = Systemic::command([
+                    Integra::getPhpBinary(),
+                    $entry->getPath(),
+                    'effigy/has-task',
+                    $name
+                ])
+                ->addSignal('SIGINT', 'SIGTERM', 'SIGQUIT')
+                ->capture();
 
             return trim((string)$result->getOutput()) === 'true';
         } catch (Throwable $e) {

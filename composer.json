@@ -14,12 +14,12 @@
 
         "decodelabs/archetype": "^0.3",
         "decodelabs/atlas": "^0.12",
-        "decodelabs/clip": "^0.3.2",
+        "decodelabs/clip": "^0.4",
         "decodelabs/coercion": "^0.3.0",
         "decodelabs/dictum": "^0.6",
         "decodelabs/exceptional": "^0.5",
         "decodelabs/integra": "^0.1.4",
-        "decodelabs/genesis": "^0.11",
+        "decodelabs/genesis": "^0.12.1",
         "decodelabs/lucid": "^0.5",
         "decodelabs/systemic": "^0.11",
         "decodelabs/terminus": "^0.11",
@@ -42,7 +42,7 @@
     ],
     "extra": {
         "branch-alias": {
-            "dev-develop": "0.4.x-dev"
+            "dev-develop": "0.5.x-dev"
         }
     },
     "config": {

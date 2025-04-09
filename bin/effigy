@@ -9,8 +9,11 @@ declare(strict_types=1);
 
 namespace DecodeLabs\Effigy;
 
-use DecodeLabs\Genesis;
+use DecodeLabs\Genesis\Bootstrap\Bin;
 use DecodeLabs\Effigy\Hub;
 
 require_once $_composer_autoload_path ?? __DIR__ . '/../vendor/autoload.php';
-Genesis::run(Hub::class);
+
+new Bin(
+    hubClass: Hub::class
+)->run();
