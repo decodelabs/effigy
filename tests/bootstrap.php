@@ -8,11 +8,11 @@ declare(strict_types=1);
 
 namespace DecodeLabs\Effigy;
 
-use DecodeLabs\Genesis;
-use DecodeLabs\Effigy\Hub;
-
 require_once 'vendor/autoload.php';
 
-Genesis::initialize(Hub::class, [
-    'analysis' => true
-]);
+use DecodeLabs\Genesis\Bootstrap\Analysis;
+use DecodeLabs\Effigy\Hub;
+
+new Analysis(
+    hubClass: Hub::class
+)->initializeOnly();
