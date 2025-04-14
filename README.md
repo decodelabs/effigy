@@ -11,8 +11,6 @@
 
 Effigy is a globally installed universal CLI tool for easily running tasks in your application.
 
-_Get news and updates on the [DecodeLabs blog](https://blog.decodelabs.com)._
-
 ---
 
 

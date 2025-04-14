@@ -81,14 +81,7 @@ class Template extends FileTemplate
      */
     protected function getPackageIntro(): string
     {
-        $output = $this->getSlot('pkgTitle') . ' provides ...';
-        $name = (string)$this->getSlot('pkgName');
-
-        if (substr($name, 0, 11) === 'decodelabs/') {
-            $output .= "\n\n" . '_Get news and updates on the [DecodeLabs blog](https://blog.decodelabs.com)._';
-        }
-
-        return $output;
+        return $this->getSlot('pkgTitle') . ' provides ...';
     }
 
 

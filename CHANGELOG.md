@@ -1,3 +1,6 @@
+## v0.5.1 (2025-04-14)
+* Removed blog from readme
+
 ## v0.5.0 (2025-04-09)
 * Upgraded Bootstrap handling
 * Replaced Genesis info with Monarch
