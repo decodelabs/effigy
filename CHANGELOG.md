@@ -1,3 +1,6 @@
+## v0.5.2 (2025-05-30)
+* Added package manager export exclusions
+
 ## v0.5.1 (2025-04-14)
 * Removed blog from readme
 
