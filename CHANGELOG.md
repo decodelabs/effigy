@@ -1,6 +1,6 @@
 ## v0.6.0 (2025-05-01)
 * Upgraded to Integra v0.2.0
-* Simplified local innstallation handling
+* Simplified local installation handling
 
 ## v0.5.2 (2025-05-01)
 * Added package manager export exclusions
