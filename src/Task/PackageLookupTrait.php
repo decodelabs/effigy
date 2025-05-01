@@ -10,7 +10,7 @@ declare(strict_types=1);
 namespace DecodeLabs\Effigy\Task;
 
 use DecodeLabs\Exceptional;
-use DecodeLabs\Integra;
+use DecodeLabs\Effigy;
 use DecodeLabs\Integra\Structure\Package;
 
 trait PackageLookupTrait
@@ -31,7 +31,7 @@ trait PackageLookupTrait
     protected function getPackages(): array
     {
         if (!isset($this->require)) {
-            $this->require = Integra::getLocalManifest()->getRequiredPackages();
+            $this->require = Effigy::$project->getLocalManifest()->getRequiredPackages();
         }
 
         return $this->require;
@@ -43,7 +43,7 @@ trait PackageLookupTrait
     protected function getDevPackages(): array
     {
         if (!isset($this->requireDev)) {
-            $this->requireDev = Integra::getLocalManifest()->getRequiredDevPackages();
+            $this->requireDev = Effigy::$project->getLocalManifest()->getRequiredDevPackages();
         }
 
         return $this->requireDev;

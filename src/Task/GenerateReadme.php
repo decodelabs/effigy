@@ -12,8 +12,8 @@ namespace DecodeLabs\Effigy\Task;
 use DecodeLabs\Atlas\File;
 use DecodeLabs\Clip\Task;
 use DecodeLabs\Clip\Task\GenerateFileTrait;
+use DecodeLabs\Effigy;
 use DecodeLabs\Effigy\Template;
-use DecodeLabs\Integra;
 
 class GenerateReadme implements Task
 {
@@ -21,7 +21,7 @@ class GenerateReadme implements Task
 
     protected function getTargetFile(): File
     {
-        return Integra::$rootDir->getFile('README.md');
+        return Effigy::$project->rootDir->getFile('README.md');
     }
 
     protected function getTemplate(): Template

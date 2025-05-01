@@ -11,7 +11,7 @@ namespace DecodeLabs\Effigy;
 
 use DecodeLabs\Dictum;
 use DecodeLabs\Genesis\FileTemplate;
-use DecodeLabs\Integra;
+use DecodeLabs\Effigy;
 use DecodeLabs\Terminus as Cli;
 
 class Template extends FileTemplate
@@ -19,14 +19,14 @@ class Template extends FileTemplate
     protected function generateSlot(
         string $name
     ): ?string {
-        $manifest = Integra::getLocalManifest();
+        $manifest = Effigy::$project->getLocalManifest();
 
         switch ($name) {
             case 'pkgName':
                 return $manifest->getName() ??
                     Cli::ask('What is your full package name?', function () {
-                        $name = Integra::$rootDir->getName();
-                        return Integra::$rootDir->getParent()?->getName() . '/' . $name;
+                        $name = Effigy::$project->rootDir->getName();
+                        return Effigy::$project->rootDir->getParent()?->getName() . '/' . $name;
                     });
 
             case 'pkgTitle':
@@ -94,7 +94,7 @@ class Template extends FileTemplate
     {
         return array_unique(array_merge(
             ['intl'],
-            Integra::getLocalManifest()->getRequiredExtensions()
+            Effigy::$project->getLocalManifest()->getRequiredExtensions()
         ));
     }
 

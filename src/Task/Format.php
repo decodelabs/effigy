@@ -13,7 +13,6 @@ use DecodeLabs\Clip\Task;
 use DecodeLabs\Effigy;
 use DecodeLabs\Effigy\Task\GenerateEcsConfig\EcsTemplate;
 use DecodeLabs\Exceptional;
-use DecodeLabs\Integra;
 use DecodeLabs\Terminus as Cli;
 
 class Format implements Task
@@ -39,13 +38,17 @@ class Format implements Task
             $args[] = '--no-progress-bar';
         }
 
-        return Integra::runGlobalBin(...$args);
+        if(Effigy::isLocal()) {
+            return Effigy::$project->runBin(...$args);
+        } else {
+            return Effigy::$project->runGlobalBin(...$args);
+        }
     }
 
     protected function ensureInstalled(): bool
     {
         // ECS file
-        $ecsFile = Integra::$rootDir->getFile('ecs.php');
+        $ecsFile = Effigy::$project->rootDir->getFile('ecs.php');
 
         if (!$ecsFile->exists()) {
             $template = new EcsTemplate();

@@ -18,9 +18,10 @@
         "decodelabs/coercion": "^0.3.0",
         "decodelabs/dictum": "^0.6",
         "decodelabs/exceptional": "^0.5",
-        "decodelabs/integra": "^0.1.4",
+        "decodelabs/integra": "^0.2",
         "decodelabs/genesis": "^0.12.1",
         "decodelabs/lucid": "^0.5",
+        "decodelabs/monarch": "^0.1.2",
         "decodelabs/systemic": "^0.11",
         "decodelabs/terminus": "^0.11",
         "decodelabs/veneer": "^0.12.3",
@@ -42,7 +43,7 @@
     ],
     "extra": {
         "branch-alias": {
-            "dev-develop": "0.5.x-dev"
+            "dev-develop": "0.6.x-dev"
         }
     },
     "config": {

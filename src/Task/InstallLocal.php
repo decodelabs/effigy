@@ -11,6 +11,7 @@ namespace DecodeLabs\Effigy\Task;
 
 use DecodeLabs\Atlas;
 use DecodeLabs\Clip\Task;
+use DecodeLabs\Effigy;
 use DecodeLabs\Integra;
 use DecodeLabs\Terminus as Cli;
 
@@ -31,13 +32,13 @@ class InstallLocal implements Task
         $umask = umask(0);
 
         Cli::{'brightMagenta'}('Copying effigy executable... ');
-        $target = $binFile->copyTo(Integra::$rootDir->getPath());
+        $target = $binFile->copyTo(Effigy::$project->rootDir->getPath());
         $target->setPermissions(0777);
         Cli::{'success'}('done');
 
         umask($umask);
         Cli::newLine();
 
-        return Integra::installDev(...static::Packages);
+        return Effigy::$project->installDev(...static::Packages);
     }
 }

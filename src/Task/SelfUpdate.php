@@ -24,15 +24,23 @@ class SelfUpdate implements Task
 
 
         // Local / global
+        $global = !Effigy::isLocal();
+
         if (Cli::$command['global']) {
-            Integra::forceLocal(false);
+            $global = true;
         }
 
 
         // Update
-        if (
-            !Integra::isForcedLocal() &&
-            !Integra::runGlobal('update', '--with-all-dependencies')
+        if(
+            (
+                $global &&
+                !Effigy::$project->runGlobal('update', '--with-all-dependencies')
+            ) ||
+            (
+                !$global &&
+                !Effigy::$project->run('update', '--with-all-dependencies')
+            )
         ) {
             return false;
         }
@@ -43,19 +51,28 @@ class SelfUpdate implements Task
         Cli::info('Re-installing effigy...');
         Cli::newLine();
 
+        $packageName = 'decodelabs/effigy';
 
-        if (!Integra::installGlobal(
-            Integra::preparePackageInstallName(
-                'decodelabs/effigy',
-                Cli::$command['dev'] ? 'dev-develop' : null
+        if (Cli::$command['dev']) {
+            $packageName .= ':dev-develop';
+        }
+
+        if (
+            (
+                $global &&
+                !Effigy::$project->installGlobal($packageName)
+            ) ||
+            (
+                !$global &&
+                !Effigy::$project->install($packageName)
             )
-        )) {
+        ) {
             return false;
         }
 
 
         // Exec
-        if (Integra::isForcedLocal()) {
+        if (Effigy::isLocal()) {
             Cli::newLine();
             Cli::info('Re-installing local executable...');
             Cli::newLine();

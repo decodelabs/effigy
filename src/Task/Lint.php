@@ -11,7 +11,6 @@ namespace DecodeLabs\Effigy\Task;
 
 use DecodeLabs\Clip\Task;
 use DecodeLabs\Effigy;
-use DecodeLabs\Integra;
 
 class Lint implements Task
 {
@@ -24,6 +23,11 @@ class Lint implements Task
         }
 
         $paths = array_keys($dirs);
-        return Integra::runGlobalBin('parallel-lint', ...$paths);
+
+        if(Effigy::isLocal()) {
+            return Effigy::$project->runBin('parallel-lint', ...$paths);
+        } else {
+            return Effigy::$project->runGlobalBin('parallel-lint', ...$paths);
+        }
     }
 }

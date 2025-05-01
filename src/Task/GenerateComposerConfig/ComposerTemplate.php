@@ -10,8 +10,8 @@ declare(strict_types=1);
 namespace DecodeLabs\Effigy\Task\GenerateComposerConfig;
 
 use DecodeLabs\Dictum;
+use DecodeLabs\Effigy;
 use DecodeLabs\Effigy\Template;
-use DecodeLabs\Integra;
 use DecodeLabs\Integra\Structure\Author;
 
 class ComposerTemplate extends Template
@@ -28,7 +28,7 @@ class ComposerTemplate extends Template
     ): ?string {
         switch ($name) {
             case 'pkgAuthors':
-                $manifest = Integra::getLocalManifest();
+                $manifest = Effigy::$project->getLocalManifest();
                 $authors = $manifest->getAuthors();
 
                 if (!empty($authors)) {
