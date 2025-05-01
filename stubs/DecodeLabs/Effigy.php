@@ -9,6 +9,7 @@ use DecodeLabs\Veneer\Proxy as Proxy;
 use DecodeLabs\Veneer\ProxyTrait as ProxyTrait;
 use DecodeLabs\Effigy\Controller as Inst;
 use DecodeLabs\Effigy\Config as ConfigPlugin;
+use DecodeLabs\Integra\Project as ProjectPlugin;
 use DecodeLabs\Atlas\File as Ref0;
 
 class Effigy implements Proxy
@@ -20,6 +21,7 @@ class Effigy implements Proxy
 
     protected static Inst $_veneerInstance;
     public static ConfigPlugin $config;
+    public static ProjectPlugin $project;
 
     public static function isLocal(): bool {
         return static::$_veneerInstance->isLocal();

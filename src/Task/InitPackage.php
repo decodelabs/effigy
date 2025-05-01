@@ -11,7 +11,6 @@ namespace DecodeLabs\Effigy\Task;
 
 use DecodeLabs\Clip\Task;
 use DecodeLabs\Effigy;
-use DecodeLabs\Integra;
 
 class InitPackage implements Task
 {
@@ -28,7 +27,7 @@ class InitPackage implements Task
         }
 
         // Make src folder
-        Integra::$rootDir->getDir('src')->ensureExists();
+        Effigy::$project->rootDir->getDir('src')->ensureExists();
 
         // Editor config
         if (!Effigy::run('generate-editor-config', '--check')) {

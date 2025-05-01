@@ -34,7 +34,7 @@ class CheckExecutablePermissions implements Task
 
         $result = Systemic::capture(
             'find . -type f \\( -perm -u=x -o -perm -g=x -o -perm -o=x \\) ' . implode(' ', $exStr) . ' -exec test -x {} \\; -print',
-            Integra::$rootDir->getPath()
+            Effigy::$project->rootDir->getPath()
         );
 
         if (!$result->wasSuccessful()) {
@@ -50,7 +50,7 @@ class CheckExecutablePermissions implements Task
         }
 
         $paths = explode("\n", $result);
-        $bins = array_keys(Integra::getLocalManifest()->getBinFiles());
+        $bins = Effigy::$project->getLocalManifest()->getBinFiles();
         $whitelist = Effigy::getExecutablesWhitelist();
         $output = [];
 

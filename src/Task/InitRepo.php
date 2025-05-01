@@ -11,7 +11,6 @@ namespace DecodeLabs\Effigy\Task;
 
 use DecodeLabs\Clip\Task;
 use DecodeLabs\Effigy;
-use DecodeLabs\Integra;
 
 class InitRepo implements Task
 {
@@ -19,7 +18,7 @@ class InitRepo implements Task
     {
         // Git init
         if (
-            !Integra::$rootDir->getFile('.git/config')->exists() &&
+            !Effigy::$project->rootDir->getFile('.git/config')->exists() &&
             !Effigy::runGit('init')
         ) {
             return false;

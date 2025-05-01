@@ -34,7 +34,7 @@ class Analyze implements Task
 
         // Clear
         if (Cli::$command['clear']) {
-            return Integra::runBin('phpstan', 'clear-result-cache');
+            return Effigy::$project->runBin('phpstan', 'clear-result-cache');
         }
 
 
@@ -61,7 +61,7 @@ class Analyze implements Task
             $runArgs = $args;
             $runArgs[] = '--configuration=' . $conf;
 
-            if (!Integra::runBin(...$runArgs)) {
+            if (!Effigy::$project->runBin(...$runArgs)) {
                 return false;
             }
         }
@@ -75,23 +75,23 @@ class Analyze implements Task
             'decodelabs/phpstan-decodelabs'
         ];
 
-        $currentPackage = Integra::getLocalManifest()->getName();
+        $currentPackage = Effigy::$project->getLocalManifest()->getName();
 
         foreach ($packages as $i => $package) {
             if (
                 $package === $currentPackage ||
-                Integra::hasPackage($package)
+                Effigy::$project->hasPackage($package)
             ) {
                 unset($packages[$i]);
             }
         }
 
         if (!empty($packages)) {
-            Integra::installDev(...$packages);
+            Effigy::$project->installDev(...$packages);
         }
 
         // Neon file
-        $neonFile = Integra::$rootDir->getFile('phpstan.neon');
+        $neonFile = Effigy::$project->rootDir->getFile('phpstan.neon');
 
         if (
             !$neonFile->exists() &&
@@ -113,7 +113,7 @@ class Analyze implements Task
     {
         $output = [];
 
-        foreach (Integra::$rootDir->scanFiles(function (string $name) {
+        foreach (Effigy::$project->rootDir->scanFiles(function (string $name) {
             return preg_match('/phpstan\.([a-zA-Z0-9-_]+\.)?neon$/', $name);
         }) as $file) {
             $output[] = $file->getName();

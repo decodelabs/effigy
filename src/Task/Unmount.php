@@ -13,7 +13,6 @@ use DecodeLabs\Clip\Task;
 use DecodeLabs\Coercion;
 use DecodeLabs\Collections\Tree;
 use DecodeLabs\Effigy;
-use DecodeLabs\Integra;
 use DecodeLabs\Integra\Structure\Package;
 use DecodeLabs\Systemic;
 use DecodeLabs\Terminus as Cli;
@@ -43,7 +42,7 @@ class Unmount implements Task
             return $this->runGlobal($packages, $all);
         }
 
-        $this->repositories = Integra::getLocalManifest()->getRepositoryConfig();
+        $this->repositories = Effigy::$project->getLocalManifest()->getRepositoryConfig();
 
         if (
             $all ||
@@ -58,7 +57,7 @@ class Unmount implements Task
         $requires = $devRequires = $removes = [];
 
         foreach ($packages as $package) {
-            Integra::run('config', '--unset', 'repositories.local:' . $package->name);
+            Effigy::$project->run('config', '--unset', 'repositories.local:' . $package->name);
 
             if (!str_ends_with($package->version, '@dev')) {
                 continue;
@@ -80,21 +79,21 @@ class Unmount implements Task
 
         if (
             !empty($removes) &&
-            !Integra::run(...['remove', ...$removes, '--no-update'])
+            !Effigy::$project->run(...['remove', ...$removes, '--no-update'])
         ) {
             return false;
         }
 
         if (
             !empty($requires) &&
-            !Integra::run(...['require', ...$requires, '--no-update'])
+            !Effigy::$project->run(...['require', ...$requires, '--no-update'])
         ) {
             return false;
         }
 
         if (
             !empty($devRequires) &&
-            !Integra::run(...['require', ...$devRequires, '--dev', '--no-update'])
+            !Effigy::$project->run(...['require', ...$devRequires, '--dev', '--no-update'])
         ) {
             return false;
         }
@@ -104,7 +103,7 @@ class Unmount implements Task
             !empty($devRequires) ||
             !empty($removes)
         ) {
-            Integra::run('update');
+            Effigy::$project->run('update');
         } else {
             Cli::operative('No packages mounted');
         }

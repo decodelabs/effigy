@@ -13,7 +13,7 @@ use DecodeLabs\Atlas\Dir;
 use DecodeLabs\Atlas\File;
 use DecodeLabs\Coercion;
 use DecodeLabs\Collections\Tree;
-use DecodeLabs\Integra;
+use DecodeLabs\Integra\Project;
 use DecodeLabs\Terminus as Cli;
 
 /**
@@ -30,6 +30,9 @@ use DecodeLabs\Terminus as Cli;
  */
 class Config
 {
+    protected const UserFilename = 'effigy.json';
+
+    protected Project $project;
     protected File $file;
 
     /**
@@ -43,9 +46,10 @@ class Config
     protected array $new = [];
 
     public function __construct(
-        File $file
+        Project $project
     ) {
-        $this->file = $file;
+        $this->project = $project;
+        $this->file = $project->rootDir->getFile(self::UserFilename);
         $this->data = $this->loadData();
     }
 
@@ -54,9 +58,8 @@ class Config
      *
      * @phpstan-return TConfig
      */
-    protected function loadData(): array
-    {
-        $output = $this->parse(Integra::getExtra()->effigy);
+    protected function loadData(): array {
+        $output = $this->parse($this->project->getExtra()->effigy);
 
         if ($this->file->exists()) {
             /** @var array<string,mixed> */
@@ -167,7 +170,7 @@ class Config
         $output = [];
 
         foreach ($dirs as $name) {
-            $dir = Integra::$rootDir->getDir($name);
+            $dir = $this->project->rootDir->getDir($name);
 
             if ($dir->exists()) {
                 $output[(string)$name] = $dir;
@@ -248,7 +251,7 @@ class Config
         $this->file->putContents($json);
 
         // Ensure .gitignore
-        $gitFile = Integra::$rootDir->getFile('.gitignore');
+        $gitFile = $this->project->rootDir->getFile('.gitignore');
         $gitIgnore = '';
 
         if ($gitFile->exists()) {

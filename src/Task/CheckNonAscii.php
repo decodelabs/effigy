@@ -11,7 +11,7 @@ namespace DecodeLabs\Effigy\Task;
 
 use DecodeLabs\Clip\Task;
 use DecodeLabs\Effigy;
-use DecodeLabs\Integra;
+use DecodeLabs\Monarch;
 use DecodeLabs\Terminus as Cli;
 
 class CheckNonAscii implements Task
@@ -24,7 +24,7 @@ class CheckNonAscii implements Task
             return true;
         }
 
-        chdir(Integra::$rootDir->getPath());
+        chdir(Effigy::$project->rootDir->getPath());
 
         $pathString = implode(' ', array_keys($dirs));
         $command = "! LC_ALL=C.UTF-8 find $pathString -type f -name \"*.php\" -not -name \"*.html.php\" -not -name \"*.htm.php\" -print0 | xargs -0 -- grep -PHn \"[^ -~]\" | grep -v '// @ignore-non-ascii$'";
@@ -39,7 +39,7 @@ class CheckNonAscii implements Task
             Cli::newLine();
         }
 
-        chdir(Integra::$runDir->getPath());
+        chdir(Monarch::$paths->working);
 
         return $output === '';
     }

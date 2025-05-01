@@ -12,7 +12,6 @@ namespace DecodeLabs\Effigy\Task;
 use DecodeLabs\Atlas;
 use DecodeLabs\Clip\Task;
 use DecodeLabs\Effigy;
-use DecodeLabs\Integra;
 use DecodeLabs\Integra\Structure\Package;
 use DecodeLabs\Systemic;
 use DecodeLabs\Terminus as Cli;
@@ -33,7 +32,7 @@ class Mount implements Task
             ->addArgument('--global|g', 'Mount globally')
             ->addArgument('packages[]', 'Package names');
 
-        $conf = Integra::getLocalManifest()->getRepositoryConfig();
+        $conf = Effigy::$project->getLocalManifest()->getRepositoryConfig();
         /** @var array<string> $packages */
         $packages = Cli::$command['packages'];
 
@@ -66,7 +65,7 @@ class Mount implements Task
             if (!isset($conf->{$key})) {
                 $path = $this->getPath($package);
 
-                if (!Integra::run('config', 'repositories.' . $key, '{"type": "path", "url": "' . $path . '", "options": {"symlink": true}}')) {
+                if (!Effigy::$project->run('config', 'repositories.' . $key, '{"type": "path", "url": "' . $path . '", "options": {"symlink": true}}')) {
                     return false;
                 }
             }
@@ -74,19 +73,19 @@ class Mount implements Task
 
         if (
             !empty($requires) &&
-            !Integra::run(...['require', ...$requires, '--no-update'])
+            !Effigy::$project->run(...['require', ...$requires, '--no-update'])
         ) {
             return false;
         }
 
         if (
             !empty($devRequires) &&
-            !Integra::run(...['require', ...$devRequires, '--dev', '--no-update'])
+            !Effigy::$project->run(...['require', ...$devRequires, '--dev', '--no-update'])
         ) {
             return false;
         }
 
-        Integra::run('update');
+        Effigy::$project->run('update');
 
         clearstatcache();
 
@@ -146,7 +145,7 @@ class Mount implements Task
                 if (str_starts_with($root, '/')) {
                     $file = Atlas::file($root . '/' . $keyName . '/composer.json');
                 } else {
-                    $file = Integra::$rootDir->getFile($root . '/' . $keyName . '/composer.json');
+                    $file = Effigy::$project->rootDir->getFile($root . '/' . $keyName . '/composer.json');
                 }
 
                 if ($file->exists()) {
@@ -164,7 +163,7 @@ class Mount implements Task
                 if (str_starts_with($path, '/')) {
                     $file = Atlas::file($path . '/composer.json');
                 } else {
-                    $file = Integra::$rootDir->getFile($path . '/composer.json');
+                    $file = Effigy::$project->rootDir->getFile($path . '/composer.json');
                 }
 
                 if (!$file->exists()) {

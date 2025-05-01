@@ -11,7 +11,6 @@ namespace DecodeLabs\Effigy\Task;
 
 use DecodeLabs\Clip\Task;
 use DecodeLabs\Effigy;
-use DecodeLabs\Integra;
 use DecodeLabs\Terminus as Cli;
 
 class Upgrade implements Task
@@ -23,7 +22,7 @@ class Upgrade implements Task
         // Update
         Cli::info('Update composer');
 
-        if (!Integra::run('update')) {
+        if (!Effigy::$project->run('update')) {
             return false;
         }
 

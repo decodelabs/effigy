@@ -19,6 +19,8 @@ use DecodeLabs\Effigy;
 use DecodeLabs\Exceptional;
 use DecodeLabs\Glitch\Dumpable;
 use DecodeLabs\Integra;
+use DecodeLabs\Integra\Project;
+use DecodeLabs\Monarch;
 use DecodeLabs\Systemic;
 use DecodeLabs\Terminus as Cli;
 use DecodeLabs\Veneer;
@@ -39,10 +41,11 @@ class Controller extends GenericController implements
     ControllerInterface,
     Dumpable
 {
-    protected const UserFilename = 'effigy.json';
+    #[Plugin]
+    protected(set) Config $config;
 
     #[Plugin]
-    public Config $config;
+    protected(set) Project $project;
 
     protected bool $local = false;
     protected bool $ciMode;
@@ -52,11 +55,11 @@ class Controller extends GenericController implements
     /**
      * Initialize paths
      */
-    public function __construct()
-    {
-        $this->config = new Config(
-            Integra::$rootDir->getFile(self::UserFilename)
-        );
+    public function __construct(
+        ?Project $project = null
+    ) {
+        $this->project = $project ?? new Project();
+        $this->config = new Config($this->project);
 
         // Local
         $entry = Atlas::file((string)realpath(
@@ -66,16 +69,13 @@ class Controller extends GenericController implements
         $parent = (string)$entry->getParent();
 
         $this->local =
-            $parent === (string)Integra::$rootDir ||
-            $parent === (string)Integra::$rootDir->getDir('bin');
-
-        if ($this->local) {
-            Integra::forceLocal(true);
-        }
+            $parent === (string)$this->project->rootDir ||
+            $parent === (string)$this->project->rootDir->getDir('bin');
 
         // Integra config
-        Integra::setPhpBinary($this->config->getPhpBinary());
-        Integra::setCiMode($this->isCiMode());
+        if(null !== ($bin = $this->config->getPhpBinary())) {
+            $this->project->setBinaryPath('php', $bin);
+        }
     }
 
 
@@ -122,7 +122,7 @@ class Controller extends GenericController implements
     ): bool {
         // Composer direct
         if ($name === 'composer') {
-            return Integra::run(...$args);
+            return $this->project->run(...$args);
         }
 
 
@@ -152,10 +152,10 @@ class Controller extends GenericController implements
         // Bin
         if ($this->hasVendorBin($name)) {
             return Systemic::command([
-                    (string)Integra::$rootDir->getFile('vendor/bin/' . $name),
+                    (string)$this->project->rootDir->getFile('vendor/bin/' . $name),
                     ...$args
                 ])
-                ->setWorkingDirectory(Integra::$runDir)
+                ->setWorkingDirectory(Monarch::$paths->working)
                 ->addSignal('SIGINT', 'SIGTERM', 'SIGQUIT')
                 ->run();
         }
@@ -173,7 +173,7 @@ class Controller extends GenericController implements
     ): bool {
         return Systemic::run(
             ['git', $name, ...$args],
-            Integra::$rootDir
+            $this->project->rootDir
         );
     }
 
@@ -186,7 +186,7 @@ class Controller extends GenericController implements
     ): ?string {
         $result = Systemic::capture(
             ['git', $name, ...$args],
-            Integra::$rootDir
+            $this->project->rootDir
         );
 
         if (!$result->wasSuccessful()) {
@@ -218,7 +218,7 @@ class Controller extends GenericController implements
      */
     public function getComposerScripts(): array
     {
-        return Integra::getScripts();
+        return $this->project->getScripts();
     }
 
     /**
@@ -227,7 +227,7 @@ class Controller extends GenericController implements
     public function hasComposerScript(
         string $name
     ): bool {
-        return Integra::hasScript($name);
+        return $this->project->hasScript($name);
     }
 
     /**
@@ -237,7 +237,7 @@ class Controller extends GenericController implements
         string $name,
         string ...$args
     ): bool {
-        return Integra::run($name, ...$args);
+        return $this->project->run($name, ...$args);
     }
 
 
@@ -249,7 +249,7 @@ class Controller extends GenericController implements
      */
     public function getVendorBins(): array
     {
-        return Integra::getBins();
+        return $this->project->getBins();
     }
 
     /**
@@ -264,7 +264,7 @@ class Controller extends GenericController implements
             return false;
         }
 
-        return Integra::hasBin($name);
+        return $this->project->hasBin($name);
     }
 
 
@@ -280,7 +280,7 @@ class Controller extends GenericController implements
 
         // Fallback to generic entry.php
         if (!$this->config->hasEntry()) {
-            $file = Integra::$rootDir->getFile('entry.php');
+            $file = $this->project->rootDir->getFile('entry.php');
 
             if ($file->exists()) {
                 return $file;
@@ -315,7 +315,7 @@ class Controller extends GenericController implements
             }
         }
 
-        $file = Integra::$rootDir->getFile($entry);
+        $file = $this->project->rootDir->getFile($entry);
 
         if ($file->exists()) {
             $this->config->set('entry', $entry);
@@ -347,7 +347,7 @@ class Controller extends GenericController implements
 
             // Launch script
             $result = Systemic::command([
-                    Integra::getPhpBinary(),
+                    $this->project->getBinaryPath('php'),
                     $entry->getPath(),
                     'effigy/has-task',
                     $name
@@ -374,7 +374,7 @@ class Controller extends GenericController implements
 
             // Launch script
             return Systemic::command([
-                    Integra::getPhpBinary(),
+                    $this->project->getBinaryPath('php'),
                     $entry->getPath(),
                     $name,
                     ...$args
@@ -386,11 +386,11 @@ class Controller extends GenericController implements
         // Clip
         elseif ($this->hasVendorBin('clip')) {
             return Systemic::command([
-                    (string)Integra::$rootDir->getFile('vendor/bin/clip'),
+                    (string)$this->project->rootDir->getFile('vendor/bin/clip'),
                     $name,
                     ...$args
                 ])
-                ->setWorkingDirectory(Integra::$runDir)
+                ->setWorkingDirectory(Monarch::$paths->working)
                 ->addSignal('SIGINT', 'SIGTERM', 'SIGQUIT')
                 ->run();
         }
@@ -442,7 +442,7 @@ class Controller extends GenericController implements
     {
         $result = Systemic::capture(
             ['composer', 'config', 'home', '--global'],
-            Integra::$rootDir
+            $this->project->rootDir
         );
 
         if (!$result->wasSuccessful()) {
