@@ -119,7 +119,7 @@ class Release implements Task
         $doc->save();
 
         Cli::newLine();
-        Cli::info('Pushing changes...');
+        Cli::info('Committing changes...');
 
         if(!Effigy::runGit('add', '.')) {
             throw Exceptional::Runtime(
