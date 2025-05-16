@@ -41,27 +41,13 @@ class InitRepo implements Task
         // Checkout develop
         Effigy::runGit('checkout', 'develop');
 
-
-        // Git flow
-        if ($this->hasGitFlow()) {
-            Effigy::runGit('flow', 'init');
-        }
-
         return true;
     }
 
-    /**
-     * Ask git if branch exists
-     */
     protected function hasBranch(
         string $branch
     ): bool {
         $list = Effigy::askGit('branch', '--list', $branch);
         return trim(trim((string)$list, '*')) === $branch;
-    }
-
-    protected function hasGitFlow(): bool
-    {
-        return Effigy::askGit('flow', 'version') !== null;
     }
 }

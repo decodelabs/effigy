@@ -14,7 +14,7 @@
 
         "decodelabs/archetype": "^0.3",
         "decodelabs/atlas": "^0.12",
-        "decodelabs/chronicle": "^0.1",
+        "decodelabs/chronicle": "^0.2",
         "decodelabs/clip": "^0.4",
         "decodelabs/coercion": "^0.3.0",
         "decodelabs/dictum": "^0.6",
