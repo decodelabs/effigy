@@ -1,250 +1,597 @@
-## v0.6.0 (2025-05-01)
-* Upgraded to Integra v0.2.0
-* Simplified local innstallation handling
+# Changelog
 
-## v0.5.2 (2025-05-01)
-* Added package manager export exclusions
+All notable changes to this project will be documented in this file.<br>
+The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
+and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## v0.5.1 (2025-04-14)
-* Removed blog from readme
+### Unreleased
+--
 
-## v0.5.0 (2025-04-09)
-* Upgraded Bootstrap handling
-* Replaced Genesis info with Monarch
-* Removed Clip bin support
+---
 
-## v0.4.34 (2025-03-10)
-* Removed vite configs from excluded exports
+### [v0.6.1](https://github.com/decodelabs/effigy/commits/v0.6.1) - 16th May 2025
 
-## v0.4.33 (2025-03-06)
-* Added package and vite files to exports
+- Integrated Chronicle for changelog generation
+- Implemented write-changelog Task
+- Updated changelog template
 
-## v0.4.32 (2025-02-25)
-* Use absolute paths for eclint
+[Full list of changes](https://github.com/decodelabs/effigy/compare/v0.6.0...v0.6.1)
 
-## v0.4.31 (2025-02-20)
-* Upgraded Coercion dependency
-* Upgraded Genesis dependency
+---
 
-## v0.4.30 (2025-02-14)
-* Upgraded PHPStan to v2
-* Upgraded dependencies
-* Tidied boolean logic
-* Fixed Exceptional syntax
-* Added PHP8.4 to CI workflow
-* Made PHP8.4 minimum version
+### [v0.6.0](https://github.com/decodelabs/effigy/commits/v0.6.0) - 1st May 2025
 
-## v0.4.29 (2024-11-06)
-* Improved executable file check command
+- Upgraded to Integra v0.2.0
+- Simplified local installation handling
 
-## v0.4.28 (2024-10-20)
-* Added composer.lock to git export whitelist
+[Full list of changes](https://github.com/decodelabs/effigy/compare/v0.5.2...v0.6.0)
 
-## v0.4.27 (2024-10-20)
-* Fixed git-exports whitelist handling
+---
 
-## v0.4.26 (2024-09-04)
-* Improved PHPStan config generation
+### [v0.5.2](https://github.com/decodelabs/effigy/commits/v0.5.2) - 1st May 2025
 
-## v0.4.25 (2024-09-04)
-* Added analysis config automation
+- Added package manager export exclusions
 
-## v0.4.24 (2024-09-04)
-* Added app task check support
+[Full list of changes](https://github.com/decodelabs/effigy/compare/v0.5.1...v0.5.2)
 
-## v0.4.23 (2024-09-04)
-* Added --global option to mount tasks
-* Improved analysis locality
+---
 
-## v0.4.22 (2024-08-21)
-* Converted consts to PascalCase
-* Updated dependencies
-* Updated Veneer dependency and Stub
+### [v0.5.1](https://github.com/decodelabs/effigy/commits/v0.5.1) - 14th April 2025
 
-## v0.4.21 (2024-08-09)
-* Added executables whitelist
+- Removed blog from readme
 
-## v0.4.20 (2024-08-09)
-* Ignore node_modules in executable permissions check
+[Full list of changes](https://github.com/decodelabs/effigy/compare/v0.5.0...v0.5.1)
 
-## v0.4.19 (2024-08-09)
-* Fixed git exports task
+---
 
-## v0.4.18 (2024-08-09)
-* Fixed test issues
+### [v0.5.0](https://github.com/decodelabs/effigy/commits/v0.5.0) - 9th April 2025
 
-## v0.4.17 (2024-08-09)
-* Fixed Controller stub
-* Added permission check to Prep task
-* Added git exports check to Prep task
-* Added ignored files to git exports task
-* Fixed check-executable-permissions task
+- Upgraded Bootstrap handling
+- Replaced Genesis info with Monarch
+- Removed Clip bin support
 
-## v0.4.16 (2024-07-17)
-* Updated Veneer dependency
+[Full list of changes](https://github.com/decodelabs/effigy/compare/v0.4.34...v0.5.0)
 
-## v0.4.15 (2024-07-12)
-* Added clip bin fallback if no entry file
+---
 
-## v0.4.14 (2024-05-15)
-* Updated github workflow template
+### [v0.4.34](https://github.com/decodelabs/effigy/commits/v0.4.34) - 10th March 2025
 
-## v0.4.13 (2024-04-29)
-* Updated gitattributes template
+- Removed vite configs from excluded exports
 
-## v0.4.12 (2024-04-29)
-* Upgraded ECS to v12
+[Full list of changes](https://github.com/decodelabs/effigy/compare/v0.4.33...v0.4.34)
 
-## v0.4.11 (2024-04-26)
-* Reinstalled Lucid
+---
 
-## v0.4.10 (2024-04-26)
-* Updated Archetype dependency
-* Updated dependency list
-
-## v0.4.9 (2023-12-06)
-* Fixed ignoreBins config option
-
-## v0.4.8 (2023-12-06)
-* Added ignoreBins option to config
-
-## v0.4.7 (2023-11-27)
-* Updated Dictum dependency
-* Made PHP8.1 minimum version
-
-## v0.4.6 (2023-11-07)
-* Support mounting unreferenced package
-* Updated templates to target PHP8.1
-* Updated gitignore template
-
-## v0.4.5 (2023-10-30)
-* Fixed readme template badge
-
-## v0.4.4 (2023-10-30)
-* Fixed README template
-* Updated Lucid dependency
-
-## v0.4.3 (2023-10-18)
-* Updated Genesis dependency
-
-## v0.4.2 (2023-10-16)
-* Updated Atlas dependency
-
-## v0.4.1 (2023-10-05)
-* Updated Terminus dependency
-
-## v0.4.0 (2022-12-09)
-* Renamed update task to upgrade
-
-## v0.3.8 (2022-12-06)
-* Clear caches after mounting
-
-## v0.3.7 (2022-12-06)
-* Added mount and unmount tasks for local repositories
-
-## v0.3.6 (2022-12-03)
-* Skip *.htm.php template files for non-ascii
-
-## v0.3.5 (2022-11-30)
-* Improved config selection in Analyze task
-
-## v0.3.4 (2022-11-30)
-* Fixed custom analyze script list
-
-## v0.3.3 (2022-11-30)
-* Switched to Systemic v0.11
-* Updated Dictum dependency
-* Ignore html.php template files in non-ascii check
-
-## v0.3.2 (2022-11-25)
-* Moved GenerateFileTrait to Clip
-* Added signals to app scripts
-
-## v0.3.1 (2022-11-25)
-* Use run dir for cwd when calling bins
-* Moved body of Template to Genesis
-* Improved version task
-* Added signal handlers to bin launcher
-
-## v0.3.0 (2022-11-24)
-* Switched composer integration to Integra
-* Moved config handling to standalone class
-* Added version task
-* Improved self-update task
-* Simplified arg handling
-* Added CI mode detection
-* Simplified bin path detection
-
-## v0.2.2 (2022-11-23)
-* Fixed arg passthrough to entry
-* Improved fall-through error handling
-
-## v0.2.1 (2022-11-22)
-* Fixed error handling
-
-## v0.2.0 (2022-11-22)
-* Switched to Clip for process initialisation
-* Renamed Command to Task
-* Register Controller as Veneer facade
-* Passthrough to available vendor bins
-* Create src folder during init-package
-
-## v0.1.14 (2022-11-22)
-* Fixed check for phpstan-decodelabs
-* Added null check in template config lookups
-* Init repo before init-package
-* Reload composer config after init-package
-* Generate CI workflow after init-package
-* Replaced template comment pattern
-* Fixed phpstan-decodelabs install check
-
-## v0.1.13 (2022-11-21)
-* Fixed local specialised phpstan script calls
-
-## v0.1.12 (2022-11-21)
-* Fixed phpstan dependency handling
-
-## v0.1.11 (2022-11-21)
-* Fixed analyze command
-* Fixed remove-local command
-
-## v0.1.10 (2022-11-21)
-* Use effigy dependencies for prep
-
-## v0.1.9 (2022-11-21)
-* Added Template and file generator structure
-* Added package initiator commands
-* Added check for local-install mode
-* Migrated to use effigy in CI workflow
-
-## v0.1.8 (2022-11-19)
-* Fixed headless options in analyze and format commands
-* Updated self-update command
-
-## v0.1.7 (2022-11-19)
-* Added veneer-stub command
-
-## v0.1.6 (2022-11-19)
-* Added full composer scripts replacement commands
-* Added codeDir config support
-* Added proper process termination handling
-
-## v0.1.5 (2022-11-08)
-* Added composer passthrough command
-
-## v0.1.4 (2022-11-08)
-* Added custom PHP bin config
-* Added self-update command
-* Standardised composer launcher
-
-## v0.1.3 (2022-11-07)
-* Improved exception handling
-
-## v0.1.2 (2022-11-07)
-* Added Command structure
-
-## v0.1.1 (2022-11-07)
-* Added bin to composer.json
-
-## v0.1.0 (2022-11-07)
-* Built initial codebase
+### [v0.4.33](https://github.com/decodelabs/effigy/commits/v0.4.33) - 6th March 2025
+
+- Added package and vite files to exports
+
+[Full list of changes](https://github.com/decodelabs/effigy/compare/v0.4.32...v0.4.33)
+
+---
+
+### [v0.4.32](https://github.com/decodelabs/effigy/commits/v0.4.32) - 25th February 2025
+
+- Use absolute paths for eclint
+
+[Full list of changes](https://github.com/decodelabs/effigy/compare/v0.4.31...v0.4.32)
+
+---
+
+### [v0.4.31](https://github.com/decodelabs/effigy/commits/v0.4.31) - 20th February 2025
+
+- Upgraded Coercion dependency
+- Upgraded Genesis dependency
+
+[Full list of changes](https://github.com/decodelabs/effigy/compare/v0.4.30...v0.4.31)
+
+---
+
+### [v0.4.30](https://github.com/decodelabs/effigy/commits/v0.4.30) - 14th February 2025
+
+- Upgraded PHPStan to v2
+- Upgraded dependencies
+- Tidied boolean logic
+- Fixed Exceptional syntax
+- Added PHP8.4 to CI workflow
+- Made PHP8.4 minimum version
+
+[Full list of changes](https://github.com/decodelabs/effigy/compare/v0.4.29...v0.4.30)
+
+---
+
+### [v0.4.29](https://github.com/decodelabs/effigy/commits/v0.4.29) - 6th November 2024
+
+- Improved executable file check command
+
+[Full list of changes](https://github.com/decodelabs/effigy/compare/v0.4.28...v0.4.29)
+
+---
+
+### [v0.4.28](https://github.com/decodelabs/effigy/commits/v0.4.28) - 20th October 2024
+
+- Added composer.lock to git export whitelist
+
+[Full list of changes](https://github.com/decodelabs/effigy/compare/v0.4.27...v0.4.28)
+
+---
+
+### [v0.4.27](https://github.com/decodelabs/effigy/commits/v0.4.27) - 20th October 2024
+
+- Fixed git-exports whitelist handling
+
+[Full list of changes](https://github.com/decodelabs/effigy/compare/v0.4.26...v0.4.27)
+
+---
+
+### [v0.4.26](https://github.com/decodelabs/effigy/commits/v0.4.26) - 4th September 2024
+
+- Improved PHPStan config generation
+
+[Full list of changes](https://github.com/decodelabs/effigy/compare/v0.4.25...v0.4.26)
+
+---
+
+### [v0.4.25](https://github.com/decodelabs/effigy/commits/v0.4.25) - 4th September 2024
+
+- Added analysis config automation
+
+[Full list of changes](https://github.com/decodelabs/effigy/compare/v0.4.24...v0.4.25)
+
+---
+
+### [v0.4.24](https://github.com/decodelabs/effigy/commits/v0.4.24) - 4th September 2024
+
+- Added app task check support
+
+[Full list of changes](https://github.com/decodelabs/effigy/compare/v0.4.23...v0.4.24)
+
+---
+
+### [v0.4.23](https://github.com/decodelabs/effigy/commits/v0.4.23) - 4th September 2024
+
+- Added --global option to mount tasks
+- Improved analysis locality
+
+[Full list of changes](https://github.com/decodelabs/effigy/compare/v0.4.22...v0.4.23)
+
+---
+
+### [v0.4.22](https://github.com/decodelabs/effigy/commits/v0.4.22) - 21st August 2024
+
+- Converted consts to PascalCase
+- Updated dependencies
+- Updated Veneer dependency and Stub
+
+[Full list of changes](https://github.com/decodelabs/effigy/compare/v0.4.21...v0.4.22)
+
+---
+
+### [v0.4.21](https://github.com/decodelabs/effigy/commits/v0.4.21) - 9th August 2024
+
+- Added executables whitelist
+
+[Full list of changes](https://github.com/decodelabs/effigy/compare/v0.4.20...v0.4.21)
+
+---
+
+### [v0.4.20](https://github.com/decodelabs/effigy/commits/v0.4.20) - 9th August 2024
+
+- Ignore node_modules in executable permissions check
+
+[Full list of changes](https://github.com/decodelabs/effigy/compare/v0.4.19...v0.4.20)
+
+---
+
+### [v0.4.19](https://github.com/decodelabs/effigy/commits/v0.4.19) - 9th August 2024
+
+- Fixed git exports task
+
+[Full list of changes](https://github.com/decodelabs/effigy/compare/v0.4.18...v0.4.19)
+
+---
+
+### [v0.4.18](https://github.com/decodelabs/effigy/commits/v0.4.18) - 9th August 2024
+
+- Fixed test issues
+
+[Full list of changes](https://github.com/decodelabs/effigy/compare/v0.4.17...v0.4.18)
+
+---
+
+### [v0.4.17](https://github.com/decodelabs/effigy/commits/v0.4.17) - 9th August 2024
+
+- Fixed Controller stub
+- Added permission check to Prep task
+- Added git exports check to Prep task
+- Added ignored files to git exports task
+- Fixed check-executable-permissions task
+
+[Full list of changes](https://github.com/decodelabs/effigy/compare/v0.4.16...v0.4.17)
+
+---
+
+### [v0.4.16](https://github.com/decodelabs/effigy/commits/v0.4.16) - 17th July 2024
+
+- Updated Veneer dependency
+
+[Full list of changes](https://github.com/decodelabs/effigy/compare/v0.4.15...v0.4.16)
+
+---
+
+### [v0.4.15](https://github.com/decodelabs/effigy/commits/v0.4.15) - 12th July 2024
+
+- Added clip bin fallback if no entry file
+
+[Full list of changes](https://github.com/decodelabs/effigy/compare/v0.4.14...v0.4.15)
+
+---
+
+### [v0.4.14](https://github.com/decodelabs/effigy/commits/v0.4.14) - 15th May 2024
+
+- Updated github workflow template
+
+[Full list of changes](https://github.com/decodelabs/effigy/compare/v0.4.13...v0.4.14)
+
+---
+
+### [v0.4.13](https://github.com/decodelabs/effigy/commits/v0.4.13) - 29th April 2024
+
+- Updated gitattributes template
+
+[Full list of changes](https://github.com/decodelabs/effigy/compare/v0.4.12...v0.4.13)
+
+---
+
+### [v0.4.12](https://github.com/decodelabs/effigy/commits/v0.4.12) - 29th April 2024
+
+- Upgraded ECS to v12
+
+[Full list of changes](https://github.com/decodelabs/effigy/compare/v0.4.11...v0.4.12)
+
+---
+
+### [v0.4.11](https://github.com/decodelabs/effigy/commits/v0.4.11) - 26th April 2024
+
+- Reinstalled Lucid
+
+[Full list of changes](https://github.com/decodelabs/effigy/compare/v0.4.10...v0.4.11)
+
+---
+
+### [v0.4.10](https://github.com/decodelabs/effigy/commits/v0.4.10) - 26th April 2024
+
+- Updated Archetype dependency
+- Updated dependency list
+
+[Full list of changes](https://github.com/decodelabs/effigy/compare/v0.4.9...v0.4.10)
+
+---
+
+### [v0.4.9](https://github.com/decodelabs/effigy/commits/v0.4.9) - 6th December 2023
+
+- Fixed ignoreBins config option
+
+[Full list of changes](https://github.com/decodelabs/effigy/compare/v0.4.8...v0.4.9)
+
+---
+
+### [v0.4.8](https://github.com/decodelabs/effigy/commits/v0.4.8) - 6th December 2023
+
+- Added ignoreBins option to config
+
+[Full list of changes](https://github.com/decodelabs/effigy/compare/v0.4.7...v0.4.8)
+
+---
+
+### [v0.4.7](https://github.com/decodelabs/effigy/commits/v0.4.7) - 27th November 2023
+
+- Updated Dictum dependency
+- Made PHP8.1 minimum version
+
+[Full list of changes](https://github.com/decodelabs/effigy/compare/v0.4.6...v0.4.7)
+
+---
+
+### [v0.4.6](https://github.com/decodelabs/effigy/commits/v0.4.6) - 7th November 2023
+
+- Support mounting unreferenced package
+- Updated templates to target PHP8.1
+- Updated gitignore template
+
+[Full list of changes](https://github.com/decodelabs/effigy/compare/v0.4.5...v0.4.6)
+
+---
+
+### [v0.4.5](https://github.com/decodelabs/effigy/commits/v0.4.5) - 30th October 2023
+
+- Fixed readme template badge
+
+[Full list of changes](https://github.com/decodelabs/effigy/compare/v0.4.4...v0.4.5)
+
+---
+
+### [v0.4.4](https://github.com/decodelabs/effigy/commits/v0.4.4) - 30th October 2023
+
+- Fixed README template
+- Updated Lucid dependency
+
+[Full list of changes](https://github.com/decodelabs/effigy/compare/v0.4.3...v0.4.4)
+
+---
+
+### [v0.4.3](https://github.com/decodelabs/effigy/commits/v0.4.3) - 18th October 2023
+
+- Updated Genesis dependency
+
+[Full list of changes](https://github.com/decodelabs/effigy/compare/v0.4.2...v0.4.3)
+
+---
+
+### [v0.4.2](https://github.com/decodelabs/effigy/commits/v0.4.2) - 16th October 2023
+
+- Updated Atlas dependency
+
+[Full list of changes](https://github.com/decodelabs/effigy/compare/v0.4.1...v0.4.2)
+
+---
+
+### [v0.4.1](https://github.com/decodelabs/effigy/commits/v0.4.1) - 5th October 2023
+
+- Updated Terminus dependency
+
+[Full list of changes](https://github.com/decodelabs/effigy/compare/v0.4.0...v0.4.1)
+
+---
+
+### [v0.4.0](https://github.com/decodelabs/effigy/commits/v0.4.0) - 9th December 2022
+
+- Renamed update task to upgrade
+
+[Full list of changes](https://github.com/decodelabs/effigy/compare/v0.3.8...v0.4.0)
+
+---
+
+### [v0.3.8](https://github.com/decodelabs/effigy/commits/v0.3.8) - 6th December 2022
+
+- Clear caches after mounting
+
+[Full list of changes](https://github.com/decodelabs/effigy/compare/v0.3.7...v0.3.8)
+
+---
+
+### [v0.3.7](https://github.com/decodelabs/effigy/commits/v0.3.7) - 6th December 2022
+
+- Added mount and unmount tasks for local repositories
+
+[Full list of changes](https://github.com/decodelabs/effigy/compare/v0.3.6...v0.3.7)
+
+---
+
+### [v0.3.6](https://github.com/decodelabs/effigy/commits/v0.3.6) - 3rd December 2022
+
+- Skip *.htm.php template files for non-ascii
+
+[Full list of changes](https://github.com/decodelabs/effigy/compare/v0.3.5...v0.3.6)
+
+---
+
+### [v0.3.5](https://github.com/decodelabs/effigy/commits/v0.3.5) - 30th November 2022
+
+- Improved config selection in Analyze task
+
+[Full list of changes](https://github.com/decodelabs/effigy/compare/v0.3.4...v0.3.5)
+
+---
+
+### [v0.3.4](https://github.com/decodelabs/effigy/commits/v0.3.4) - 30th November 2022
+
+- Fixed custom analyze script list
+
+[Full list of changes](https://github.com/decodelabs/effigy/compare/v0.3.3...v0.3.4)
+
+---
+
+### [v0.3.3](https://github.com/decodelabs/effigy/commits/v0.3.3) - 30th November 2022
+
+- Switched to Systemic v0.11
+- Updated Dictum dependency
+- Ignore html.php template files in non-ascii check
+
+[Full list of changes](https://github.com/decodelabs/effigy/compare/v0.3.2...v0.3.3)
+
+---
+
+### [v0.3.2](https://github.com/decodelabs/effigy/commits/v0.3.2) - 25th November 2022
+
+- Moved GenerateFileTrait to Clip
+- Added signals to app scripts
+
+[Full list of changes](https://github.com/decodelabs/effigy/compare/v0.3.1...v0.3.2)
+
+---
+
+### [v0.3.1](https://github.com/decodelabs/effigy/commits/v0.3.1) - 25th November 2022
+
+- Use run dir for cwd when calling bins
+- Moved body of Template to Genesis
+- Improved version task
+- Added signal handlers to bin launcher
+
+[Full list of changes](https://github.com/decodelabs/effigy/compare/v0.3.0...v0.3.1)
+
+---
+
+### [v0.3.0](https://github.com/decodelabs/effigy/commits/v0.3.0) - 24th November 2022
+
+- Switched composer integration to Integra
+- Moved config handling to standalone class
+- Added version task
+- Improved self-update task
+- Simplified arg handling
+- Added CI mode detection
+- Simplified bin path detection
+
+[Full list of changes](https://github.com/decodelabs/effigy/compare/v0.2.2...v0.3.0)
+
+---
+
+### [v0.2.2](https://github.com/decodelabs/effigy/commits/v0.2.2) - 23rd November 2022
+
+- Fixed arg passthrough to entry
+- Improved fall-through error handling
+
+[Full list of changes](https://github.com/decodelabs/effigy/compare/v0.2.1...v0.2.2)
+
+---
+
+### [v0.2.1](https://github.com/decodelabs/effigy/commits/v0.2.1) - 22nd November 2022
+
+- Fixed error handling
+
+[Full list of changes](https://github.com/decodelabs/effigy/compare/v0.2.0...v0.2.1)
+
+---
+
+### [v0.2.0](https://github.com/decodelabs/effigy/commits/v0.2.0) - 22nd November 2022
+
+- Switched to Clip for process initialisation
+- Renamed Command to Task
+- Register Controller as Veneer facade
+- Passthrough to available vendor bins
+- Create src folder during init-package
+
+[Full list of changes](https://github.com/decodelabs/effigy/compare/v0.1.14...v0.2.0)
+
+---
+
+### [v0.1.14](https://github.com/decodelabs/effigy/commits/v0.1.14) - 22nd November 2022
+
+- Fixed check for phpstan-decodelabs
+- Added null check in template config lookups
+- Init repo before init-package
+- Reload composer config after init-package
+- Generate CI workflow after init-package
+- Replaced template comment pattern
+- Fixed phpstan-decodelabs install check
+
+[Full list of changes](https://github.com/decodelabs/effigy/compare/v0.1.13...v0.1.14)
+
+---
+
+### [v0.1.13](https://github.com/decodelabs/effigy/commits/v0.1.13) - 21st November 2022
+
+- Fixed local specialised phpstan script calls
+
+[Full list of changes](https://github.com/decodelabs/effigy/compare/v0.1.12...v0.1.13)
+
+---
+
+### [v0.1.12](https://github.com/decodelabs/effigy/commits/v0.1.12) - 21st November 2022
+
+- Fixed phpstan dependency handling
+
+[Full list of changes](https://github.com/decodelabs/effigy/compare/v0.1.11...v0.1.12)
+
+---
+
+### [v0.1.11](https://github.com/decodelabs/effigy/commits/v0.1.11) - 21st November 2022
+
+- Fixed analyze command
+- Fixed remove-local command
+
+[Full list of changes](https://github.com/decodelabs/effigy/compare/v0.1.10...v0.1.11)
+
+---
+
+### [v0.1.10](https://github.com/decodelabs/effigy/commits/v0.1.10) - 21st November 2022
+
+- Use effigy dependencies for prep
+
+[Full list of changes](https://github.com/decodelabs/effigy/compare/v0.1.9...v0.1.10)
+
+---
+
+### [v0.1.9](https://github.com/decodelabs/effigy/commits/v0.1.9) - 21st November 2022
+
+- Added Template and file generator structure
+- Added package initiator commands
+- Added check for local-install mode
+- Migrated to use effigy in CI workflow
+
+[Full list of changes](https://github.com/decodelabs/effigy/compare/v0.1.8...v0.1.9)
+
+---
+
+### [v0.1.8](https://github.com/decodelabs/effigy/commits/v0.1.8) - 19th November 2022
+
+- Fixed headless options in analyze and format commands
+- Updated self-update command
+
+[Full list of changes](https://github.com/decodelabs/effigy/compare/v0.1.7...v0.1.8)
+
+---
+
+### [v0.1.7](https://github.com/decodelabs/effigy/commits/v0.1.7) - 19th November 2022
+
+- Added veneer-stub command
+
+[Full list of changes](https://github.com/decodelabs/effigy/compare/v0.1.6...v0.1.7)
+
+---
+
+### [v0.1.6](https://github.com/decodelabs/effigy/commits/v0.1.6) - 19th November 2022
+
+- Added full composer scripts replacement commands
+- Added codeDir config support
+- Added proper process termination handling
+
+[Full list of changes](https://github.com/decodelabs/effigy/compare/v0.1.5...v0.1.6)
+
+---
+
+### [v0.1.5](https://github.com/decodelabs/effigy/commits/v0.1.5) - 8th November 2022
+
+- Added composer passthrough command
+
+[Full list of changes](https://github.com/decodelabs/effigy/compare/v0.1.4...v0.1.5)
+
+---
+
+### [v0.1.4](https://github.com/decodelabs/effigy/commits/v0.1.4) - 8th November 2022
+
+- Added custom PHP bin config
+- Added self-update command
+- Standardised composer launcher
+
+[Full list of changes](https://github.com/decodelabs/effigy/compare/v0.1.3...v0.1.4)
+
+---
+
+### [v0.1.3](https://github.com/decodelabs/effigy/commits/v0.1.3) - 7th November 2022
+
+- Improved exception handling
+
+[Full list of changes](https://github.com/decodelabs/effigy/compare/v0.1.2...v0.1.3)
+
+---
+
+### [v0.1.2](https://github.com/decodelabs/effigy/commits/v0.1.2) - 7th November 2022
+
+- Added Command structure
+
+[Full list of changes](https://github.com/decodelabs/effigy/compare/v0.1.1...v0.1.2)
+
+---
+
+### [v0.1.1](https://github.com/decodelabs/effigy/commits/v0.1.1) - 7th November 2022
+
+- Added bin to composer.json
+
+[Full list of changes](https://github.com/decodelabs/effigy/compare/v0.1.0...v0.1.1)
+
+---
+
+### [v0.1.0](https://github.com/decodelabs/effigy/commits/v0.1.0) - 7th November 2022
+
+- Built initial codebase
