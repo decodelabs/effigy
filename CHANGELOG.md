@@ -5,8 +5,16 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ### Unreleased
+--
+
+---
+
+### [v0.7.0](https://github.com/decodelabs/effigy/commits/v0.7.0) - 19th May 2025
+
 - Upgraded to use Commandment Dispatcher system
 - Upgraded Clip to v0.5.0
+
+[Full list of changes](https://github.com/decodelabs/effigy/compare/v0.6.3...v0.7.0)
 
 ---
 
