@@ -11,6 +11,10 @@ use DecodeLabs\Effigy\Controller as Inst;
 use DecodeLabs\Effigy\Config as ConfigPlugin;
 use DecodeLabs\Integra\Project as ProjectPlugin;
 use DecodeLabs\Atlas\File as Ref0;
+use DecodeLabs\Terminus\Session as Ref1;
+use DecodeLabs\Slingshot as Ref2;
+use DecodeLabs\Commandment\Request as Ref3;
+use DecodeLabs\Commandment\Middleware as Ref4;
 
 class Effigy implements Proxy
 {
@@ -62,11 +66,11 @@ class Effigy implements Proxy
     public static function getEntryFile(): ?Ref0 {
         return static::$_veneerInstance->getEntryFile();
     }
-    public static function hasAppTask(string $name): bool {
-        return static::$_veneerInstance->hasAppTask(...func_get_args());
+    public static function hasAppAction(string $name): bool {
+        return static::$_veneerInstance->hasAppAction(...func_get_args());
     }
-    public static function runAppTask(string $name, string ...$args): bool {
-        return static::$_veneerInstance->runAppTask(...func_get_args());
+    public static function runAppAction(string $name, string ...$args): bool {
+        return static::$_veneerInstance->runAppAction(...func_get_args());
     }
     public static function getCodeDirs(): array {
         return static::$_veneerInstance->getCodeDirs();
@@ -83,13 +87,26 @@ class Effigy implements Proxy
     public static function glitchDump(): iterable {
         return static::$_veneerInstance->glitchDump();
     }
-    public static function hasTask(string $name): bool {
-        return static::$_veneerInstance->hasTask(...func_get_args());
+    public static function runAction(string $name, array $args = []): bool {
+        return static::$_veneerInstance->runAction(...func_get_args());
     }
-    public static function runTask(string $name, array $args = []): bool {
-        return static::$_veneerInstance->runTask(...func_get_args());
+    public static function getIoSession(): Ref1 {
+        return static::$_veneerInstance->getIoSession();
     }
-    public static function getTaskClass(string $name): ?string {
-        return static::$_veneerInstance->getTaskClass(...func_get_args());
+    public static function newRequest(string $command, array $arguments = [], array $attributes = [], ?array $server = NULL, ?Ref2 $slingshot = NULL): Ref3 {
+        return static::$_veneerInstance->newRequest(...func_get_args());
+    }
+    public static function addMiddleware(Ref4 $middleware): void {}
+    public static function dispatch(Ref3 $request): bool {
+        return static::$_veneerInstance->dispatch(...func_get_args());
+    }
+    public static function getActionAttributes(string $class): array {
+        return static::$_veneerInstance->getActionAttributes(...func_get_args());
+    }
+    public static function hasAction(string $name): bool {
+        return static::$_veneerInstance->hasAction(...func_get_args());
+    }
+    public static function getActionClass(string $name): ?string {
+        return static::$_veneerInstance->getActionClass(...func_get_args());
     }
 };

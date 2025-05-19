@@ -12,7 +12,7 @@ namespace DecodeLabs\Effigy;
 use DecodeLabs\Archetype;
 use DecodeLabs\Clip\Controller as ControllerInterface;
 use DecodeLabs\Clip\Hub as ClipHub;
-use DecodeLabs\Clip\Task as TaskInterface;
+use DecodeLabs\Commandment\Action as ActionInterface;
 use DecodeLabs\Glitch;
 use DecodeLabs\Monarch;
 use DecodeLabs\Pandora\Container;
@@ -24,11 +24,11 @@ class Hub extends ClipHub
     {
         parent::initializePlatform();
 
-        Archetype::map(TaskInterface::class, Task::class);
-
+        // @phpstan-ignore-next-line
+        Archetype::map(ActionInterface::class, Action::class);
         $controller = new Controller();
 
-        if(Monarch::$container instanceof Container) {
+        if (Monarch::$container instanceof Container) {
             Monarch::$container->bindShared(ControllerInterface::class, $controller);
             Monarch::$container->bindShared(Controller::class, $controller);
         }

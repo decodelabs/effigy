@@ -54,11 +54,10 @@ class Config
     }
 
     /**
-     * Load composer config
-     *
      * @phpstan-return TConfig
      */
-    protected function loadData(): array {
+    protected function loadData(): array
+    {
         $output = $this->parse($this->project->getExtra()->effigy);
 
         if ($this->file->exists()) {
@@ -70,17 +69,12 @@ class Config
         return $output;
     }
 
-    /**
-     * Get file
-     */
     public function getFile(): File
     {
         return $this->file;
     }
 
     /**
-     * Convert to array
-     *
      * @phpstan-return TConfig
      */
     public function toArray(): array
@@ -89,9 +83,6 @@ class Config
     }
 
 
-    /**
-     * Set value
-     */
     public function set(
         string $key,
         mixed $value
@@ -106,9 +97,6 @@ class Config
     }
 
 
-    /**
-     * Get param from config or user
-     */
     public function getParam(
         string $slug
     ): string {
@@ -128,26 +116,17 @@ class Config
     }
 
 
-    /**
-     * Get PHP binary
-     */
     public function getPhpBinary(): ?string
     {
         return $this->data['php'] ?? null;
     }
 
 
-    /**
-     * Has entry
-     */
     public function hasEntry(): bool
     {
         return isset($this->data['entry']);
     }
 
-    /**
-     * Get entry
-     */
     public function getEntry(): ?string
     {
         return $this->data['entry'] ?? null;
@@ -155,8 +134,6 @@ class Config
 
 
     /**
-     * Get code paths
-     *
      * @return array<string,Dir>
      */
     public function getCodeDirs(): array
@@ -181,8 +158,6 @@ class Config
     }
 
     /**
-     * Get ignored bins
-     *
      * @return array<string>
      */
     public function getIgnoredBins(): array
@@ -191,8 +166,6 @@ class Config
     }
 
     /**
-     * Get exports whitelist
-     *
      * @return array<string>
      */
     public function getExportsWhitelist(): array
@@ -201,8 +174,6 @@ class Config
     }
 
     /**
-     * Get executables whitelist
-     *
      * @return array<string>
      */
     public function getExecutablesWhitelist(): array
@@ -211,9 +182,7 @@ class Config
     }
 
     /**
-     * Get local repos list
-     *
-     * @return array<string, string>
+     * @return array<string,string>
      */
     public function getLocalRepos(): array
     {
@@ -224,9 +193,6 @@ class Config
 
 
 
-    /**
-     * Save user config
-     */
     public function save(): void
     {
         if (empty($this->new)) {
@@ -268,8 +234,6 @@ class Config
 
 
     /**
-     * Parse config
-     *
      * @param array<string,mixed>|Tree<string|int|float|bool> $config
      * @phpstan-return TConfig
      */
@@ -327,8 +291,6 @@ class Config
     }
 
     /**
-     * Merge config data
-     *
      * @param array<string,mixed> $config,
      * @param array<string,mixed> $new
      * @return array<string,mixed>

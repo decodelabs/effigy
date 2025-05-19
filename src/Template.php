@@ -10,8 +10,8 @@ declare(strict_types=1);
 namespace DecodeLabs\Effigy;
 
 use DecodeLabs\Dictum;
-use DecodeLabs\Genesis\FileTemplate;
 use DecodeLabs\Effigy;
+use DecodeLabs\Genesis\FileTemplate;
 use DecodeLabs\Terminus as Cli;
 
 class Template extends FileTemplate
@@ -76,9 +76,6 @@ class Template extends FileTemplate
     }
 
 
-    /**
-     * Get package intro
-     */
     protected function getPackageIntro(): string
     {
         return $this->getSlot('pkgTitle') . ' provides ...';
@@ -86,8 +83,6 @@ class Template extends FileTemplate
 
 
     /**
-     * Get package PHP extensions
-     *
      * @return array<string>
      */
     protected function getPackagePhpExtensions(): array
@@ -98,9 +93,6 @@ class Template extends FileTemplate
         ));
     }
 
-    /**
-     * Get git branch
-     */
     protected function getGitBranch(): string
     {
         return (string)exec('git branch --show-current');

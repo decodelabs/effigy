@@ -13,12 +13,11 @@ use DecodeLabs\Atlas;
 use DecodeLabs\Atlas\Dir;
 use DecodeLabs\Atlas\File;
 use DecodeLabs\Clip\Controller as ControllerInterface;
-use DecodeLabs\Clip\Controller\Generic as GenericController;
+use DecodeLabs\Clip\Controller\Commandment as CommandmentController;
 use DecodeLabs\Coercion;
 use DecodeLabs\Effigy;
 use DecodeLabs\Exceptional;
 use DecodeLabs\Glitch\Dumpable;
-use DecodeLabs\Integra;
 use DecodeLabs\Integra\Project;
 use DecodeLabs\Monarch;
 use DecodeLabs\Systemic;
@@ -37,7 +36,7 @@ use Throwable;
  *     'exports'?: array<string>
  * }
  */
-class Controller extends GenericController implements
+class Controller extends CommandmentController implements
     ControllerInterface,
     Dumpable
 {
@@ -52,12 +51,11 @@ class Controller extends GenericController implements
     protected ?File $entryFile = null;
 
 
-    /**
-     * Initialize paths
-     */
     public function __construct(
         ?Project $project = null
     ) {
+        parent::__construct();
+
         $this->project = $project ?? new Project();
         $this->config = new Config($this->project);
 
@@ -73,23 +71,18 @@ class Controller extends GenericController implements
             $parent === (string)$this->project->rootDir->getDir('bin');
 
         // Integra config
-        if(null !== ($bin = $this->config->getPhpBinary())) {
+        if (null !== ($bin = $this->config->getPhpBinary())) {
             $this->project->setBinaryPath('php', $bin);
         }
     }
 
 
-    /**
-     * Is local installation
-     */
     public function isLocal(): bool
     {
         return $this->local;
     }
 
     /**
-     * Set CI mode
-     *
      * @return $this
      */
     public function setCiMode(
@@ -99,9 +92,6 @@ class Controller extends GenericController implements
         return $this;
     }
 
-    /**
-     * Get CI mode
-     */
     public function isCiMode(): bool
     {
         if (isset($this->ciMode)) {
@@ -113,9 +103,6 @@ class Controller extends GenericController implements
     }
 
 
-    /**
-     * Run controller
-     */
     public function run(
         string $name,
         string ...$args
@@ -126,9 +113,9 @@ class Controller extends GenericController implements
         }
 
 
-        // Confirmed app task
-        if ($this->hasAppTask($name)) {
-            return $this->runAppTask($name, ...$args);
+        // Confirmed app Action
+        if ($this->hasAppAction($name)) {
+            return $this->runAppAction($name, ...$args);
         }
 
 
@@ -139,8 +126,8 @@ class Controller extends GenericController implements
 
 
         // Commands
-        if ($this->hasTask($name)) {
-            if ($this->runTask($name, $args)) {
+        if ($this->hasAction($name)) {
+            if ($this->runAction($name, array_values($args))) {
                 $this->config->save();
                 return true;
             } else {
@@ -161,12 +148,9 @@ class Controller extends GenericController implements
         }
 
 
-        return $this->runAppTask($name, ...$args);
+        return $this->runAppAction($name, ...$args);
     }
 
-    /**
-     * Run git command
-     */
     public function runGit(
         string $name,
         string ...$args
@@ -177,9 +161,6 @@ class Controller extends GenericController implements
         );
     }
 
-    /**
-     * Ask git quietly
-     */
     public function askGit(
         string $name,
         string ...$args
@@ -198,22 +179,17 @@ class Controller extends GenericController implements
 
 
 
-    /**
-     * Can run script or command
-     */
     public function canRun(
         string $name
     ): bool {
         return
             $this->hasComposerScript($name) ||
-            $this->hasTask($name) ||
+            $this->hasAction($name) ||
             $this->hasVendorBin($name);
     }
 
 
     /**
-     * Get list of composer scripts
-     *
      * @return array<string>
      */
     public function getComposerScripts(): array
@@ -221,18 +197,12 @@ class Controller extends GenericController implements
         return $this->project->getScripts();
     }
 
-    /**
-     * Composer script exists
-     */
     public function hasComposerScript(
         string $name
     ): bool {
         return $this->project->hasScript($name);
     }
 
-    /**
-     * Run composer script
-     */
     public function runComposerScript(
         string $name,
         string ...$args
@@ -243,8 +213,6 @@ class Controller extends GenericController implements
 
 
     /**
-     * Get vendor bins
-     *
      * @return array<File>
      */
     public function getVendorBins(): array
@@ -252,9 +220,6 @@ class Controller extends GenericController implements
         return $this->project->getBins();
     }
 
-    /**
-     * Composer vendor bin exists
-     */
     public function hasVendorBin(
         string $name
     ): bool {
@@ -269,9 +234,6 @@ class Controller extends GenericController implements
 
 
 
-    /**
-     * Get entry file
-     */
     public function getEntryFile(): ?File
     {
         if ($this->entryFile !== null) {
@@ -327,14 +289,11 @@ class Controller extends GenericController implements
         );
     }
 
-    /**
-     * Ask app if it supports a task
-     */
-    public function hasAppTask(
+    public function hasAppAction(
         string $name
     ): bool {
-        if ($name === 'effigy/has-task') {
-            return false;
+        if ($name === 'action-exists') {
+            return true;
         }
 
         try {
@@ -349,7 +308,7 @@ class Controller extends GenericController implements
             $result = Systemic::command([
                     $this->project->getBinaryPath('php'),
                     $entry->getPath(),
-                    'effigy/has-task',
+                    'action-exists',
                     $name
                 ])
                 ->addSignal('SIGINT', 'SIGTERM', 'SIGQUIT')
@@ -361,10 +320,7 @@ class Controller extends GenericController implements
         }
     }
 
-    /**
-     * Run app task via entry or clip
-     */
-    public function runAppTask(
+    public function runAppAction(
         string $name,
         string ...$args
     ): bool {
@@ -405,8 +361,6 @@ class Controller extends GenericController implements
 
 
     /**
-     * Get code paths
-     *
      * @return array<string, Dir>
      */
     public function getCodeDirs(): array
@@ -415,8 +369,6 @@ class Controller extends GenericController implements
     }
 
     /**
-     * Get exports whitelist
-     *
      * @return array<string>
      */
     public function getExportsWhitelist(): array
@@ -425,8 +377,6 @@ class Controller extends GenericController implements
     }
 
     /**
-     * Get executables whitelist
-     *
      * @return array<string>
      */
     public function getExecutablesWhitelist(): array
@@ -435,9 +385,6 @@ class Controller extends GenericController implements
     }
 
 
-    /**
-     * Get global install path
-     */
     public function getGlobalPath(): string
     {
         $result = Systemic::capture(
@@ -467,9 +414,6 @@ class Controller extends GenericController implements
 
 
 
-    /**
-     * Export for dump inspection
-     */
     public function glitchDump(): iterable
     {
         yield 'properties' => [
