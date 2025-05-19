@@ -45,7 +45,7 @@ trait RepoVersionTrait
             }
 
             if(!$lastVersion) {
-                return 'feature';
+                return 'v0.1.0';
             }
 
             $breaking = Cli::confirm('Does this release have any breaking changes?');

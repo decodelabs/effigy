@@ -101,15 +101,15 @@ class Release implements Task
             );
         }
 
-        $body = $renderer->renderNextRelease(
+        $releaseNotes = $renderer->renderNextRelease(
             $release,
-            withHeader: false
+            withHeader: true
         );
 
         Cli::newLine();
         Cli::info('Release notes:');
         Cli::newLine();
-        Cli::{'.brightYellow'}($body);
+        Cli::{'.brightYellow'}($releaseNotes);
         Cli::newLine();
 
         if(!Cli::confirm('Is this release correct?')) {
@@ -150,6 +150,11 @@ class Release implements Task
 
         Cli::newLine();
         Cli::info('Pushing changes to release branch...');
+
+        $body = $renderer->renderNextRelease(
+            $release,
+            withHeader: false
+        );
 
         if(!Effigy::runGit('tag', $version, '-m', $body)) {
             throw Exceptional::Runtime(

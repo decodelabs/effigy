@@ -6,6 +6,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Unreleased
 - Text change in release Task
+- Fixed first version handling
+- Show release notes header in confirmation
 
 ---
 
