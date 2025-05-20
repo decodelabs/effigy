@@ -48,9 +48,16 @@ trait RepoVersionTrait
 
             $breaking = $this->io->confirm('Does this release have any breaking changes?');
 
-            $version = $doc->validateNextVersion(
-                $breaking ? 'breaking' : 'feature'
-            );
+            if($breaking) {
+                $version = 'breaking';
+            } elseif(str_starts_with($lastVersion, 'v0.')) {
+                $version = 'feature';
+            } else {
+                $feature = $this->io->confirm('Does this release have any new features?');
+                $version = $feature ? 'feature' : 'patch';
+            }
+
+            $version = $doc->validateNextVersion($version);
 
             $this->io->newLine();
             $this->io->newLine();

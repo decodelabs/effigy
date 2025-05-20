@@ -6,6 +6,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Unreleased
 - Fixed tokenised version input parsing in release Action
+- Added patch version question to release Action
 
 ---
 
