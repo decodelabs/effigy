@@ -13,8 +13,8 @@ use DecodeLabs\Atlas\Dir;
 use DecodeLabs\Atlas\File;
 use DecodeLabs\Coercion;
 use DecodeLabs\Collections\Tree;
+use DecodeLabs\Effigy;
 use DecodeLabs\Integra\Project;
-use DecodeLabs\Terminus as Cli;
 
 /**
  * @phpstan-type TConfig array{
@@ -104,7 +104,9 @@ class Config
             return $this->data['params'][$slug];
         }
 
-        $value = (string)Cli::ask(
+        $io = Effigy::getIoSession();
+
+        $value = (string)$io->ask(
             message: 'What is your "' . $slug . '" value?',
             validator: function (string $value) {
                 return strlen($value) > 0;

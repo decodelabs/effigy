@@ -267,9 +267,11 @@ class Controller extends CommandmentController implements
         $matches = $matches[1] ?? [];
 
         if (!empty($matches)) {
-            Cli::newLine();
-            Cli::write('Found entry: ');
-            Cli::{'..brightYellow'}($entry);
+            $io = $this->getIoSession();
+
+            $io->newLine();
+            $io->write('Found entry: ');
+            $io->{'..brightYellow'}($entry);
 
             foreach ($matches as $slug) {
                 $param = $this->config->getParam($slug);

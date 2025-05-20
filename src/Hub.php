@@ -36,11 +36,14 @@ class Hub extends ClipHub
         set_exception_handler(function ($e) use ($controller) {
             if ($controller->isLocal()) {
                 Glitch::handleException($e);
-            } else {
-                Terminus::newLine();
-                Terminus::error($e->getMessage());
-                Terminus::newLine();
+                return;
             }
+
+            $io = $controller->getIoSession();
+
+            $io->newLine();
+            $io->error($e->getMessage());
+            $io->newLine();
         });
     }
 }

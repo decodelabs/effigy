@@ -20,11 +20,12 @@ class Template extends FileTemplate
         string $name
     ): ?string {
         $manifest = Effigy::$project->getLocalManifest();
+        $io = Effigy::getIoSession();
 
         switch ($name) {
             case 'pkgName':
                 return $manifest->getName() ??
-                    Cli::ask('What is your full package name?', function () {
+                    $io->ask('What is your full package name?', function () {
                         $name = Effigy::$project->rootDir->getName();
                         return Effigy::$project->rootDir->getParent()?->getName() . '/' . $name;
                     });
@@ -35,11 +36,11 @@ class Template extends FileTemplate
 
             case 'pkgDescription':
                 return $manifest->getDescription() ??
-                    Cli::ask('Describe your package');
+                    $io->ask('Describe your package');
 
             case 'pkgType':
                 return $manifest->getType() ??
-                    Cli::ask('What type of package is this?', 'library');
+                    $io->ask('What type of package is this?', 'library');
 
             case 'pkgLicense':
                 $license = $manifest->getLicense();
@@ -53,7 +54,7 @@ class Template extends FileTemplate
                 }
 
                 return $license ??
-                    Cli::ask('What license does your package use?', 'MIT');
+                    $io->ask('What license does your package use?', 'MIT');
 
             case 'pkgIntro':
                 return $this->getPackageIntro();
