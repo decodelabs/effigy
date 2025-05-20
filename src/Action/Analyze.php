@@ -48,7 +48,7 @@ class Analyze implements Action
         }
 
         // Clear
-        $clear = $request->parameters->getAsBool('clear');
+        $clear = $request->parameters->asBool('clear');
 
         if ($clear) {
             return Effigy::$project->runBin('phpstan', 'clear-result-cache');
@@ -58,7 +58,7 @@ class Analyze implements Action
         // Main analyze
         $args = ['phpstan'];
 
-        if ($request->parameters->getAsBool('debug')) {
+        if ($request->parameters->asBool('debug')) {
             $args[] = '--debug';
         }
 
@@ -66,7 +66,7 @@ class Analyze implements Action
             $args[] = '--no-progress';
         }
 
-        if ($confFile = $request->parameters->getAsString('configuration')) {
+        if ($confFile = $request->parameters->tryString('configuration')) {
             $confs = [$confFile];
         } else {
             $confs = $this->findConfigFiles();

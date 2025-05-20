@@ -38,7 +38,7 @@ class SelfUpdate implements Action
         // Local / global
         $global = !Effigy::isLocal();
 
-        if ($request->parameters->getAsBool('global')) {
+        if ($request->parameters->asBool('global')) {
             $global = true;
         }
 
@@ -65,7 +65,7 @@ class SelfUpdate implements Action
 
         $packageName = 'decodelabs/effigy';
 
-        if ($request->parameters->getAsBool('dev')) {
+        if ($request->parameters->asBool('dev')) {
             $packageName .= ':dev-develop';
         }
 

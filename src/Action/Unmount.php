@@ -50,10 +50,10 @@ class Unmount implements Action
     public function execute(
         Request $request
     ): bool {
-        $packages = $request->parameters->getAsStringList('packages');
-        $all = $request->parameters->getAsBool('all');
+        $packages = $request->parameters->asStringList('packages');
+        $all = $request->parameters->asBool('all');
 
-        if ($request->parameters->getAsBool('global')) {
+        if ($request->parameters->asBool('global')) {
             return $this->runGlobal($packages, $all);
         }
 

@@ -40,7 +40,7 @@ class Format implements Action
 
         $args = ['ecs'];
 
-        if (!$request->parameters->getAsBool('check')) {
+        if (!$request->parameters->asBool('check')) {
             $args[] = '--fix';
         }
 

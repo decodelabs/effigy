@@ -46,9 +46,9 @@ class Mount implements Action
         Request $request
     ): bool {
         $conf = Effigy::$project->getLocalManifest()->getRepositoryConfig();
-        $packages = $request->parameters->getAsStringList('packages') ?? [];
+        $packages = $request->parameters->asStringList('packages');
 
-        if ($request->parameters->getAsBool('global')) {
+        if ($request->parameters->asBool('global')) {
             return $this->runGlobal($packages);
         }
 

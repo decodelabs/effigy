@@ -39,7 +39,7 @@ class WriteChangelog implements Action
         Request $request
     ): bool {
         $repo = new Repository(Effigy::$project->rootDir);
-        $rewrite = $request->parameters->getAsBool('rewrite');
+        $rewrite = $request->parameters->asBool('rewrite');
 
         $doc = $repo->parseChangeLog(
             rewrite: $rewrite
@@ -50,7 +50,7 @@ class WriteChangelog implements Action
 
             $version = $this->askRepoVersion(
                 $doc,
-                $request->parameters->getAsString('version')
+                $request->parameters->tryString('version')
             );
 
             $doc->generateNextRelease(

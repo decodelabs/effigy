@@ -79,7 +79,7 @@ class Release implements Action
         // Parse version
         $version = $this->askRepoVersion(
             $doc,
-            $request->parameters->getAsString('version')
+            $request->parameters->tryString('version')
         );
 
 
