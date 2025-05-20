@@ -38,9 +38,8 @@ trait RepoVersionTrait
                 $version = null;
             }
 
-
-            if ($version !== null) {
-                return $version;
+            if($version !== null) {
+                return $doc->validateNextVersion($version);
             }
 
             if (!$lastVersion) {
