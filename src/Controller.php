@@ -21,7 +21,6 @@ use DecodeLabs\Glitch\Dumpable;
 use DecodeLabs\Integra\Project;
 use DecodeLabs\Monarch;
 use DecodeLabs\Systemic;
-use DecodeLabs\Terminus as Cli;
 use DecodeLabs\Veneer;
 use DecodeLabs\Veneer\Plugin;
 use OndraM\CiDetector\CiDetector;
@@ -309,7 +308,7 @@ class Controller extends CommandmentController implements
             // Launch script
             $result = Systemic::command([
                     $this->project->getBinaryPath('php'),
-                    $entry->getPath(),
+                    $entry->path,
                     'action-exists',
                     $name
                 ])
@@ -333,7 +332,7 @@ class Controller extends CommandmentController implements
             // Launch script
             return Systemic::command([
                     $this->project->getBinaryPath('php'),
-                    $entry->getPath(),
+                    $entry->path,
                     $name,
                     ...$args
                 ])

@@ -40,7 +40,7 @@ class CheckExecutablePermissions implements Action
 
         $result = Systemic::capture(
             'find . -type f \\( -perm -u=x -o -perm -g=x -o -perm -o=x \\) ' . implode(' ', $exStr) . ' -exec test -x {} \\; -print',
-            Effigy::$project->rootDir->getPath()
+            Effigy::$project->rootDir->path
         );
 
         if (!$result->wasSuccessful()) {

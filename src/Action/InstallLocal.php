@@ -38,7 +38,7 @@ class InstallLocal implements Action
         $umask = umask(0);
 
         $this->io->{'brightMagenta'}('Copying effigy executable... ');
-        $target = $binFile->copyTo(Effigy::$project->rootDir->getPath());
+        $target = $binFile->copyTo(Effigy::$project->rootDir->path);
         $target->setPermissions(0777);
         $this->io->{'success'}('done');
 

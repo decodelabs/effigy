@@ -41,7 +41,7 @@ class Eclint implements Action
 
         $command = 'check';
         $paths = array_map(
-            fn ($dir) => $dir->getPath(),
+            fn ($dir) => $dir->path,
             $dirs
         );
 

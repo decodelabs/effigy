@@ -16,7 +16,6 @@ use DecodeLabs\Commandment\Action as ActionInterface;
 use DecodeLabs\Glitch;
 use DecodeLabs\Monarch;
 use DecodeLabs\Pandora\Container;
-use DecodeLabs\Terminus;
 
 class Hub extends ClipHub
 {

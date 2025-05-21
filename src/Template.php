@@ -26,8 +26,8 @@ class Template extends FileTemplate
             case 'pkgName':
                 return $manifest->getName() ??
                     $io->ask('What is your full package name?', function () {
-                        $name = Effigy::$project->rootDir->getName();
-                        return Effigy::$project->rootDir->getParent()?->getName() . '/' . $name;
+                        $name = Effigy::$project->rootDir->name;
+                        return Effigy::$project->rootDir->getParent()?->name . '/' . $name;
                     });
 
             case 'pkgTitle':

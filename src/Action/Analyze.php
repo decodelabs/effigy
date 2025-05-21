@@ -131,7 +131,7 @@ class Analyze implements Action
         foreach (Effigy::$project->rootDir->scanFiles(function (string $name) {
             return preg_match('/phpstan\.([a-zA-Z0-9-_]+\.)?neon$/', $name);
         }) as $file) {
-            $output[] = $file->getName();
+            $output[] = $file->name;
         }
 
         usort($output, function ($a, $b) {

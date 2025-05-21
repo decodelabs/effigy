@@ -31,7 +31,7 @@ class CheckNonAscii implements Action
             return true;
         }
 
-        chdir(Effigy::$project->rootDir->getPath());
+        chdir(Effigy::$project->rootDir->path);
 
         $pathString = implode(' ', array_keys($dirs));
         $command = "! LC_ALL=C.UTF-8 find $pathString -type f -name \"*.php\" -not -name \"*.html.php\" -not -name \"*.htm.php\" -print0 | xargs -0 -- grep -PHn \"[^ -~]\" | grep -v '// @ignore-non-ascii$'";

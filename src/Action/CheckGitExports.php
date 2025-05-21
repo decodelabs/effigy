@@ -61,7 +61,7 @@ class CheckGitExports implements Action
 
         $result = Systemic::capture(
             'git archive HEAD | tar --list ' . implode(' ', $exclude),
-            Effigy::$project->rootDir->getPath()
+            Effigy::$project->rootDir->path
         );
 
         if (!$result->wasSuccessful()) {
