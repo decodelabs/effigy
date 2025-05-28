@@ -12,7 +12,6 @@ namespace DecodeLabs\Effigy\Action;
 use DecodeLabs\Chronicle\ChangeLog\Block\Buffered\NextRelease;
 use DecodeLabs\Chronicle\ChangeLog\Renderer\Generic as GenericRenderer;
 use DecodeLabs\Chronicle\Repository;
-use DecodeLabs\Coercion;
 use DecodeLabs\Commandment\Action;
 use DecodeLabs\Commandment\Argument;
 use DecodeLabs\Commandment\Request;
@@ -27,6 +26,7 @@ use DecodeLabs\Terminus\Session;
 class Release implements Action
 {
     use RepoAuthTrait;
+    use RepoBranchTrait;
     use RepoVersionTrait;
 
     public function __construct(
@@ -114,6 +114,10 @@ class Release implements Action
         $this->io->newLine();
 
         if (!$this->io->confirm('Is this release correct?')) {
+            return false;
+        }
+
+        if(!Effigy::run('update-dev-version', $release->version)) {
             return false;
         }
 
@@ -205,96 +209,6 @@ class Release implements Action
 
         return true;
     }
-
-
-
-    /**
-     * @return array{develop: string, release: string}
-     */
-    private function getBranchSetup(
-        Repository $repo
-    ): ?array {
-        $config = $repo->loadGitConfig();
-
-        if (isset($config['gitflow branch'])) {
-            return [
-                'develop' => Coercion::toString($config['gitflow branch']['develop'] ?? 'develop'),
-                'release' => Coercion::toString($config['gitflow branch']['master'] ?? 'main')
-            ];
-        }
-
-        if (isset($config['effigy branch'])) {
-            return [
-                'develop' => Coercion::toString($config['effigy branch']['develop'] ?? 'develop'),
-                'release' => Coercion::toString($config['effigy branch']['release'] ?? 'main')
-            ];
-        }
-
-        if (!$develop = $this->io->ask(
-            'What is the name of your develop branch?',
-            'develop'
-        )) {
-            $this->io->newLine();
-            $this->io->error('You must specify a develop branch name.');
-            $this->io->newLine();
-            return null;
-        }
-
-        if (!$release = $this->io->ask(
-            'What is the name of your release branch?',
-            'main'
-        )) {
-            $this->io->newLine();
-            $this->io->error('You must specify a release branch name.');
-            $this->io->newLine();
-            return null;
-        }
-
-        Effigy::runGit('config', '--local', 'effigy.branch.develop', $develop);
-        Effigy::runGit('config', '--local', 'effigy.branch.release', $release);
-
-        $repo->reloadGitConfig();
-
-        return [
-            'develop' => $develop,
-            'release' => $release
-        ];
-    }
-
-    private function checkBranchSetup(
-        Repository $repo,
-        string $develop,
-        string $release
-    ): bool {
-        $branches = $repo->getBranches();
-
-        if (
-            !isset($branches[$develop]) ||
-            !$branches[$develop]
-        ) {
-            $this->io->newLine();
-            $this->io->error('You are not on the ' . $develop . ' branch. Please checkout the ' . $develop . ' branch before continuing.');
-            $this->io->newLine();
-            return false;
-        }
-
-        if (!isset($branches[$release])) {
-            $this->io->newLine();
-            $this->io->warning('The ' . $release . ' branch does not exist.');
-
-            if (!$this->io->confirm('Would you like to create it?')) {
-                return false;
-            }
-
-            Effigy::runGit('branch', $release);
-        }
-
-
-        //Effigy::runGit('fetch');
-
-        return true;
-    }
-
 
     private function checkVersion(
         Repository $repo,
