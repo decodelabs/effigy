@@ -74,6 +74,10 @@ class UpdateDevVersion implements Action
         $this->io->{'.brightYellow'}($version);
         $this->io->newLine();
 
-        return Effigy::$project->run('config', 'extra.branch-alias.dev-'.$developBranch, $version);
+        if(!Effigy::$project->run('config', 'extra.branch-alias.dev-'.$developBranch, $version)) {
+            return false;
+        }
+
+        return Effigy::$project->run('update', '--lock');
     }
 }
