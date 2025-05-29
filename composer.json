@@ -44,9 +44,6 @@
         "bin/effigy"
     ],
     "extra": {
-        "changelog": {
-            "issueAssignees": false
-        },
         "branch-alias": {
             "dev-develop": "0.7.x-dev"
         }
