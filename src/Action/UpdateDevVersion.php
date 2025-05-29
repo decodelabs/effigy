@@ -44,7 +44,7 @@ class UpdateDevVersion implements Action
             $version = $doc->getLastVersion();
         }
 
-        if(!preg_match('/^v?(\d+)\.(\d+)\.\d+(-\w+)?$/', (string)$version, $matches)) {
+        if(!preg_match('/^v?(\d+)\.(\d+)(\.\d+(-\w+)?)?$/', (string)$version, $matches)) {
             throw Exceptional::InvalidArgument(
                 'Invalid version format: ' . $version
             );
@@ -69,12 +69,23 @@ class UpdateDevVersion implements Action
             return false;
         }
 
+
+        $currentVersion = Effigy::$project->getConfig('extra.branch-alias.dev-develop');
+
+        if ($currentVersion === $version) {
+            $this->io->newLine();
+            $this->io->{'brightGreen'}('Dev version is already up to date: ');
+            $this->io->{'.brightYellow'}($version);
+            $this->io->newLine();
+            return true;
+        }
+
         $this->io->newLine();
         $this->io->{'brightMagenta'}('Updating dev version: ');
         $this->io->{'.brightYellow'}($version);
         $this->io->newLine();
 
-        if(!Effigy::$project->run('config', 'extra.branch-alias.dev-'.$developBranch, $version)) {
+        if(!Effigy::$project->setConfig('extra.branch-alias.dev-'.$developBranch, $version)) {
             return false;
         }
 
