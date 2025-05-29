@@ -27,6 +27,7 @@ use DecodeLabs\Terminus\Session;
 )]
 class WriteChangelog implements Action
 {
+    use ChangelogRendererTrait;
     use RepoAuthTrait;
     use RepoVersionTrait;
 
@@ -59,7 +60,9 @@ class WriteChangelog implements Action
             );
         }
 
-        $doc->save();
+        $doc->save(
+            $this->getChangelogRenderer()
+        );
 
         $this->io->newLine();
         $this->io->success('Changelog written');

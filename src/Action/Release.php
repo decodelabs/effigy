@@ -10,7 +10,6 @@ declare(strict_types=1);
 namespace DecodeLabs\Effigy\Action;
 
 use DecodeLabs\Chronicle\ChangeLog\Block\Buffered\NextRelease;
-use DecodeLabs\Chronicle\ChangeLog\Renderer\Generic as GenericRenderer;
 use DecodeLabs\Chronicle\Repository;
 use DecodeLabs\Commandment\Action;
 use DecodeLabs\Commandment\Argument;
@@ -25,6 +24,7 @@ use DecodeLabs\Terminus\Session;
 )]
 class Release implements Action
 {
+    use ChangelogRendererTrait;
     use RepoAuthTrait;
     use RepoBranchTrait;
     use RepoVersionTrait;
@@ -94,7 +94,7 @@ class Release implements Action
             repository: $repo
         );
 
-        $renderer = new GenericRenderer();
+        $renderer = $this->getChangelogRenderer();
 
         if (!($release = $doc->getLastRelease()) instanceof NextRelease) {
             throw Exceptional::Runtime(
