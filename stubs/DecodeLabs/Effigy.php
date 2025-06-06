@@ -11,10 +11,11 @@ use DecodeLabs\Effigy\Controller as Inst;
 use DecodeLabs\Effigy\Config as ConfigPlugin;
 use DecodeLabs\Integra\Project as ProjectPlugin;
 use DecodeLabs\Atlas\File as Ref0;
-use DecodeLabs\Terminus\Session as Ref1;
-use DecodeLabs\Slingshot as Ref2;
-use DecodeLabs\Commandment\Request as Ref3;
-use DecodeLabs\Commandment\Middleware as Ref4;
+use DecodeLabs\Nuance\Entity\NativeObject as Ref1;
+use DecodeLabs\Terminus\Session as Ref2;
+use DecodeLabs\Slingshot as Ref3;
+use DecodeLabs\Commandment\Request as Ref4;
+use DecodeLabs\Commandment\Middleware as Ref5;
 
 class Effigy implements Proxy
 {
@@ -84,20 +85,20 @@ class Effigy implements Proxy
     public static function getGlobalPath(): string {
         return static::$_veneerInstance->getGlobalPath();
     }
-    public static function glitchDump(): iterable {
-        return static::$_veneerInstance->glitchDump();
+    public static function toNuanceEntity(): Ref1 {
+        return static::$_veneerInstance->toNuanceEntity();
     }
     public static function runAction(string $name, array $args = []): bool {
         return static::$_veneerInstance->runAction(...func_get_args());
     }
-    public static function getIoSession(): Ref1 {
+    public static function getIoSession(): Ref2 {
         return static::$_veneerInstance->getIoSession();
     }
-    public static function newRequest(string $command, array $arguments = [], array $attributes = [], ?array $server = NULL, ?Ref2 $slingshot = NULL): Ref3 {
+    public static function newRequest(string $command, array $arguments = [], array $attributes = [], ?array $server = NULL, ?Ref3 $slingshot = NULL): Ref4 {
         return static::$_veneerInstance->newRequest(...func_get_args());
     }
-    public static function addMiddleware(Ref4 $middleware): void {}
-    public static function dispatch(Ref3 $request): bool {
+    public static function addMiddleware(Ref5 $middleware): void {}
+    public static function dispatch(Ref4 $request): bool {
         return static::$_veneerInstance->dispatch(...func_get_args());
     }
     public static function getActionAttributes(string $class): array {

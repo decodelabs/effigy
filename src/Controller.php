@@ -17,9 +17,10 @@ use DecodeLabs\Clip\Controller\Commandment as CommandmentController;
 use DecodeLabs\Coercion;
 use DecodeLabs\Effigy;
 use DecodeLabs\Exceptional;
-use DecodeLabs\Glitch\Dumpable;
 use DecodeLabs\Integra\Project;
 use DecodeLabs\Monarch;
+use DecodeLabs\Nuance\Dumpable;
+use DecodeLabs\Nuance\Entity\NativeObject as NuanceEntity;
 use DecodeLabs\Systemic;
 use DecodeLabs\Veneer;
 use DecodeLabs\Veneer\Plugin;
@@ -414,14 +415,13 @@ class Controller extends CommandmentController implements
     }
 
 
-
-    public function glitchDump(): iterable
+    public function toNuanceEntity(): NuanceEntity
     {
-        yield 'properties' => [
-            '*local' => $this->local,
-            '*config' => $this->config,
-            '*entryFile' => $this->entryFile
-        ];
+        $entity = new NuanceEntity($this);
+        $entity->setProperty('local', $this->local, 'protected');
+        $entity->setProperty('config', $this->config, 'protected');
+        $entity->setProperty('entryFile', $this->entryFile, 'protected');
+        return $entity;
     }
 }
 
