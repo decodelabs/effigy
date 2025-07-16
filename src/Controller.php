@@ -41,10 +41,10 @@ class Controller extends CommandmentController implements
     Dumpable
 {
     #[Plugin]
-    protected(set) Config $config;
+    public protected(set) Config $config;
 
     #[Plugin]
-    protected(set) Project $project;
+    public protected(set) Project $project;
 
     protected bool $local = false;
     protected bool $ciMode;

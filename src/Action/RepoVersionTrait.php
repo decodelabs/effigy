@@ -38,7 +38,7 @@ trait RepoVersionTrait
                 $version = null;
             }
 
-            if($version !== null) {
+            if ($version !== null) {
                 return $doc->validateNextVersion($version);
             }
 
@@ -48,9 +48,9 @@ trait RepoVersionTrait
 
             $breaking = $this->io->confirm('Does this release have any breaking changes?');
 
-            if($breaking) {
+            if ($breaking) {
                 $version = 'breaking';
-            } elseif(str_starts_with($lastVersion, 'v0.')) {
+            } elseif (str_starts_with($lastVersion, 'v0.')) {
                 $version = 'feature';
             } else {
                 $feature = $this->io->confirm('Does this release have any new features?');

@@ -12,7 +12,6 @@ namespace DecodeLabs\Effigy;
 use DecodeLabs\Dictum;
 use DecodeLabs\Effigy;
 use DecodeLabs\Genesis\FileTemplate;
-use DecodeLabs\Terminus as Cli;
 
 class Template extends FileTemplate
 {

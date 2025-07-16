@@ -39,12 +39,12 @@ class UpdateDevVersion implements Action
 
         $version = $request->parameters->tryString('version');
 
-        if($version === null) {
+        if ($version === null) {
             $doc = $repo->parseChangeLog();
             $version = $doc->getLastVersion();
         }
 
-        if(!preg_match('/^v?(\d+)\.(\d+)(\.\d+(-\w+)?)?$/', (string)$version, $matches)) {
+        if (!preg_match('/^v?(\d+)\.(\d+)(\.\d+(-\w+)?)?$/', (string)$version, $matches)) {
             throw Exceptional::InvalidArgument(
                 'Invalid version format: ' . $version
             );
@@ -85,7 +85,7 @@ class UpdateDevVersion implements Action
         $this->io->{'.brightYellow'}($version);
         $this->io->newLine();
 
-        if(!Effigy::$project->setConfig('extra.branch-alias.dev-'.$developBranch, $version)) {
+        if (!Effigy::$project->setConfig('extra.branch-alias.dev-' . $developBranch, $version)) {
             return false;
         }
 

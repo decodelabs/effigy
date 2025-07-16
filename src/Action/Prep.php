@@ -69,8 +69,9 @@ class Prep implements Action
         // Standards
         $this->io->info('Ensure proper code formatting');
 
-        if (version_compare(PHP_VERSION, '8.4.0', '>=')) {
-            $this->io->warning('Skipping formatting until PHP-CS-Fixer is updated for PHP 8.4');
+        // @phpstan-ignore-next-line
+        if (version_compare(PHP_VERSION, '8.5.0', '>=')) {
+            $this->io->warning('Skipping formatting until PHP-CS-Fixer is updated for PHP 8.5');
         } else {
             if (!Effigy::run('format')) {
                 return false;

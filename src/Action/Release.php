@@ -117,7 +117,7 @@ class Release implements Action
             return false;
         }
 
-        if(!Effigy::run('update-dev-version', $release->version)) {
+        if (!Effigy::run('update-dev-version', $release->version)) {
             return false;
         }
 

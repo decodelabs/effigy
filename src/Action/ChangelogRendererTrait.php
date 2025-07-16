@@ -9,8 +9,8 @@ declare(strict_types=1);
 
 namespace DecodeLabs\Effigy\Action;
 
-use DecodeLabs\Chronicle\ChangeLog\Renderer\Generic as GenericRenderer;
 use DecodeLabs\Chronicle\ChangeLog\Options;
+use DecodeLabs\Chronicle\ChangeLog\Renderer\Generic as GenericRenderer;
 use DecodeLabs\Effigy;
 
 trait ChangelogRendererTrait
