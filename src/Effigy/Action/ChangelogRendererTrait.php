@@ -1,0 +1,32 @@
+<?php
+
+/**
+ * @package Effigy
+ * @license http://opensource.org/licenses/MIT
+ */
+
+declare(strict_types=1);
+
+namespace DecodeLabs\Effigy\Action;
+
+use DecodeLabs\Chronicle\ChangeLog\Options;
+use DecodeLabs\Chronicle\ChangeLog\Renderer\Generic as GenericRenderer;
+use DecodeLabs\Effigy;
+
+trait ChangelogRendererTrait
+{
+    protected Effigy $effigy;
+
+    private function getChangelogRenderer(): GenericRenderer
+    {
+        $manifest = $this->effigy->project->getLocalManifest();
+        $settings = $manifest->getExtra()->changelog;
+
+        $options = new Options(
+            issueAssignees: $settings->issueAssignees->as('?bool') ?? true,
+            pullRequestAssignees: $settings->pullRequestAssignees->as('?bool') ?? true
+        );
+
+        return new GenericRenderer($options);
+    }
+}

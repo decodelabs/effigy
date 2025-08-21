@@ -12,22 +12,22 @@
         "php": "^8.4",
         "composer-runtime-api": "^2.2",
 
-        "decodelabs/archetype": "^0.3.10",
-        "decodelabs/atlas": "^0.13.1",
-        "decodelabs/chronicle": "^0.2.4",
-        "decodelabs/clip": "^0.5.5",
+        "decodelabs/archetype": "^0.4",
+        "decodelabs/atlas": "^0.14",
+        "decodelabs/chronicle": "^0.3",
+        "decodelabs/clip": "^0.6",
         "decodelabs/coercion": "^0.3.3",
-        "decodelabs/commandment": "^0.2.2",
-        "decodelabs/dictum": "^0.6.10",
+        "decodelabs/commandment": "^0.3",
+        "decodelabs/dictum": "^0.7",
         "decodelabs/exceptional": "^0.6.1",
-        "decodelabs/integra": "^0.2.3",
-        "decodelabs/genesis": "^0.12.4",
-        "decodelabs/lucid": "^0.5.2",
-        "decodelabs/monarch": "^0.1.4",
+        "decodelabs/integra": "^0.3",
+        "decodelabs/genesis": "^0.13",
+        "decodelabs/hatch": "^0.1.4",
+        "decodelabs/lucid": "^0.6",
+        "decodelabs/monarch": "^0.2",
         "decodelabs/nuance": "^0.1.2",
-        "decodelabs/systemic": "^0.11.18",
-        "decodelabs/terminus": "^0.13.1",
-        "decodelabs/veneer": "^0.12.8",
+        "decodelabs/systemic": "^0.12",
+        "decodelabs/terminus": "^0.14",
 
         "ondram/ci-detector": "^4.2",
         "php-parallel-lint/php-parallel-lint": "^1.4",
@@ -38,8 +38,11 @@
     },
     "autoload": {
         "psr-4": {
-            "DecodeLabs\\Effigy\\": "src/"
-        }
+            "DecodeLabs\\Effigy\\": "src/Effigy/"
+        },
+        "classmap": [
+            "src/Effigy.php"
+        ]
     },
     "bin": [
         "bin/effigy"

@@ -1,5 +1,6 @@
 #!/usr/bin/env php
 <?php
+
 /**
  * @package Effigy
  * @license http://opensource.org/licenses/MIT
