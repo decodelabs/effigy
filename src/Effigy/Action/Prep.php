@@ -168,7 +168,7 @@ class Prep implements Action
         $this->io->info('Updating composer...');
 
         if (!$this->systemic->run(
-            ['composer', 'install'],
+            ['composer', 'update'],
             Monarch::getPaths()->root
         )) {
             return false;
