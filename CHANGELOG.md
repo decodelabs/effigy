@@ -5,8 +5,16 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ### Unreleased
+--
+
+---
+
+### [v0.8.3](https://github.com/decodelabs/effigy/commits/v0.8.3) - 22nd August 2025
+
 - Fixed upgrade task handling
 - Moved upgrade task to deploy/ namespace
+
+[Full list of changes](https://github.com/decodelabs/effigy/compare/v0.8.2...v0.8.3)
 
 ---
 
