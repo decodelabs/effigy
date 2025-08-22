@@ -12,13 +12,16 @@ namespace DecodeLabs\Effigy\Action;
 use DecodeLabs\Commandment\Action;
 use DecodeLabs\Commandment\Request;
 use DecodeLabs\Effigy;
+use DecodeLabs\Monarch;
+use DecodeLabs\Systemic;
 use DecodeLabs\Terminus\Session;
 
 class Upgrade implements Action
 {
     public function __construct(
+        protected Session $io,
         protected Effigy $effigy,
-        protected Session $io
+        protected Systemic $systemic
     ) {
     }
 
@@ -27,24 +30,56 @@ class Upgrade implements Action
     ): bool {
         $this->io->newLine();
 
-        // Update
-        $this->io->info('Update composer');
-
-        if (!$this->effigy->project->run('update')) {
-            return false;
-        }
-
-        $this->io->newLine();
-        $this->io->newLine();
-
-
-        // Veneer
-        $this->io->info('Create veneer stubs');
-
-        if (!$this->effigy->run('veneer-stub')) {
-            return false;
-        }
-
+        $this->updateGit();
+        $this->updateComposer();
+        $this->build();
         return true;
+    }
+
+    protected function updateGit(): void
+    {
+        $this->io->info('Updating git...');
+
+        // Git pull
+        $this->systemic->run(
+            ['git', 'pull'],
+            Monarch::getPaths()->root
+        );
+
+        $this->io->newLine();
+        $this->io->newLine();
+    }
+
+    protected function updateComposer(): void
+    {
+        $this->io->info('Updating composer...');
+
+        $args = [];
+
+        if (!Monarch::isDevelopment()) {
+            $args[] = '--no-dev';
+        }
+
+        $this->systemic->run(
+            ['composer', 'install', ...$args],
+            Monarch::getPaths()->root
+        );
+
+        $this->io->newLine();
+        $this->io->newLine();
+    }
+
+    protected function build(): void
+    {
+        if (
+            Monarch::isDevelopment() ||
+            !$this->effigy->hasAppAction('deploy/build')
+        ) {
+            return;
+        }
+
+        $this->io->info('Building...');
+
+        $this->effigy->runAction('deploy/build');
     }
 }
