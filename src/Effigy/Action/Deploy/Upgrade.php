@@ -7,7 +7,7 @@
 
 declare(strict_types=1);
 
-namespace DecodeLabs\Effigy\Action;
+namespace DecodeLabs\Effigy\Action\Deploy;
 
 use DecodeLabs\Commandment\Action;
 use DecodeLabs\Commandment\Request;
@@ -55,10 +55,7 @@ class Upgrade implements Action
         $this->io->info('Updating composer...');
 
         $args = [];
-
-        if (!Monarch::isDevelopment()) {
-            $args[] = '--no-dev';
-        }
+        $args[] = '--no-dev';
 
         $this->systemic->run(
             ['composer', 'install', ...$args],
@@ -71,15 +68,12 @@ class Upgrade implements Action
 
     protected function build(): void
     {
-        if (
-            Monarch::isDevelopment() ||
-            !$this->effigy->hasAppAction('deploy/build')
-        ) {
+        if (!$this->effigy->hasAppAction('deploy/build')) {
             return;
         }
 
         $this->io->info('Building...');
 
-        $this->effigy->runAction('deploy/build');
+        $this->effigy->runAppAction('deploy/build', '--fabric-source');
     }
 }

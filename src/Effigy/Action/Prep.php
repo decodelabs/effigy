@@ -12,6 +12,8 @@ namespace DecodeLabs\Effigy\Action;
 use DecodeLabs\Commandment\Action;
 use DecodeLabs\Commandment\Request;
 use DecodeLabs\Effigy;
+use DecodeLabs\Monarch;
+use DecodeLabs\Systemic;
 use DecodeLabs\Terminus\Session;
 
 use const PHP_VERSION;
@@ -20,7 +22,8 @@ class Prep implements Action
 {
     public function __construct(
         protected Effigy $effigy,
-        protected Session $io
+        protected Session $io,
+        protected Systemic $systemic
     ) {
     }
 
@@ -38,7 +41,10 @@ class Prep implements Action
         $this->io->newLine();
 
         // Update
-        if (!$this->effigy->run('upgrade')) {
+        if (
+            !$this->updateGit() ||
+            !$this->updateComposer()
+        ) {
             return false;
         }
 
@@ -134,6 +140,42 @@ class Prep implements Action
             return false;
         }
 
+
+        return true;
+    }
+
+
+    protected function updateGit(): bool
+    {
+        $this->io->info('Updating git...');
+
+        // Git pull
+        if (!$this->systemic->run(
+            ['git', 'pull'],
+            Monarch::getPaths()->root
+        )) {
+            return false;
+        }
+
+        $this->io->newLine();
+        $this->io->newLine();
+
+        return true;
+    }
+
+    protected function updateComposer(): bool
+    {
+        $this->io->info('Updating composer...');
+
+        if (!$this->systemic->run(
+            ['composer', 'install'],
+            Monarch::getPaths()->root
+        )) {
+            return false;
+        }
+
+        $this->io->newLine();
+        $this->io->newLine();
 
         return true;
     }

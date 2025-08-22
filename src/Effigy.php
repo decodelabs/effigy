@@ -125,6 +125,16 @@ class Effigy extends Clip implements Dumpable
         return $this->runAppAction($name, ...$args);
     }
 
+    public function hasAction(
+        string $name
+    ): bool {
+        $class = $this->getActionClass($name);
+
+        return
+            $class !== null &&
+            str_starts_with($class, 'DecodeLabs\\Effigy\\Action\\');
+    }
+
     public function runGit(
         string $name,
         string ...$args
