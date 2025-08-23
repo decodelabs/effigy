@@ -42,7 +42,7 @@ class Prep implements Action
 
         // Update
         if (
-            !$this->updateGit() ||
+            //!$this->updateGit() ||
             !$this->updateComposer()
         ) {
             return false;
