@@ -344,10 +344,12 @@ class Effigy extends Clip implements Dumpable
                 ->run();
         }
 
+        $this->io->newLine();
+        $this->io->writeError('No way to run command: ');
+        $this->io->error($name);
+        $this->io->newLine();
 
-        throw Exceptional::NotFound(
-            message: 'Effigy couldn\'t find any appropriate ways to run "' . $name . '"'
-        );
+        return false;
     }
 
 

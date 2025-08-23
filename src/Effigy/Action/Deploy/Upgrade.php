@@ -74,6 +74,6 @@ class Upgrade implements Action
 
         $this->io->info('Building...');
 
-        $this->effigy->runAppAction('deploy/build', '--fabric-source');
+        $this->effigy->runAppAction('deploy/build', '--from-source');
     }
 }

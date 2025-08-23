@@ -21,7 +21,7 @@
         "decodelabs/dictum": "^0.7",
         "decodelabs/exceptional": "^0.6.1",
         "decodelabs/integra": "^0.3",
-        "decodelabs/genesis": "^0.13",
+        "decodelabs/genesis": "^0.14",
         "decodelabs/hatch": "^0.1.4",
         "decodelabs/lucid": "^0.6",
         "decodelabs/monarch": "^0.2",
@@ -48,6 +48,9 @@
         "bin/effigy"
     ],
     "extra": {
+        "genesis": {
+            "hub": "DecodeLabs\\Effigy\\Hub"
+        },
         "branch-alias": {
             "dev-develop": "0.8.x-dev"
         }
@@ -55,7 +58,8 @@
     "config": {
         "allow-plugins": {
             "phpstan/extension-installer": true,
-            "php-http/discovery": true
+            "php-http/discovery": true,
+            "decodelabs/genesis": true
         }
     },
     "repositories": {

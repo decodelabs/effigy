@@ -10,11 +10,12 @@ declare(strict_types=1);
 
 namespace DecodeLabs\Effigy;
 
-use DecodeLabs\Genesis\Bootstrap\Bin;
 use DecodeLabs\Effigy\Hub;
+use DecodeLabs\Genesis;
 
 require_once $_composer_autoload_path ?? __DIR__ . '/../vendor/autoload.php';
 
-new Bin(
+new Genesis(
+    rootPath: dirname(__DIR__),
     hubClass: Hub::class
 )->run();
