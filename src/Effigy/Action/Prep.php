@@ -54,17 +54,6 @@ class Prep implements Action
 
 
         // Analysis
-        /*
-        $this->io->info('Clear PHPStan cache');
-
-        if (!$this->effigy->run('analyze', '--clear')) {
-            return false;
-        }
-
-        $this->io->newLine();
-        $this->io->newLine();
-        */
-
         $this->io->info('Run PHPStan analysis');
 
         if (!$this->effigy->run('analyze')) {
@@ -90,15 +79,16 @@ class Prep implements Action
         $this->io->newLine();
 
         // Lint
+        /*
         $this->io->info('Ensure all files are syntax compliant');
 
         if (!$this->effigy->run('lint')) {
             return false;
         }
 
-
         $this->io->newLine();
         $this->io->newLine();
+        */
 
         // EC Lint
         $this->io->info('Check for editorconfig issues');
