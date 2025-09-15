@@ -12,13 +12,15 @@ namespace DecodeLabs\Effigy\Action;
 use DecodeLabs\Commandment\Action;
 use DecodeLabs\Commandment\Request;
 use DecodeLabs\Effigy;
+use DecodeLabs\Systemic;
 use DecodeLabs\Terminus\Session;
 
 class CheckNonAscii implements Action
 {
     public function __construct(
         protected Effigy $effigy,
-        protected Session $io
+        protected Session $io,
+        protected Systemic $systemic
     ) {
     }
 
@@ -28,6 +30,11 @@ class CheckNonAscii implements Action
         $dirs = $this->effigy->getCodeDirs();
 
         if (empty($dirs)) {
+            return true;
+        }
+
+        if ($this->systemic->os->name !== 'Linux') {
+            $this->io->warning('Skipping non-ascii check on non-Linux systems');
             return true;
         }
 
