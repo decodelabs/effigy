@@ -5,7 +5,15 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ### Unreleased
+--
+
+---
+
+### [v0.9.3](https://github.com/decodelabs/effigy/commits/v0.9.3) - 15th September 2025
+
 - Removed parallel-lint from prep task
+
+[Full list of changes](https://github.com/decodelabs/effigy/compare/v0.9.2...v0.9.3)
 
 ---
 
