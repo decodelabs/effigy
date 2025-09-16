@@ -78,23 +78,15 @@ class Prep implements Action
         $this->io->newLine();
         $this->io->newLine();
 
-        // Lint
-        /*
-        $this->io->info('Ensure all files are syntax compliant');
-
-        if (!$this->effigy->run('lint')) {
-            return false;
-        }
-
-        $this->io->newLine();
-        $this->io->newLine();
-        */
-
         // EC Lint
         $this->io->info('Check for editorconfig issues');
 
-        if (!$this->effigy->run('eclint')) {
-            return false;
+        try {
+            if (!$this->effigy->run('eclint')) {
+                return false;
+            }
+        } catch (ComponentUnavailableException $e) {
+            $this->io->error($e->getMessage());
         }
 
 
