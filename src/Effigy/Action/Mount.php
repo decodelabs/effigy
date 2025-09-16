@@ -128,7 +128,10 @@ class Mount implements Action
     ): string {
         $local = $this->effigy->config->getLocalRepos();
 
-        if (isset($local[$package->name])) {
+        if (
+            isset($local[$package->name]) &&
+            is_dir($local[$package->name])
+        ) {
             return $local[$package->name];
         }
 
