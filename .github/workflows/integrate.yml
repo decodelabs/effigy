@@ -39,7 +39,7 @@ jobs:
 
       - name: "Check coding style"
         run: |
-          composer global exec effigy format --check -- --headless
+          composer global exec effigy format -- --check --headless
 
       - name: "Check file permissions"
         run: |
