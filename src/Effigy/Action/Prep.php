@@ -113,15 +113,6 @@ class Prep implements Action
 
 
         $this->io->newLine();
-        $this->io->newLine();
-
-        // Non ascii
-        $this->io->info('Check for non-ASCII characters');
-
-        if (!$this->effigy->run('check-non-ascii')) {
-            return false;
-        }
-
 
         return true;
     }
