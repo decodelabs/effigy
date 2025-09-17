@@ -57,8 +57,6 @@ jobs:
 
   static_analysis:
     name: "2️⃣ Static Analysis"
-    needs:
-      - "file_consistency"
     runs-on: "ubuntu-latest"
     strategy:
       matrix:
