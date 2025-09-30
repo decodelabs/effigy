@@ -16,6 +16,10 @@ Effigy is a globally installed universal CLI tool for easily running tasks in yo
 
 ## Installation
 
+This package requires PHP 8.4 or higher.
+
+Install via Composer:
+
 ```bash
 composer global require decodelabs/effigy
 ```
