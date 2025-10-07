@@ -12,7 +12,6 @@ namespace DecodeLabs\Effigy\Action\Deploy;
 use DecodeLabs\Commandment\Action;
 use DecodeLabs\Commandment\Request;
 use DecodeLabs\Effigy;
-use DecodeLabs\Monarch;
 use DecodeLabs\Systemic;
 use DecodeLabs\Terminus\Session;
 
@@ -43,7 +42,7 @@ class Upgrade implements Action
         // Git pull
         $this->systemic->run(
             ['git', 'pull'],
-            Monarch::getPaths()->root
+            $this->effigy->project->rootDir
         );
 
         $this->io->newLine();
@@ -59,7 +58,7 @@ class Upgrade implements Action
 
         $this->systemic->run(
             ['composer', 'install', ...$args],
-            Monarch::getPaths()->root
+            $this->effigy->project->rootDir
         );
 
         $this->io->newLine();

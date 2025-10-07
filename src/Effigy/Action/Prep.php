@@ -12,7 +12,6 @@ namespace DecodeLabs\Effigy\Action;
 use DecodeLabs\Commandment\Action;
 use DecodeLabs\Commandment\Request;
 use DecodeLabs\Effigy;
-use DecodeLabs\Monarch;
 use DecodeLabs\Systemic;
 use DecodeLabs\Terminus\Session;
 
@@ -125,7 +124,7 @@ class Prep implements Action
         // Git pull
         if (!$this->systemic->run(
             ['git', 'pull'],
-            Monarch::getPaths()->root
+            $this->effigy->project->rootDir
         )) {
             return false;
         }
@@ -142,7 +141,7 @@ class Prep implements Action
 
         if (!$this->systemic->run(
             ['composer', 'update'],
-            Monarch::getPaths()->root
+            $this->effigy->project->rootDir
         )) {
             return false;
         }
