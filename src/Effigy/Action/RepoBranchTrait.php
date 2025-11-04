@@ -1,8 +1,8 @@
 <?php
 
 /**
- * @package Effigy
- * @license http://opensource.org/licenses/MIT
+ * Effigy
+ * @license https://opensource.org/licenses/MIT
  */
 
 declare(strict_types=1);
