@@ -34,7 +34,7 @@ class GenerateAgents implements Action
         }
 
         return new Template(
-            $root . '/vendor/decodelabs/chorus/templates/AGENTS.template.md',
+            $root . '/vendor/decodelabs/chorus/docs/templates/AGENTS.md',
             $this->effigy,
             $this->io,
         );
