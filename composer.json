@@ -62,7 +62,5 @@
             "php-http/discovery": true,
             "decodelabs/genesis": true
         }
-    },
-    "repositories": {
     }
 }
