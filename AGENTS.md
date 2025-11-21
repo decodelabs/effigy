@@ -94,7 +94,7 @@ When generating or editing code:
 
 Where possible:
 
-- Respect the project’s existing tooling:
+- Respect the project's existing tooling:
   - `php-cs-fixer` configuration (baseline: `@PSR12,-method_argument_space,array_syntax`).
   - Static analysis tools (PHPStan/Psalm) if configured.
   - Test runner (phpunit/pest/etc.).
@@ -130,7 +130,7 @@ Highlights (non-exhaustive; see Chorus for full details):
     ```
 
 - **Nullable returns and `try*` methods:**
-  - A method that returns `?Type` because the value “may not exist” should generally be named `trySomething()`.
+  - A method that returns `?Type` because the value "may not exist" should generally be named `trySomething()`.
   - A corresponding non-nullable `something()` method should exist that:
     - calls `trySomething()`, and
     - throws a domain-appropriate exception when no value is available.
@@ -223,7 +223,7 @@ Before you change anything in this repository:
    - Chorus architecture principles,
    - Coding standards,
    - Package taxonomy.
-3. Read this repository’s:
+3. Read this repository's:
    - `AGENTS.md`,
    - `README.md`,
    - `docs/meta/spec.md`.
@@ -235,3 +235,4 @@ Before you change anything in this repository:
    If a wider change is needed, leave a note for human architects.
 
 If in doubt, stop and ask for clarification rather than guessing.
+
