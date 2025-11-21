@@ -21,6 +21,7 @@ class CheckGitExports implements Action
      * @var array<string>
      */
     public const array ExcludeFiles = [
+        'AGENTS.md',
         'LICENSE',
         'README.md',
         'CHANGELOG.md',
