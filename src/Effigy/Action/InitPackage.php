@@ -56,6 +56,11 @@ class InitPackage implements Action
             return false;
         }
 
+        // Agents
+        if (!$this->effigy->run('generate-agents', '--check')) {
+            return false;
+        }
+
         // ECS
         if (!$this->effigy->run('generate-ecs-config', '--check')) {
             return false;

@@ -29,6 +29,7 @@ class GenerateComposerConfig implements Action
      * @var array<string>
      */
     protected const array DevPackages = [
+        'decodelabs/chorus',
         'decodelabs/phpstan-decodelabs'
     ];
 

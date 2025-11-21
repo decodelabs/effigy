@@ -34,6 +34,7 @@
         "symplify/easy-coding-standard": "^12.5.20"
     },
     "require-dev": {
+        "decodelabs/chorus": "^0.1.0",
         "decodelabs/phpstan-decodelabs": "^0.7"
     },
     "autoload": {
