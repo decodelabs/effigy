@@ -22,10 +22,19 @@ class GenerateAgents implements Action
         return $this->effigy->project->rootDir->getFile('AGENTS.md');
     }
 
+    /**
+     * TODO: sort out proper vendor dir detection
+     */
     protected function getTemplate(): Template
     {
+        $root = dirname(__DIR__, 3);
+
+        if (str_contains($root, 'vendor')) {
+            $root = explode('/vendor/', $root)[0];
+        }
+
         return new Template(
-            dirname(__DIR__, 3) . '/vendor/decodelabs/chorus/templates/AGENTS.template.md',
+            $root . '/vendor/decodelabs/chorus/templates/AGENTS.template.md',
             $this->effigy,
             $this->io,
         );
