@@ -166,6 +166,13 @@ class Unmount implements Action
         $output = [];
 
         foreach ($this->repositories as $key => $config) {
+            if (
+                is_numeric($key) &&
+                isset($config->name)
+            ) {
+                $key = $config['name'];
+            }
+
             if (!str_starts_with((string)$key, 'local:')) {
                 continue;
             }
