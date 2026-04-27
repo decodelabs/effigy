@@ -49,6 +49,11 @@
         "bin/effigy"
     ],
     "extra": {
+        "effigy": {
+            "exports": [
+                "effigy.toml"
+            ]
+        },
         "genesis": {
             "hub": "DecodeLabs\\Effigy\\Hub"
         },
