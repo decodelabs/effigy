@@ -27,6 +27,7 @@ class CheckGitExports implements Action
         'CHANGELOG.md',
         'composer.json',
         'composer.lock',
+        'effigy.toml',
         'package.json',
         'package-lock.json',
         'pnpm-lock.yaml',
