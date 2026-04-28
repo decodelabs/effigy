@@ -31,6 +31,7 @@ class CheckExecutablePermissions implements Action
             './.git/*',
             './vendor/*',
             './effigy',
+            './.effigy/*',
             '*/node_modules/*',
         ];
 

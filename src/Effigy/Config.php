@@ -278,6 +278,7 @@ class Config
                         $output[$key] = [];
 
                         foreach ($value as $param) {
+                            /** @phpstan-ignore-next-line */
                             $output[$key][] = Coercion::toString($param);
                         }
                     }
