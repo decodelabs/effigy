@@ -7,7 +7,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Unreleased
 --
 
+---
+
+### [v0.10.14](https://github.com/decodelabs/effigy/commits/v0.10.14) - 25th August 2026
+
+--
+
 - Fixed executable permission checks scanning ignored and generated directories
+
+[Full list of changes](https://github.com/decodelabs/effigy/compare/v0.10.13...v0.10.14)
 
 ---
 
