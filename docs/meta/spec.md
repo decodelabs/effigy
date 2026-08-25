@@ -233,6 +233,7 @@ None — all dependencies are required.
 - Release process validates version doesn't exist
 - Release process generates changelog from Chronicle
 - Release process creates git tags and pushes to remote
+- Executable permission checks inspect tracked and non-ignored untracked files only
 - CI mode is detected automatically
 
 ### 5.2 Input & Output Contracts

@@ -27,23 +27,18 @@ class CheckExecutablePermissions implements Action
     public function execute(
         Request $request,
     ): bool {
-        $exclude = [
-            './.git/*',
-            './vendor/*',
-            './effigy',
-            './.effigy/*',
-            '*/node_modules/*',
-        ];
-
-        $exStr = [];
-
-        foreach ($exclude as $glob) {
-            $exStr[] = '-not -path \'' . $glob . '\'';
-        }
+        $rootDir = $this->effigy->project->rootDir->path;
 
         $result = $this->systemic->capture(
-            'find . -type f \\( -perm -u=x -o -perm -g=x -o -perm -o=x \\) ' . implode(' ', $exStr) . ' -exec test -x {} \\; -print',
-            $this->effigy->project->rootDir->path
+            [
+                'git',
+                'ls-files',
+                '--cached',
+                '--others',
+                '--exclude-standard',
+                '-z',
+            ],
+            $rootDir
         );
 
         if (!$result->wasSuccessful()) {
@@ -51,20 +46,35 @@ class CheckExecutablePermissions implements Action
             return false;
         }
 
-        $result = trim((string)$result->getOutput());
-
-        if ($result === '') {
-            $this->io->success('No executable files found');
-            return true;
-        }
-
-        $paths = explode("\n", $result);
+        $result = rtrim((string)$result->getOutput(), "\0");
+        $paths = $result === '' ? [] : explode("\0", $result);
         $bins = $this->effigy->project->getLocalManifest()->getBinFiles();
         $whitelist = $this->effigy->getExecutablesWhitelist();
         $output = [];
+        $hasExecutables = false;
 
         foreach ($paths as $path) {
-            $path = substr($path, 2);
+            if (
+                $path === 'effigy' ||
+                str_starts_with($path, 'vendor/') ||
+                str_starts_with($path, '.effigy/') ||
+                str_starts_with($path, 'node_modules/') ||
+                str_contains($path, '/node_modules/')
+            ) {
+                continue;
+            }
+
+            $file = $rootDir . '/' . $path;
+
+            if (
+                is_link($file) ||
+                !is_file($file) ||
+                !is_executable($file)
+            ) {
+                continue;
+            }
+
+            $hasExecutables = true;
 
             if (
                 !in_array($path, $bins) &&
@@ -72,6 +82,11 @@ class CheckExecutablePermissions implements Action
             ) {
                 $output[] = $path;
             }
+        }
+
+        if (!$hasExecutables) {
+            $this->io->success('No executable files found');
+            return true;
         }
 
         if (!empty($output)) {
