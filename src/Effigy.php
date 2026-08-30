@@ -31,6 +31,10 @@ use Throwable;
  */
 class Effigy extends Clip implements Dumpable
 {
+    protected const GitIndexLockTimeoutSeconds = 30;
+    protected const GitIndexLockPollMicroseconds = 100_000;
+    protected const GitIndexLockAttempts = 3;
+
     public protected(set) Config $config;
 
     public protected(set) bool $local = false;
@@ -139,10 +143,27 @@ class Effigy extends Clip implements Dumpable
         string $name,
         string ...$args
     ): bool {
-        return $this->systemic->run(
-            ['git', $name, ...$args],
-            $this->project->rootDir
-        );
+        for ($attempt = 1; $attempt <= self::GitIndexLockAttempts; $attempt++) {
+            $this->waitForGitIndexUnlock();
+
+            if ($this->systemic->run(
+                ['git', $name, ...$args],
+                $this->project->rootDir
+            )) {
+                return true;
+            }
+
+            if (
+                $attempt === self::GitIndexLockAttempts ||
+                !$this->hasGitIndexLock()
+            ) {
+                return false;
+            }
+
+            $this->io->warning('Git index is locked, retrying...');
+        }
+
+        return false;
     }
 
     public function askGit(
@@ -159,6 +180,38 @@ class Effigy extends Clip implements Dumpable
         }
 
         return $result->getOutput();
+    }
+
+    private function waitForGitIndexUnlock(): void
+    {
+        if (!$this->hasGitIndexLock()) {
+            return;
+        }
+
+        $this->io->info('Waiting for git index lock to be released...');
+        $deadline = microtime(true) + self::GitIndexLockTimeoutSeconds;
+
+        while ($this->hasGitIndexLock()) {
+            if (microtime(true) >= $deadline) {
+                throw Exceptional::Runtime(
+                    message: 'Timed out waiting for git index lock to be released: ' . $this->getGitIndexLockPath()
+                );
+            }
+
+            usleep(self::GitIndexLockPollMicroseconds);
+        }
+    }
+
+    private function hasGitIndexLock(): bool
+    {
+        $path = $this->getGitIndexLockPath();
+        clearstatcache(true, $path);
+        return is_file($path);
+    }
+
+    private function getGitIndexLockPath(): string
+    {
+        return $this->project->rootDir->getFile('.git/index.lock')->path;
     }
 
 

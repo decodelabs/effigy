@@ -233,6 +233,7 @@ None — all dependencies are required.
 - Release process validates version doesn't exist
 - Release process generates changelog from Chronicle
 - Release process creates git tags and pushes to remote
+- Git writes wait for `.git/index.lock` to clear before running, and retry if the lock reappears
 - Executable permission checks inspect tracked and non-ignored untracked files only
 - CI mode is detected automatically
 
@@ -242,7 +243,7 @@ None — all dependencies are required.
 - `__construct(Project $project, Archetype $archetype, Session $io, Systemic $systemic, Paths $paths)` — Creates service with dependencies
 - `run(string $name, string ...$args): bool` — Runs command (composer, composer script, action, vendor bin, or app action)
 - `hasAction(string $name): bool` — Checks if Effigy action exists
-- `runGit(string $name, string ...$args): bool` — Runs git command
+- `runGit(string $name, string ...$args): bool` — Runs git command after waiting for `.git/index.lock` to clear; retries if the lock reappears after a failed write
 - `askGit(string $name, string ...$args): ?string` — Runs git command and returns output
 - `canRun(string $name): bool` — Checks if command can be run
 - `getComposerScripts(): array` — Gets composer scripts
@@ -388,6 +389,7 @@ CI mode is detected automatically:
 - Missing entry file throws `Exceptional::NotFound`
 - Invalid entry template throws `Exceptional::UnexpectedValue`
 - Failed git operations return false or null
+- A git index lock that does not clear within 30 seconds throws `Exceptional::Runtime`
 - Failed composer operations return false
 - Failed system commands return false
 - Invalid PHP binary may cause execution failures
@@ -711,6 +713,7 @@ Release process:
 - Creates git tags
 - Publishes GitHub releases
 - Handles branch management
+- Git writes go through `runGit()`, which waits for `.git/index.lock` (30s timeout) and retries up to 3 times if the lock reappears. The lock file is never deleted automatically.
 
 ### 10.7 Template System
 
