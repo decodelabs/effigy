@@ -257,7 +257,7 @@ class Config
                     }
                     break;
 
-                // array<string, string>
+                    // array<string, string>
                 case 'params':
                 case 'localRepos':
                     if (null !== ($value = Coercion::tryArray($value))) {
@@ -269,7 +269,7 @@ class Config
                     }
                     break;
 
-                // array<string>
+                    // array<string>
                 case 'codeDirs':
                 case 'ignoreBins':
                 case 'exports':
