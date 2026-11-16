@@ -54,8 +54,8 @@ class Effigy extends Clip implements Dumpable
 
 
     public function __construct(
-        protected(set) Project $project,
-        protected(set) Archetype $archetype,
+        public protected(set) Project $project,
+        public protected(set) Archetype $archetype,
         protected Session $io,
         protected Systemic $systemic,
         protected Paths $paths

@@ -257,7 +257,7 @@ class Config
                     }
                     break;
 
-                    // array<string, string>
+                // array<string, string>
                 case 'params':
                 case 'localRepos':
                     if (null !== ($value = Coercion::tryArray($value))) {
@@ -269,7 +269,7 @@ class Config
                     }
                     break;
 
-                    // array<string>
+                // array<string>
                 case 'codeDirs':
                 case 'ignoreBins':
                 case 'exports':
@@ -278,7 +278,6 @@ class Config
                         $output[$key] = [];
 
                         foreach ($value as $param) {
-                            /** @phpstan-ignore-next-line */
                             $output[$key][] = Coercion::toString($param);
                         }
                     }
@@ -286,7 +285,6 @@ class Config
             }
         }
 
-        /** @phpstan-ignore-next-line */
         return $output;
     }
 

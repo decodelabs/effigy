@@ -15,8 +15,6 @@ use DecodeLabs\Effigy;
 use DecodeLabs\Systemic;
 use DecodeLabs\Terminus\Session;
 
-use const PHP_VERSION;
-
 class Prep implements Action
 {
     public function __construct(
@@ -66,12 +64,8 @@ class Prep implements Action
         // Standards
         $this->io->info('Ensure proper code formatting');
 
-        if (version_compare(PHP_VERSION, '8.5.0', '>=')) {
-            $this->io->warning('Skipping formatting until PHP-CS-Fixer is updated for PHP 8.5');
-        } else {
-            if (!$this->effigy->run('format')) {
-                return false;
-            }
+        if (!$this->effigy->run('format')) {
+            return false;
         }
 
         $this->io->newLine();
