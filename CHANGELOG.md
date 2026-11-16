@@ -5,7 +5,15 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ### Unreleased
+--
+
+---
+
+### [v0.10.17](https://github.com/decodelabs/effigy/commits/v0.10.17) - 16th November 2026
+
 - Pinned Easy Coding Standard to 13.2 to avoid invalid match-expression rewrites in the Go formatter
+
+[Full list of changes](https://github.com/decodelabs/effigy/compare/v0.10.16...v0.10.17)
 
 ---
 
